@@ -1,6 +1,9 @@
 import singer
 from singer import utils
 from singer.catalog import Catalog, write_catalog
+from tap_quickbooks.discover import do_discover
+from tap_quickbooks.client import QuickbooksClient
+from tap_quickbooks.sync import do_sync
 
 
 LOGGER = singer.get_logger()
@@ -12,7 +15,7 @@ def main():
     args = singer.parse_args(required_config_keys)
 
     config = args.config
-    #client = AdrollClient(args.config_path, config)
+    client = QuickbooksClient(args.config_path, config)
     catalog = args.catalog or Catalog([])
     state = args.state
 
@@ -21,7 +24,7 @@ def main():
 
     if args.discover:
         LOGGER.info("Starting discovery mode")
-        #catalog = do_discover()
+        catalog = do_discover()
         write_catalog(catalog)
     else:
         LOGGER.info("Starting sync mode")

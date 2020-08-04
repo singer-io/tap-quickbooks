@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": ["null", "string"]
+    },
+    "LastUpdatedTime": {
+      "type": ["null", "string"],
+      "format": "date-time"
+    }
+  }
+}
