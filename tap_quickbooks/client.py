@@ -28,6 +28,11 @@ class QuickbooksClient():
             'client_id': config['client_id'],
             'client_secret': config['client_secret']
         }
+
+        # TODO: Cleanup
+        if config['sandbox'] == 'true' or config['sandbox'] == 'True':
+            self.sandbox = True
+
         self.user_agent = config['user_agent']
         self.realm_id = config['realm_id']
         self.config_path = config_path
@@ -61,8 +66,12 @@ class QuickbooksClient():
                           max_tries=3,
                           interval=10)
     def _make_request(self, method, endpoint, headers=None, params=None, data=None):
-        # VERY IMPORTANT
-        full_url = SANDBOX_ENDPOINT_BASE + endpoint
+        # Make sure the correct endpoint is used
+        if self.sandbox:
+            full_url = SANDBOX_ENDPOINT_BASE + endpoint
+        else:
+            full_url = PROD_ENDPOINT_BASE + endpoint
+
         LOGGER.info(
             "%s - Making request to %s endpoint %s, with params %s",
             full_url,
