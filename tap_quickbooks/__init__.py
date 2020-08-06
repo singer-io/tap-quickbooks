@@ -28,7 +28,7 @@ def main():
         write_catalog(catalog)
     else:
         LOGGER.info("Starting sync mode")
-        #do_sync(client, config, state, catalog)
+        do_sync(client, config, state, catalog)
 
 if __name__ == "__main__":
     main()
