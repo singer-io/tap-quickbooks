@@ -6,10 +6,10 @@ class Stream:
 
     def format_query(self, wheres, startposition, maxresults):
         bookmark = self.state.get(self.stream_id, {}).get('bookmark') or self.config.get('start_date') # had to update start_date in config
-        wheres += ["Metadata.LastUpdatedTime >= " + "'" +  bookmark + "'"]
+        where_clauses = wheres + ["Metadata.LastUpdatedTime >= " + "'" +  bookmark + "'"]
 
         orders = ["Metadata.LastUpdatedTime ASC", "STARTPOSITION " + str(startposition), "MAXRESULTS " + str(maxresults)]
-        where_clause = "WHERE " + " AND ".join(wheres)
+        where_clause = "WHERE " + " AND ".join(where_clauses)
         order_clause = "ORDER BY " + " ".join(orders)
         query = "SELECT * FROM " + self.query_name + " " + where_clause + " " + order_clause
         return query
@@ -49,7 +49,7 @@ class Accounts(Stream):
     def sync(self):
         additional_wheres = ["Active IN (true, false)"]
         startposition = 1
-        maxresults = 90 # this could be global maybe
+        maxresults = 2 # this could be global maybe
 
         while True:
             query = self.format_query(additional_wheres, startposition, maxresults)
