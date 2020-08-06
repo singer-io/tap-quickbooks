@@ -15,8 +15,8 @@ class Accounts(Stream):
     
 
 class Invoices(Stream):
-    stream_id = 'accounts'
-    stream_name = 'accounts'
+    stream_id = 'invoices'
+    stream_name = 'invoices'
     endpoint = ''
     key_properties = ['id']
     replication_method = 'INCREMENTAL'
@@ -24,8 +24,8 @@ class Invoices(Stream):
 
 
 class Items(Stream):    
-    stream_id = 'accounts'
-    stream_name = 'accounts'
+    stream_id = 'items'
+    stream_name = 'items'
     endpoint = ''
     key_properties = ['id']
     replication_method = 'INCREMENTAL'

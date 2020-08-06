@@ -5,7 +5,9 @@ import singer
 
 from requests_oauthlib import OAuth2Session
 
+
 LOGGER = singer.get_logger()
+
 PROD_ENDPOINT_BASE = "https://quickbooks.api.intuit.com"
 SANDBOX_ENDPOINT_BASE = "https://sandbox-quickbooks.api.intuit.com"
 TOKEN_REFRESH_URL = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
@@ -29,8 +31,7 @@ class QuickbooksClient():
             'client_secret': config['client_secret']
         }
 
-        # TODO: Cleanup
-        if config['sandbox'] == 'true' or config['sandbox'] == 'True':
+        if config['sandbox'] in ['true', 'True', True]:
             self.sandbox = True
 
         self.user_agent = config['user_agent']
@@ -43,7 +44,7 @@ class QuickbooksClient():
                                      token_updater=self._write_config)
         try:
             # Make an authenticated request after creating the object to any endpoint
-            self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo"}).get('CompanyInfo', {})
+            self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo"})
         except Exception as e:
             LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
             raise QuickbooksAuthenticationError(e)
@@ -66,7 +67,7 @@ class QuickbooksClient():
                           max_tries=3,
                           interval=10)
     def _make_request(self, method, endpoint, headers=None, params=None, data=None):
-        # Make sure the correct endpoint is used
+        # Sandbox requests need to be made against the Sandbox endpoint base
         if self.sandbox:
             full_url = SANDBOX_ENDPOINT_BASE + endpoint
         else:
@@ -84,8 +85,13 @@ class QuickbooksClient():
             'Accept': 'application/json',
             'User-Agent': self.user_agent
         }
-        # TODO: We should merge headers with some default headers like user_agent - fix this
-        response = self.session.request(method, full_url, headers=default_headers, params=params, data=data)
+
+        if headers:
+            headers = {**default_headers, **headers}
+        else:
+            headers = {**default_headers}
+
+        response = self.session.request(method, full_url, headers=headers, params=params, data=data)
 
         response.raise_for_status()
 
