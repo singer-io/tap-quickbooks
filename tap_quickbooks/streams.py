@@ -45,30 +45,20 @@ class Accounts(Stream):
     # capitalization appears to not matter
     query_name = 'Account'
 
-    # def sync(self):
-    #     additional_wheres = ["Active IN (true, false)"]
-    #     additional_orders = []
-    #     query = self.format_query(additional_wheres, additional_orders)
-    #     for rec in self.client.get(self.endpoint.format(self.client.realm_id), params={"query": "SELECT * FROM Account WHERE Active IN (true, false)"}).get('QueryResponse', {}).get('Account'):
-    #         yield rec
 
     def sync(self):
         additional_wheres = ["Active IN (true, false)"]
         startposition = 1
         maxresults = 90 # this could be global maybe
-        query = self.format_query(additional_wheres, startposition, maxresults)
 
-        # TODO: We can do better here
-        results = self.client.get(self.endpoint.format(self.client.realm_id), params={"query": query}).get('QueryResponse',{}).get('Account', [])
-        for rec in results:
-            yield rec
-
-        while len(results) == maxresults:
-            startposition += len(results)
-            query = self.format_query(additional_wheres,  startposition, maxresults)
+        while True:
+            query = self.format_query(additional_wheres, startposition, maxresults)
             results = self.client.get(self.endpoint.format(self.client.realm_id), params={"query": query}).get('QueryResponse',{}).get('Account', [])
             for rec in results:
                 yield rec
+            if len(results) < maxresults:
+                break
+            startposition += len(results)
 
 
 class Invoices(Stream):
