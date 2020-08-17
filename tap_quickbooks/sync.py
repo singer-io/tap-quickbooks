@@ -33,3 +33,4 @@ def do_sync(client, config, state, catalog):
                     # transformer.transform(rec,
                     #                       stream.schema.to_dict(),
                     #                      metadata.to_map(stream.metadata)
+

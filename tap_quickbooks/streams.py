@@ -1,3 +1,7 @@
+import tap_quickbooks.query_builder
+
+import singer
+
 class Stream:
     def __init__(self, client, config, state):
         self.client = client
@@ -37,6 +41,7 @@ class Stream:
 class Accounts(Stream):
     stream_id = 'accounts'
     stream_name = 'accounts'
+    # TODO: clean this up
     endpoint = '/v3/company/{}/query'
     key_properties = ['Id']
     replication_method = 'INCREMENTAL'
@@ -49,13 +54,19 @@ class Accounts(Stream):
     def sync(self):
         additional_wheres = ["Active IN (true, false)"]
         startposition = 1
-        maxresults = 2 # this could be global maybe
+        maxresults = 200 # this could be global maybe
 
         while True:
             query = self.format_query(additional_wheres, startposition, maxresults)
             results = self.client.get(self.endpoint.format(self.client.realm_id), params={"query": query}).get('QueryResponse',{}).get('Account', [])
+
             for rec in results:
                 yield rec
+
+            # Write state after each page is yielded
+            state = singer.write_bookmark(self.state, self.stream_id, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
+            singer.write_state(state)
+
             if len(results) < maxresults:
                 break
             startposition += len(results)
@@ -78,6 +89,7 @@ class Items(Stream):
     replication_method = 'INCREMENTAL'
     replication_keys = ['LastUpdatedTime']
 
+# Budgets, Classes, CreditMemos
 
 STREAM_OBJECTS = {
     "accounts": Accounts,
