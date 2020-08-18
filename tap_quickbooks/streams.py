@@ -3,25 +3,28 @@ import tap_quickbooks.query_builder as query_builder
 import singer
 
 class Stream:
-    endpoint = '/v3/company/{}/query'
+    endpoint = '/v3/company/{realm_id}/query'
     key_properties = ['Id']
     replication_method = 'INCREMENTAL'
     replication_keys = ['LastUpdatedTime']
+    additional_where = None
 
     def __init__(self, client, config, state):
         self.client = client
         self.config = config
         self.state = state
 
+
     def sync(self):
         # TODO: 1 or bookmarked start_position?
         start_position = 1
         max_results = self.config.get('max_results', 200)
 
+        bookmark = singer.get_bookmark(self.state, self.stream_id, 'LastUpdatedTime') or self.config.get('start_date')
+
         while True:
-            bookmark = singer.get_bookmark(self.state, self.stream_id, 'LastUpdatedTime') or self.config.get('start_date')
             query = query_builder.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
-            resp = self.client.get(self.endpoint.format(self.client.realm_id), params={"query": query}).get('QueryResponse',{})
+            resp = self.client.get(self.endpoint, params={"query": query}).get('QueryResponse',{})
 
             results = resp.get(self.table_name, [])
             for rec in results:
@@ -35,21 +38,14 @@ class Stream:
 
             if len(results) < max_results:
                 break
-            start_position += len(results)
+            start_position += max_results
 
-
-# Query Building Notes
-#max-results 200
-# startpostiion start at 1
-#start_position—The starting count of the response for pagination.
-#maxresults—The number of entity elements in the <QueryResponse> element.
 
 # theory:
 # never change LastUpdatedTime during the pagination
 # increase start_position each loop by += max-results
 # loop until count records is less than maxresults?
 # save bookmark whenever it changes
-
 # bookmarking should also save start-position in the case that you loop and never more time forward
 
 class Accounts(Stream):
@@ -62,12 +58,13 @@ class Accounts(Stream):
 class Invoices(Stream):
     stream_id = 'invoices'
     stream_name = 'invoices'
+    table_name = 'Invoice'
 
 
 class Items(Stream):
     stream_id = 'items'
     stream_name = 'items'
-
+    table_name = 'Item'
 
 # Budgets, Classes, CreditMemos
 

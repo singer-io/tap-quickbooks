@@ -73,6 +73,7 @@ class QuickbooksClient():
         else:
             full_url = PROD_ENDPOINT_BASE + endpoint
 
+        full_url = full_url.format(realm_id=self.realm_id)
         LOGGER.info(
             "%s - Making request to %s endpoint %s, with params %s",
             full_url,

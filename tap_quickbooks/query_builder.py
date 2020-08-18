@@ -1,4 +1,3 @@
-# TODO: Unit Test this function
 def build_query(table_name, bookmark, start_position, max_results, additional_where=None):
     # TODO: Check if we could use field selection to choose specific fields
     query_base = "SELECT * FROM {}".format(table_name)
