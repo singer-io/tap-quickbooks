@@ -31,9 +31,10 @@ def do_sync(client, config, state, catalog):
                 singer.write_record(
                     stream_id,
                     rec)
-                    # transformer.transform(rec,
-                    #                       stream.schema.to_dict(),
-                    #                      metadata.to_map(stream.metadata)
+                    #transformer.transform(rec,
+                    #                      stream.schema.to_dict(),
+                    #                      metadata.to_map(stream.metadata)))
 
         # After finishing a stream, None out the current_position bookmark
         singer.clear_bookmark(state, stream_id, 'start_position')
+        singer.write_state(state)

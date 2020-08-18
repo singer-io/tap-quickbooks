@@ -38,6 +38,7 @@ def do_discover():
             "metadata": metadata.get_standard_metadata(
                 schema=schema,
                 key_properties=stream.key_properties,
+                # Something about Metadata.LastUpdatedTime is strange here
                 valid_replication_keys=stream.replication_keys,
                 replication_method=stream.replication_method,
             ),
