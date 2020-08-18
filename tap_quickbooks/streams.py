@@ -30,11 +30,12 @@ class Stream:
             for rec in results:
                 yield rec
 
+            if results:
             # Write state after each page is yielded
             # TODO: Check start_position ideas
-            state = singer.write_bookmark(self.state, self.stream_id, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
-            state = singer.write_bookmark(self.state, self.stream_id, 'start_position', resp['startPosition'] + resp['maxResults'])
-            singer.write_state(state)
+                state = singer.write_bookmark(self.state, self.stream_id, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
+                state = singer.write_bookmark(self.state, self.stream_id, 'start_position', resp['startPosition'] + resp['maxResults'])
+                singer.write_state(state)
 
             if len(results) < max_results:
                 break
