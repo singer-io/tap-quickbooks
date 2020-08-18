@@ -87,10 +87,10 @@
             ]
           },
           "Amount": {
-            "format": "singer.",
+            "format": "singer.decimal",
             "type": [
               "null",
-              "string",
+              "string"
             ]
           }
         },
