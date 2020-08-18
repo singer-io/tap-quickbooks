@@ -86,6 +86,24 @@ class CreditMemos(Stream):
     table_name = 'CreditMemo'
 
 
+class BillPayments(Stream):
+    stream_id = 'bill_payments'
+    stream_name = 'bill_payments'
+    table_name = 'BillPayment'
+
+
+class SalesReceipts(Stream):
+    stream_id = 'sales_receipts'
+    stream_name = 'sales_receipts'
+    table_name = 'SalesReceipt'
+
+
+class Purchases(Stream):
+    stream_id = 'purchases'
+    stream_name = 'purchases'
+    table_name = 'Purchase'
+
+
 STREAM_OBJECTS = {
     "accounts": Accounts,
     "invoices": Invoices,
@@ -93,4 +111,7 @@ STREAM_OBJECTS = {
     "budgets": Budgets,
     "classes": Classes,
     "credit_memos": CreditMemos,
+    "bill_payments": BillPayments,
+    "sales_receipts": SalesReceipts,
+    "purchases": Purchases,
 }
