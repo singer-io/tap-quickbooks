@@ -58,13 +58,15 @@ class Accounts(Stream):
 
         while True:
             query = self.format_query(additional_wheres, startposition, maxresults)
-            results = self.client.get(self.endpoint.format(self.client.realm_id), params={"query": query}).get('QueryResponse',{}).get('Account', [])
+            resp = self.client.get(self.endpoint.format(self.client.realm_id), params={"query": query}).get('QueryResponse',{})
 
-            for rec in results:
+            for rec in resp.get('Account', []):
                 yield rec
 
             # Write state after each page is yielded
+            # TODO: Check start_position ideas
             state = singer.write_bookmark(self.state, self.stream_id, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
+            state = singer.write_bookmark(self.state, self.stream_id, 'start_position', resp['startPosition'] + resp['maxResults'])
             singer.write_state(state)
 
             if len(results) < maxresults:
