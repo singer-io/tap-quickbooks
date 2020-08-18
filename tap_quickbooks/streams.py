@@ -66,10 +66,30 @@ class Items(Stream):
     stream_name = 'items'
     table_name = 'Item'
 
-# Budgets, Classes, CreditMemos
+
+class Budgets(Stream):
+    stream_id = 'budgets'
+    stream_name = 'budgets'
+    table_name = 'Budget'
+
+
+class Classes(Stream):
+    stream_id = 'classes'
+    stream_name = 'classes'
+    table_name = 'Class'
+
+
+class CreditMemos(Stream):
+    stream_id = 'credit_memos'
+    stream_name = 'credit_memos'
+    table_name = 'CreditMemo'
+
 
 STREAM_OBJECTS = {
     "accounts": Accounts,
     "invoices": Invoices,
-    "items": Items
+    "items": Items,
+    "budgets": Budgets,
+    "classes": Classes,
+    "credit_memos": CreditMemos,
 }

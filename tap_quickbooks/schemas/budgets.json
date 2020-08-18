@@ -1,0 +1,140 @@
+{
+  "properties": {
+    "BudgetEntryType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "domain": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Active": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "EndDate": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "StartDate": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "BudgetType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "SyncToken": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "BudgetDetail": {
+      "items": {
+        "properties": {
+          "AccountRef": {
+            "properties": {
+              "name": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "value": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "BudgetDate": {
+            "format": "date-time",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "Amount": {
+            "format": "singer.",
+            "type": [
+              "null",
+              "string",
+            ]
+          }
+        },
+        "type": [
+          "null",
+          "object"
+        ]
+      },
+      "type": [
+        "null",
+        "array"
+      ]
+    },
+    "MetaData": {
+      "properties": {
+        "CreateTime": {
+          "format": "date-time",
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "LastUpdatedTime": {
+          "format": "date-time",
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "sparse": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    }
+  },
+  "type": [
+    "null",
+    "object"
+  ]
+}
