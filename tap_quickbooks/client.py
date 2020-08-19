@@ -31,6 +31,7 @@ class QuickbooksClient():
             'client_secret': config['client_secret']
         }
 
+        self.sandbox = False
         if config['sandbox'] in ['true', 'True', True]:
             self.sandbox = True
 
