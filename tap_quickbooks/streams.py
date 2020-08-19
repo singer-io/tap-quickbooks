@@ -6,7 +6,8 @@ class Stream:
     endpoint = '/v3/company/{realm_id}/query'
     key_properties = ['Id']
     replication_method = 'INCREMENTAL'
-    replication_keys = ['LastUpdatedTime']
+    # replication keys is LastUpdatedTime, nested under metadata
+    replication_keys = ['MetaData']
     additional_where = None
 
     def __init__(self, client, config, state):
