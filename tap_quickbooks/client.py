@@ -20,10 +20,10 @@ class QuickbooksAuthenticationError(Exception):
 class QuickbooksClient():
     def __init__(self, config_path, config):
         token = {
-            'access_token': "wrong",
             'refresh_token': config['refresh_token'],
             'token_type': 'Bearer',
-            # Set expires_in to a negative number to force the client to reauthenticate
+            # Set a fake access_token and expires_in to a negative number to force the client to reauthenticate
+            'access_token': "wrong",
             'expires_in': '-30'
         }
         extra = {
@@ -73,6 +73,7 @@ class QuickbooksClient():
         else:
             full_url = PROD_ENDPOINT_BASE + endpoint
 
+        full_url = full_url.format(realm_id=self.realm_id)
         LOGGER.info(
             "%s - Making request to %s endpoint %s, with params %s",
             full_url,

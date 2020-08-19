@@ -17,7 +17,8 @@ setup(name='tap-quickbooks',
       extras_require={
           'dev': [
               'ipdb==0.11',
-              'pylint==2.5.3'
+              'pylint==2.5.3',
+              'nose'
           ]
       },
       entry_points='''

@@ -1,86 +1,118 @@
+import tap_quickbooks.query_builder as query_builder
+
+import singer
+
 class Stream:
+    endpoint = '/v3/company/{realm_id}/query'
+    key_properties = ['Id']
+    replication_method = 'INCREMENTAL'
+    # replication keys is LastUpdatedTime, nested under metadata
+    replication_keys = ['MetaData']
+    additional_where = None
+
     def __init__(self, client, config, state):
         self.client = client
         self.config = config
         self.state = state
 
-    def format_query(self, wheres, startposition, maxresults):
-        bookmark = self.state.get(self.stream_id, {}).get('bookmark') or self.config.get('start_date') # had to update start_date in config
-        where_clauses = wheres + ["Metadata.LastUpdatedTime >= " + "'" +  bookmark + "'"]
 
-        orders = ["Metadata.LastUpdatedTime ASC", "STARTPOSITION " + str(startposition), "MAXRESULTS " + str(maxresults)]
-        where_clause = "WHERE " + " AND ".join(where_clauses)
-        order_clause = "ORDER BY " + " ".join(orders)
-        query = "SELECT * FROM " + self.query_name + " " + where_clause + " " + order_clause
-        return query
+    def sync(self):
+        # TODO: 1 or bookmarked start_position?
+        start_position = 1
+        max_results = self.config.get('max_results', 200)
 
+        bookmark = singer.get_bookmark(self.state, self.stream_id, 'LastUpdatedTime') or self.config.get('start_date')
 
-# Query Building Notes
-#max-results 200
-# startpostiion start at 1
-#startposition—The starting count of the response for pagination.
-#maxresults—The number of entity elements in the <QueryResponse> element.
+        while True:
+            query = query_builder.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
+            resp = self.client.get(self.endpoint, params={"query": query}).get('QueryResponse',{})
 
-# "Metadata.LastUpdatedTime >= '%s' " time
-# "ORDER BY Metadata.LastUpdatedTime ASC STARTPOSITION %s MAXRESULTS %s"
-#                start-pos
-#                max-results
+            results = resp.get(self.table_name, [])
+            for rec in results:
+                yield rec
+
+            if results:
+            # Write state after each page is yielded
+            # TODO: Check start_position ideas
+                state = singer.write_bookmark(self.state, self.stream_id, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
+                state = singer.write_bookmark(self.state, self.stream_id, 'start_position', resp['startPosition'] + resp['maxResults'])
+                singer.write_state(state)
+
+            if len(results) < max_results:
+                break
+            start_position += max_results
+
 
 # theory:
 # never change LastUpdatedTime during the pagination
-# increase startposition each loop by += max-results
+# increase start_position each loop by += max-results
 # loop until count records is less than maxresults?
 # save bookmark whenever it changes
-
 # bookmarking should also save start-position in the case that you loop and never more time forward
 
 class Accounts(Stream):
     stream_id = 'accounts'
     stream_name = 'accounts'
-    endpoint = '/v3/company/{}/query'
-    key_properties = ['Id']
-    replication_method = 'INCREMENTAL'
-    replication_keys = ['LastUpdatedTime']
-
-    # capitalization appears to not matter
-    query_name = 'Account'
-
-
-    def sync(self):
-        additional_wheres = ["Active IN (true, false)"]
-        startposition = 1
-        maxresults = 2 # this could be global maybe
-
-        while True:
-            query = self.format_query(additional_wheres, startposition, maxresults)
-            results = self.client.get(self.endpoint.format(self.client.realm_id), params={"query": query}).get('QueryResponse',{}).get('Account', [])
-            for rec in results:
-                yield rec
-            if len(results) < maxresults:
-                break
-            startposition += len(results)
+    table_name = 'Account'
+    additional_where = "Active IN (true, false)"
 
 
 class Invoices(Stream):
     stream_id = 'invoices'
     stream_name = 'invoices'
-    endpoint = ''
-    key_properties = ['Id']
-    replication_method = 'INCREMENTAL'
-    replication_keys = ['LastUpdatedTime']
+    table_name = 'Invoice'
 
 
 class Items(Stream):
     stream_id = 'items'
     stream_name = 'items'
-    endpoint = ''
-    key_properties = ['Id']
-    replication_method = 'INCREMENTAL'
-    replication_keys = ['LastUpdatedTime']
+    table_name = 'Item'
+
+
+class Budgets(Stream):
+    stream_id = 'budgets'
+    stream_name = 'budgets'
+    table_name = 'Budget'
+
+
+class Classes(Stream):
+    stream_id = 'classes'
+    stream_name = 'classes'
+    table_name = 'Class'
+
+
+class CreditMemos(Stream):
+    stream_id = 'credit_memos'
+    stream_name = 'credit_memos'
+    table_name = 'CreditMemo'
+
+
+class BillPayments(Stream):
+    stream_id = 'bill_payments'
+    stream_name = 'bill_payments'
+    table_name = 'BillPayment'
+
+
+class SalesReceipts(Stream):
+    stream_id = 'sales_receipts'
+    stream_name = 'sales_receipts'
+    table_name = 'SalesReceipt'
+
+
+class Purchases(Stream):
+    stream_id = 'purchases'
+    stream_name = 'purchases'
+    table_name = 'Purchase'
 
 
 STREAM_OBJECTS = {
     "accounts": Accounts,
     "invoices": Invoices,
-    "items": Items
+    "items": Items,
+    "budgets": Budgets,
+    "classes": Classes,
+    "credit_memos": CreditMemos,
+    "bill_payments": BillPayments,
+    "sales_receipts": SalesReceipts,
+    "purchases": Purchases,
 }

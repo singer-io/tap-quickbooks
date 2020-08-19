@@ -1,12 +1,144 @@
 {
-  "type": "object",
   "properties": {
-    "Id": {
-      "type": ["null", "string"]
+    "CurrentBalanceWithSubAccounts": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
     },
-    "LastUpdatedTime": {
-      "type": ["null", "string"],
-      "format": "date-time"
+    "AccountSubType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Classification": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "CurrencyRef": {
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "Name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "FullyQualifiedName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "sparse": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "AccountType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "MetaData": {
+      "properties": {
+        "CreateTime": {
+          "format": "date-time",
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "LastUpdatedTime": {
+          "format": "date-time",
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "CurrentBalance": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Active": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "domain": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "SubAccount": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "ParentRef": {
+      "properties": {
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "SyncToken": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
-  }
+  },
+  "type": [
+    "null",
+    "object"
+  ]
 }

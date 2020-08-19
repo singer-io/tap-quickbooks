@@ -6,8 +6,6 @@ from datetime import timedelta
 import tap_tester.menagerie   as menagerie
 import tap_tester.connections as connections
 
-#from test_client import TestClient
-
 
 class TestQuickbooksBase(unittest.TestCase):
     REPLICATION_KEYS = "valid-replication-keys"
@@ -21,10 +19,10 @@ class TestQuickbooksBase(unittest.TestCase):
 
     def setUp(self):
         missing_envs = [x for x in [
-            "TAP_QUICKBOOKS_CLIENT_ID",
-            "TAP_QUICKBOOKS_CLIENT_SECRET",
-            "TAP_QUICKBOOKS_REALM_ID",
-            "TAP_QUICKBOOKS_REFRESH_TOKEN" # maybe?
+            'TAP_QUICKBOOKS_OAUTH_CLIENT_ID',
+            'TAP_QUICKBOOKS_OAUTH_CLIENT_SECRET',
+            'TAP_QUICKBOOKS_OAUTH_REFRESH_TOKEN',
+            'TAP_QUICKBOOKS_REALM_ID'
         ] if os.getenv(x) is None]
         if missing_envs:
             raise Exception("Missing environment variables: {}".format(missing_envs))
@@ -37,30 +35,21 @@ class TestQuickbooksBase(unittest.TestCase):
     def tap_name():
         return "tap-quickbooks"
 
-    def get_properties(self, original: bool = True):
-        return_value = {
+    def get_properties(self):
+        return {
             'start_date' : '2016-06-02T00:00:00Z',
-            'end_date' : '2016-06-06T00:00:00Z'
+            'sandbox': 'true'
+            #'end_date' : '2016-06-06T00:00:00Z'
         }
-        if original:
-            return return_value
 
-        # Start Date test needs the new connections start date to be after the default
-        assert self.START_DATE > return_value["start_date"]
-        assert self.END_DATE > return_value["end_date"]
-
-        # Reassign start and end dates
-        return_value["start_date"] = self.START_DATE
-        return_value["end_date"] = self.END_DATE
-        return return_value
 
     def get_credentials(self):
-        #token = TestClient.get_token_information()
         return {
-            'refresh_token': token['refresh_token'],
-            'client_id': token['client_id'],
-            'client_secret': token['client_secret'],
-            'access_token': token['access_token']
+            # Refresh Tokens expire and a valid chain needs to be maintained
+            'refresh_token': os.getenv('TAP_QUICKBOOKS_OAUTH_REFRESH_TOKEN'),
+            'client_id': os.getenv('TAP_QUICKBOOKS_OAUTH_CLIENT_ID'),
+            'client_secret': os.getenv('TAP_QUICKBOOKS_OAUTH_CLIENT_SECRET'),
+            'realm_id': os.getenv('TAP_QUICKBOOKS_REALM_ID')
         }
 
     @staticmethod
@@ -68,7 +57,13 @@ class TestQuickbooksBase(unittest.TestCase):
         return {
             'accounts',
             'invoices',
-            'items'
+            'items',
+            'budgets',
+            'classes',
+            'credit_memos',
+            'bill_payments',
+            'sales_receipts',
+            'purchases',
         }
 
     def expected_metadata(self):
@@ -78,17 +73,47 @@ class TestQuickbooksBase(unittest.TestCase):
             "accounts": {
                 self.PRIMARY_KEYS: {'Id'},
                 self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'LastUpdatedTime'},
+                self.REPLICATION_KEYS: {'MetaData'},
             },
             "invoices": {
                 self.PRIMARY_KEYS: {'Id'},
                 self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'LastUpdatedTime'},
+                self.REPLICATION_KEYS: {'MetaData'},
             },
             "items": {
                 self.PRIMARY_KEYS: {'Id'},
                 self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'LastUpdatedTime'},
+                self.REPLICATION_KEYS: {'MetaData'},
+            },
+            'budgets': {
+                self.PRIMARY_KEYS: {'Id'},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {'MetaData'},
+            },
+            'classes': {
+                self.PRIMARY_KEYS: {'Id'},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {'MetaData'},
+            },
+            'credit_memos': {
+                self.PRIMARY_KEYS: {'Id'},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {'MetaData'},
+            },
+            'bill_payments': {
+                self.PRIMARY_KEYS: {'Id'},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {'MetaData'},
+            },
+            'sales_receipts': {
+                self.PRIMARY_KEYS: {'Id'},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {'MetaData'},
+            },
+            'purchases': {
+                self.PRIMARY_KEYS: {'Id'},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {'MetaData'},
             },
         }
 
@@ -102,6 +127,16 @@ class TestQuickbooksBase(unittest.TestCase):
         """A set of expected stream names"""
         return set(self.expected_metadata().keys())
 
+
+    def expected_replication_keys(self):
+        """
+        return a dictionary with key of table name
+        and value as a set of replication key fields
+        """
+        return {table: properties.get(self.REPLICATION_KEYS, set())
+                for table, properties
+                in self.expected_metadata().items()}
+
     def expected_primary_keys(self):
 
         """
@@ -112,6 +147,19 @@ class TestQuickbooksBase(unittest.TestCase):
                 for table, properties
                 in self.expected_metadata().items()}
 
+    def ensure_connection(self):
+        def preserve_refresh_token(existing_conns, payload):
+            if not existing_conns:
+                return payload
+            conn_with_creds = connections.fetch_existing_connection_with_creds(existing_conns[0]['id'])
+            # Even though is a credential, this API posts the entire payload using properties
+            payload['properties']['refresh_token'] = conn_with_creds['credentials']['refresh_token']
+            return payload
+
+        conn_id = connections.ensure_connection(self, payload_hook=preserve_refresh_token)
+        return conn_id
+
+    
     def select_all_streams_and_fields(self, conn_id, catalogs, select_all_fields: bool = True):
         """Select all streams and all fields within streams"""
         for catalog in catalogs:
