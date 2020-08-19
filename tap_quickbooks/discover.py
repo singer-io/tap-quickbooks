@@ -25,6 +25,7 @@ def _load_schemas():
                 schemas[file_raw] = json.load(file)
             except:
                 LOGGER.info('Failed to load file {}'.format(file_raw))
+                raise
 
     return schemas
 
