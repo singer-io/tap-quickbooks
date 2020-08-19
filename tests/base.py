@@ -64,58 +64,24 @@ class TestQuickbooksBase(unittest.TestCase):
             'bill_payments',
             'sales_receipts',
             'purchases',
+            'payments',
+            'purchase_orders',
+            'payment_methods'
         }
 
     def expected_metadata(self):
         """The expected streams and metadata about the streams"""
 
-        return {
-            "accounts": {
+        mdata = {}
+        for stream in self.expected_check_streams():
+            mdata[stream] = {
                 self.PRIMARY_KEYS: {'Id'},
                 self.REPLICATION_METHOD: self.INCREMENTAL,
                 self.REPLICATION_KEYS: {'MetaData'},
-            },
-            "invoices": {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            },
-            "items": {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            },
-            'budgets': {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            },
-            'classes': {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            },
-            'credit_memos': {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            },
-            'bill_payments': {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            },
-            'sales_receipts': {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            },
-            'purchases': {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            },
-        }
+            }
+
+        return mdata
+
 
     def expected_replication_method(self):
         """return a dictionary with key of table name and value of replication method"""

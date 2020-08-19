@@ -34,9 +34,9 @@ def do_discover():
     raw_schemas = _load_schemas()
     catalog_entries = []
 
-    for stream_name, schema in raw_schemas.items():
+    for stream_name, stream in STREAM_OBJECTS.items():
         # create and add catalog entry
-        stream = STREAM_OBJECTS[stream_name]
+        schema = raw_schemas[stream_name]
 
         mdata = metadata.to_map(
             metadata.get_standard_metadata(

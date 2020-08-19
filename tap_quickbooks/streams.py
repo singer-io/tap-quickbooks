@@ -21,7 +21,7 @@ class Stream:
         start_position = 1
         max_results = self.config.get('max_results', 200)
 
-        bookmark = singer.get_bookmark(self.state, self.stream_id, 'LastUpdatedTime') or self.config.get('start_date')
+        bookmark = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime') or self.config.get('start_date')
 
         while True:
             query = query_builder.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
@@ -34,8 +34,8 @@ class Stream:
             if results:
             # Write state after each page is yielded
             # TODO: Check start_position ideas
-                state = singer.write_bookmark(self.state, self.stream_id, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
-                state = singer.write_bookmark(self.state, self.stream_id, 'start_position', resp['startPosition'] + resp['maxResults'])
+                state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
+                state = singer.write_bookmark(self.state, self.stream_name, 'start_position', resp['startPosition'] + resp['maxResults'])
                 singer.write_state(state)
 
             if len(results) < max_results:
@@ -51,59 +51,65 @@ class Stream:
 # bookmarking should also save start-position in the case that you loop and never more time forward
 
 class Accounts(Stream):
-    stream_id = 'accounts'
     stream_name = 'accounts'
     table_name = 'Account'
     additional_where = "Active IN (true, false)"
 
 
 class Invoices(Stream):
-    stream_id = 'invoices'
     stream_name = 'invoices'
     table_name = 'Invoice'
 
 
 class Items(Stream):
-    stream_id = 'items'
     stream_name = 'items'
     table_name = 'Item'
 
 
 class Budgets(Stream):
-    stream_id = 'budgets'
     stream_name = 'budgets'
     table_name = 'Budget'
 
 
 class Classes(Stream):
-    stream_id = 'classes'
     stream_name = 'classes'
     table_name = 'Class'
 
 
 class CreditMemos(Stream):
-    stream_id = 'credit_memos'
     stream_name = 'credit_memos'
     table_name = 'CreditMemo'
 
 
 class BillPayments(Stream):
-    stream_id = 'bill_payments'
     stream_name = 'bill_payments'
     table_name = 'BillPayment'
 
 
 class SalesReceipts(Stream):
-    stream_id = 'sales_receipts'
     stream_name = 'sales_receipts'
     table_name = 'SalesReceipt'
 
 
 class Purchases(Stream):
-    stream_id = 'purchases'
     stream_name = 'purchases'
     table_name = 'Purchase'
 
+
+class Payments(Stream):
+    stream_name = 'payments'
+    table_name = 'Payment'
+
+
+class PurchaseOrders(Stream):
+    stream_name = 'purchase_orders'
+    table_name = 'PurchaseOrder'
+
+
+class PaymentMethods(Stream):
+    stream_name = 'payment_methods'
+    table_name = 'PaymentMethod'
+    
 
 STREAM_OBJECTS = {
     "accounts": Accounts,
@@ -115,4 +121,7 @@ STREAM_OBJECTS = {
     "bill_payments": BillPayments,
     "sales_receipts": SalesReceipts,
     "purchases": Purchases,
+    "payments": Payments,
+    "purchase_orders": PurchaseOrders,
+    "payment_methods": PaymentMethods,
 }
