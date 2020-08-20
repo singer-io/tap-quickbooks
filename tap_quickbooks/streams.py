@@ -111,6 +111,80 @@ class PaymentMethods(Stream):
     table_name = 'PaymentMethod'
     
 
+
+class JournalEntries(Stream):
+    stream_name = 'journal_entries'
+    table_name = 'JournalEntry'
+    
+class Items(Stream):
+    stream_name = 'items'
+    table_name = 'Item'
+    
+class Invoices(Stream):
+    stream_name = 'invoices'
+    table_name = 'Invoice'
+    
+class Customers(Stream):
+    stream_name = 'customers'
+    table_name = 'Customer'
+    
+class RefundReceipts(Stream):
+    stream_name = 'refund_receipts'
+    table_name = 'RefundReceipt'
+    
+class Deposits(Stream):
+    stream_name = 'deposits'
+    table_name = 'Deposit'
+    
+class Departments(Stream):
+    stream_name = 'departments'
+    table_name = 'Department'
+    
+class Employees(Stream):
+    stream_name = 'employees'
+    table_name = 'Employee'
+    
+class Estimates(Stream):
+    stream_name = 'estimates'
+    table_name = 'Estimate'
+    
+class Bills(Stream):
+    stream_name = 'bills'
+    table_name = 'Bill'
+    
+class TaxAgencies(Stream):
+    stream_name = 'tax_agencies'
+    table_name = 'TaxAgency'
+    
+class TaxCodes(Stream):
+    stream_name = 'tax_codes'
+    table_name = 'TaxCode'
+    
+class TaxRates(Stream):
+    stream_name = 'tax_rates'
+    table_name = 'TaxRate'
+    
+class Terms(Stream):
+    stream_name = 'terms'
+    table_name = 'Term'
+    
+class TimeActivities(Stream):
+    stream_name = 'time_activities'
+    table_name = 'TimeActivity'
+    
+class Transfers(Stream):
+    stream_name = 'transfers'
+    table_name = 'Transfer'
+    
+class VendorCredits(Stream):
+    stream_name = 'vendor_credits'
+    table_name = 'VendorCredit'
+    
+class Vendors(Stream):
+    stream_name = 'vendors'
+    table_name = 'Vendor'
+    
+
 STREAM_OBJECTS = {
     "accounts": Accounts,
     "invoices": Invoices,
@@ -124,4 +198,22 @@ STREAM_OBJECTS = {
     "payments": Payments,
     "purchase_orders": PurchaseOrders,
     "payment_methods": PaymentMethods,
+    "journal_entries": JournalEntries,
+    "items": Items,
+    "invoices": Invoices,
+    "customers": Customers,
+    "refund_receipts": RefundReceipts,
+    "deposits": Deposits,
+    "departments": Departments,
+    "employees": Employees,
+    "estimates": Estimates,
+    "bills": Bills,
+    "tax_agencies": TaxAgencies,
+    "tax_codes": TaxCodes,
+    "tax_rates": TaxRates,
+    "terms": Terms,
+    "time_activities": TimeActivities,
+    "transfers": Transfers,
+    "vendor_credits": VendorCredits,
+    "vendors": Vendors
 }
