@@ -18,7 +18,7 @@ class Stream:
 
     def sync(self):
         start_position = 1
-        max_results = self.config.get('max_results', 100)
+        max_results = self.config.get('max_results', 200)
 
         bookmark = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.config.get('start_date'))
 
