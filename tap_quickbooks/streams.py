@@ -17,14 +17,14 @@ class Stream:
 
 
     def sync(self):
-        # TODO: 1 or bookmarked start_position?
         start_position = 1
-        max_results = self.config.get('max_results', 200)
+        max_results = self.config.get('max_results', 100)
 
-        bookmark = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime') or self.config.get('start_date')
+        bookmark = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.config.get('start_date'))
 
         while True:
             query = query_builder.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
+
             resp = self.client.get(self.endpoint, params={"query": query}).get('QueryResponse',{})
 
             results = resp.get(self.table_name, [])
@@ -32,23 +32,16 @@ class Stream:
                 yield rec
 
             if results:
-            # Write state after each page is yielded
-            # TODO: Check start_position ideas
                 state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
-                state = singer.write_bookmark(self.state, self.stream_name, 'start_position', resp['startPosition'] + resp['maxResults'])
                 singer.write_state(state)
 
             if len(results) < max_results:
                 break
             start_position += max_results
 
+        singer.write_state(state)
 
-# theory:
-# never change LastUpdatedTime during the pagination
-# increase start_position each loop by += max-results
-# loop until count records is less than maxresults?
-# save bookmark whenever it changes
-# bookmarking should also save start-position in the case that you loop and never more time forward
+
 
 class Accounts(Stream):
     stream_name = 'accounts'
@@ -109,81 +102,81 @@ class PurchaseOrders(Stream):
 class PaymentMethods(Stream):
     stream_name = 'payment_methods'
     table_name = 'PaymentMethod'
-    
+
 
 
 class JournalEntries(Stream):
     stream_name = 'journal_entries'
     table_name = 'JournalEntry'
-    
+
 class Items(Stream):
     stream_name = 'items'
     table_name = 'Item'
-    
+
 class Invoices(Stream):
     stream_name = 'invoices'
     table_name = 'Invoice'
-    
+
 class Customers(Stream):
     stream_name = 'customers'
     table_name = 'Customer'
-    
+
 class RefundReceipts(Stream):
     stream_name = 'refund_receipts'
     table_name = 'RefundReceipt'
-    
+
 class Deposits(Stream):
     stream_name = 'deposits'
     table_name = 'Deposit'
-    
+
 class Departments(Stream):
     stream_name = 'departments'
     table_name = 'Department'
-    
+
 class Employees(Stream):
     stream_name = 'employees'
     table_name = 'Employee'
-    
+
 class Estimates(Stream):
     stream_name = 'estimates'
     table_name = 'Estimate'
-    
+
 class Bills(Stream):
     stream_name = 'bills'
     table_name = 'Bill'
-    
+
 class TaxAgencies(Stream):
     stream_name = 'tax_agencies'
     table_name = 'TaxAgency'
-    
+
 class TaxCodes(Stream):
     stream_name = 'tax_codes'
     table_name = 'TaxCode'
-    
+
 class TaxRates(Stream):
     stream_name = 'tax_rates'
     table_name = 'TaxRate'
-    
+
 class Terms(Stream):
     stream_name = 'terms'
     table_name = 'Term'
-    
+
 class TimeActivities(Stream):
     stream_name = 'time_activities'
     table_name = 'TimeActivity'
-    
+
 class Transfers(Stream):
     stream_name = 'transfers'
     table_name = 'Transfer'
-    
+
 class VendorCredits(Stream):
     stream_name = 'vendor_credits'
     table_name = 'VendorCredit'
-    
+
 class Vendors(Stream):
     stream_name = 'vendors'
     table_name = 'Vendor'
-    
+
 
 STREAM_OBJECTS = {
     "accounts": Accounts,

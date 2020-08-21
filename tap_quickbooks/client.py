@@ -16,6 +16,12 @@ TOKEN_REFRESH_URL = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
 class QuickbooksAuthenticationError(Exception):
     pass
 
+class Quickbooks5XXException(Exception):
+    pass
+
+class Quickbooks4XXException(Exception):
+    pass
+
 
 class QuickbooksClient():
     def __init__(self, config_path, config):
@@ -64,9 +70,13 @@ class QuickbooksClient():
 
 
     @backoff.on_exception(backoff.constant,
-                          (requests.exceptions.HTTPError),
+                          (Quickbooks5XXException,
+                           Quickbooks4XXException,
+                           QuickbooksAuthenticationError,
+                           requests.ConnectionError),
                           max_tries=3,
                           interval=10)
+    @singer.utils.ratelimit(500, 60)
     def _make_request(self, method, endpoint, headers=None, params=None, data=None):
         # Sandbox requests need to be made against the Sandbox endpoint base
         if self.sandbox:
@@ -95,9 +105,14 @@ class QuickbooksClient():
 
         response = self.session.request(method, full_url, headers=headers, params=params, data=data)
 
-        response.raise_for_status()
-
         # TODO: Check error status, rate limit, etc.
+        if response.status_code >= 500:
+            raise Quickbooks5XXException()
+        elif response.status_code in (401, 403):
+            raise QuickbooksAuthenticationError()
+        elif response.status_code >= 400:
+            raise Quickbooks4XXException()
+
         return response.json()
 
 
