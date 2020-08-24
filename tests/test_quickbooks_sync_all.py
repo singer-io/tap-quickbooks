@@ -7,7 +7,7 @@ from base import TestQuickbooksBase
 
 class TestQuickbooksSyncAll(TestQuickbooksBase):
     def name(self):
-        return "tap_tester_quickbooks_sync_all"
+        return "tap_tester_quickbooks_combined_test"
 
     def expected_replication_keys(self):
         """
