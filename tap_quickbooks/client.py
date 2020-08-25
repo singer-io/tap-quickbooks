@@ -107,11 +107,11 @@ class QuickbooksClient():
 
         # TODO: Check error status, rate limit, etc.
         if response.status_code >= 500:
-            raise Quickbooks5XXException()
+            raise Quickbooks5XXException(response.text)
         elif response.status_code in (401, 403):
-            raise QuickbooksAuthenticationError()
+            raise QuickbooksAuthenticationError(response.text)
         elif response.status_code >= 400:
-            raise Quickbooks4XXException()
+            raise Quickbooks4XXException(response.text)
 
         return response.json()
 
