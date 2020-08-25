@@ -152,7 +152,7 @@ class TestQuickbooksBase(unittest.TestCase):
                 for table, properties
                 in self.expected_metadata().items()}
 
-    def ensure_connection(self):
+    def ensure_connection(self, original=True):
         def preserve_refresh_token(existing_conns, payload):
             if not existing_conns:
                 return payload
@@ -161,7 +161,7 @@ class TestQuickbooksBase(unittest.TestCase):
             payload['properties']['refresh_token'] = conn_with_creds['credentials']['refresh_token']
             return payload
 
-        conn_id = connections.ensure_connection(self, payload_hook=preserve_refresh_token)
+        conn_id = connections.ensure_connection(self, payload_hook=preserve_refresh_token, original_properties = original)
         return conn_id
 
 
