@@ -101,6 +101,27 @@ class TestQuickbooksBase(unittest.TestCase):
         return mdata
 
 
+    def expected_primary_keys(self):
+        """
+        return a dictionary with key of table name
+        and value as a set of primary key fields
+        """
+        return {table: properties.get(self.PRIMARY_KEYS, set())
+                for table, properties
+                in self.expected_metadata().items()}
+
+
+    def expected_automatic_fields(self):
+        """
+        return a dictionary with key of table name and value as the primary keys and replication keys
+        """
+        pks = self.expected_primary_keys()
+        rks = self.expected_replication_keys()
+
+        return {stream: rks.get(stream, set()) | pks.get(stream, set())
+                for stream in self.expected_streams()}
+
+
     def expected_replication_method(self):
         """return a dictionary with key of table name and value of replication method"""
         return {table: properties.get(self.REPLICATION_METHOD, None)
@@ -143,7 +164,7 @@ class TestQuickbooksBase(unittest.TestCase):
         conn_id = connections.ensure_connection(self, payload_hook=preserve_refresh_token)
         return conn_id
 
-    
+
     def select_all_streams_and_fields(self, conn_id, catalogs, select_all_fields: bool = True):
         """Select all streams and all fields within streams"""
         for catalog in catalogs:
