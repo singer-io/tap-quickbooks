@@ -181,6 +181,13 @@
         "string"
       ]
     },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
     "TotalAmt": {
       "type": [
         "null",
@@ -259,12 +266,6 @@
       "type": [
         "null",
         "string"
-      ]
-    },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
       ]
     },
     "PaymentMethodRef": {

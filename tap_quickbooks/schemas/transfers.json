@@ -6,12 +6,6 @@
         "string"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "MetaData": {
       "properties": {
         "LastUpdatedTime": {
@@ -52,6 +46,13 @@
         "null",
         "string"
       ]
+    },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
     },
     "Amount": {
       "type": [

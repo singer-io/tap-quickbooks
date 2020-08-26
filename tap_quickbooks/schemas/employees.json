@@ -1,11 +1,5 @@
 {
   "properties": {
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "HiredDate": {
       "format": "date-time",
       "type": [

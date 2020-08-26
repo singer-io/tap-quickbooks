@@ -1,11 +1,5 @@
 {
   "properties": {
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "Id": {
       "type": [
         "null",

@@ -195,12 +195,6 @@
         "object"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "PreferredDeliveryMethod": {
       "type": [
         "null",

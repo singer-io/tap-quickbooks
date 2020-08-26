@@ -14,12 +14,6 @@
         "object"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "BillAddr": {
       "properties": {
         "Lat": {
@@ -476,6 +470,20 @@
       "type": [
         "null",
         "array"
+      ]
+    },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "HomeTotalAmt": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
       ]
     },
     "ShipAddr": {

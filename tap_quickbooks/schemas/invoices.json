@@ -28,6 +28,18 @@
     },
     "BillAddr": {
       "properties": {
+        "CountrySubDivisionCode": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "City": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
         "Line3": {
           "type": [
             "null",
@@ -53,6 +65,12 @@
           ]
         },
         "Line4": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "PostalCode": {
           "type": [
             "null",
             "string"
@@ -106,12 +124,6 @@
       "type": [
         "null",
         "string"
-      ]
-    },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
       ]
     },
     "DeliveryInfo": {
@@ -261,6 +273,20 @@
         "string"
       ]
     },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "HomeTotalAmt": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "Line": {
       "items": {
         "properties": {
@@ -305,6 +331,26 @@
           },
           "SalesItemLineDetail": {
             "properties": {
+              "ClassRef": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                }
+              },
               "TaxCodeRef": {
                 "properties": {
                   "value": {

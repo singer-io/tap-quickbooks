@@ -1,11 +1,5 @@
 {
   "properties": {
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "CurrencyRef": {
       "properties": {
         "name": {
@@ -332,6 +326,33 @@
         "null",
         "string"
       ]
+    },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "DepartmentRef": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
     },
     "SalesTermRef": {
       "properties": {

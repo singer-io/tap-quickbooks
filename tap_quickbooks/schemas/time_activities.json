@@ -1,11 +1,5 @@
 {
   "properties": {
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "HourlyRate": {
       "type": [
         "null",

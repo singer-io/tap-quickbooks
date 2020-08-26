@@ -1,11 +1,5 @@
 {
   "properties": {
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "MetaData": {
       "properties": {
         "LastUpdatedTime": {

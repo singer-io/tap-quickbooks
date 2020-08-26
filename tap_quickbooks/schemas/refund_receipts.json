@@ -34,12 +34,6 @@
         "object"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "CustomerRef": {
       "properties": {
         "name": {
@@ -379,6 +373,20 @@
       "type": [
         "null",
         "boolean"
+      ]
+    },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "HomeTotalAmt": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
       ]
     },
     "TotalAmt": {

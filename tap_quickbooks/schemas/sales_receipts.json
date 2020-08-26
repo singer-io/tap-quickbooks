@@ -493,10 +493,18 @@
         }
       }
     },
-    "sparse": {
+    "ExchangeRate": {
       "type": [
         "null",
-        "boolean"
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "HomeTotalAmt": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
       ]
     },
     "TotalAmt": {

@@ -219,11 +219,12 @@
         "string"
       ]
     },
-    "sparse": {
+    "ExchangeRate": {
       "type": [
         "null",
-        "boolean"
-      ]
+        "string"
+      ],
+      "format": "singer.decimal"
     }
   }
 }

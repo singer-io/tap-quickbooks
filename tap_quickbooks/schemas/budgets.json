@@ -125,12 +125,6 @@
         "null",
         "object"
       ]
-    },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
     }
   },
   "type": [
