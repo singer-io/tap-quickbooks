@@ -273,12 +273,6 @@
         "boolean"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "Title": {
       "type": [
         "null",

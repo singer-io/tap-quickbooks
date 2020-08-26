@@ -44,12 +44,6 @@
         }
       }
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "Id": {
       "type": [
         "null",
@@ -175,6 +169,18 @@
             "string"
           ]
         },
+        "City": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Country": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
         "Line1": {
           "type": [
             "null",
@@ -243,6 +249,13 @@
         }
       }
     },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
     "TotalAmt": {
       "type": [
         "null",
@@ -288,6 +301,26 @@
         "null",
         "string"
       ]
+    },
+    "DepartmentRef": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
     },
     "Line": {
       "type": [
@@ -336,6 +369,26 @@
                   "null",
                   "string"
                 ]
+              },
+              "ClassRef": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                }
               },
               "ItemRef": {
                 "type": [

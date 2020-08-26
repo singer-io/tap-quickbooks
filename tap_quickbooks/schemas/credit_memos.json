@@ -190,12 +190,6 @@
         "boolean"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "domain": {
       "type": [
         "null",
@@ -385,6 +379,20 @@
       "type": [
         "null",
         "integer"
+      ]
+    },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "HomeTotalAmt": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
       ]
     },
     "MetaData": {

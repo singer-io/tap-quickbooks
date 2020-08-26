@@ -20,12 +20,6 @@
         "object"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "CashBack": {
       "properties": {
         "AccountRef": {
@@ -259,6 +253,13 @@
         "null",
         "string"
       ]
+    },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
     },
     "PrivateNote": {
       "type": [

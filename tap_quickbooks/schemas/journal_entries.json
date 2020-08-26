@@ -32,12 +32,6 @@
         "string"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "SyncToken": {
       "type": [
         "null",
@@ -129,6 +123,13 @@
         "null",
         "string"
       ]
+    },
+    "ExchangeRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
     },
     "MetaData": {
       "properties": {

@@ -44,12 +44,6 @@
         "string"
       ]
     },
-    "sparse": {
-      "type": [
-        "null",
-        "boolean"
-      ]
-    },
     "SyncToken": {
       "type": [
         "null",
