@@ -62,7 +62,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 self.assertGreaterEqual(sync_record_count[stream], 1)
 
         # Update state and sync again
-        new_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-24T08:43:33-07:00'}}}
+        new_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-25T13:17:36-07:00'}}}
         menagerie.set_state(conn_id, new_state, version=1)
 
         sync_job_name = runner.run_sync_mode(self, conn_id)
