@@ -63,7 +63,7 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
 
         # Examine target output
-        self.assertEqual(sync_record_count, {'accounts': 91})
+        self.assertEqual(sync_record_count, {'accounts': 92})
 
         conn_id = self.ensure_connection(original=False)
         # Run in check mode
@@ -78,4 +78,4 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
         # Verify only 1 record synced with the new state
         sync_record_count = runner.examine_target_output_file(
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
-        self.assertEqual(sync_record_count, {'accounts': 1})
+        self.assertEqual(sync_record_count, {'accounts': 3})

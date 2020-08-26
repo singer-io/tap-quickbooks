@@ -56,4 +56,4 @@ class TestQuickbooksPagination(TestQuickbooksBase):
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
 
         # Examine target output
-        self.assertEqual(sync_record_count, {'accounts': 91})
+        self.assertEqual(sync_record_count, {'accounts': 92})

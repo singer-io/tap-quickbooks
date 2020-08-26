@@ -48,7 +48,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
         # Verify the bookmark is correct, LastUpdatedTime assumes no other Account records are added to Sandbox
         actual_state = menagerie.get_state(conn_id)
-        expected_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-24T08:44:33-07:00'}}}
+        expected_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-25T13:17:37-07:00'}}}
         self.assertEqual(actual_state, expected_state)
 
         # Verify actual rows were synced
