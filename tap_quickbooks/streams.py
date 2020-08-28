@@ -32,14 +32,14 @@ class Stream:
                 yield rec
 
             if results:
-                state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
-                singer.write_state(state)
+                self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
+                singer.write_state(self.state)
 
             if len(results) < max_results:
                 break
             start_position += max_results
 
-        singer.write_state(state)
+        singer.write_state(self.state)
 
 
 
