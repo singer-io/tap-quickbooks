@@ -115,8 +115,8 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
 
         # Verify tap and target exit codes
-        # exit_status = menagerie.get_exit_status(conn_id, sync_job_name)  # BUG | https://stitchdata.atlassian.net/browse/SRCE-3819
-        # menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
+        exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
+        menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
 
         # Test by stream
         for stream in self.expected_streams():
