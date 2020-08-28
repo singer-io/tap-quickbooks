@@ -64,7 +64,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
         # Update state and sync again
         new_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-25T13:17:36-07:00'}}}
-        menagerie.set_state(conn_id, new_state, version=1)
+        menagerie.set_state(conn_id, new_state)
 
         sync_job_name = runner.run_sync_mode(self, conn_id)
 
