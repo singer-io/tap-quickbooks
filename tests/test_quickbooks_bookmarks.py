@@ -35,9 +35,10 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         found_catalogs = menagerie.get_catalogs(conn_id)
         self.assertGreater(len(found_catalogs), 0, msg="unable to locate schemas for connection {}".format(conn_id))
 
-        # Select only the Accounts table
-        accounts_entry = [ce for ce in found_catalogs if ce['tap_stream_id'] == "accounts"]
-        self.select_all_streams_and_fields(conn_id, accounts_entry)
+        # Select only the expected streams tables
+        expected_streams = self.expected_streams()
+        catalog_entries = [ce for ce in found_catalogs if ce['tap_stream_id'] in expected_streams]
+        self.select_all_streams_and_fields(conn_id, catalog_entries)
 
         # Run a sync job using orchestrator
         sync_job_name = runner.run_sync_mode(self, conn_id)
