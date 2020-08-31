@@ -10,21 +10,6 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-    # def metadata_level_rep_keys(self):
-    #     """
-    #     Buil a dictionary with key of table name
-    #     and value of an object, to use in state comparisons.
-
-    #     The object has a key of the MetaData-level-replication-key
-    #     and a value instantiated to None
-    #     """
-    #     top_level_rep_keys = self.expected_replication_keys()
-    #     md_level_rep_key = {"LastUpdatedTime": None}
-    #     md_level_rep_keys = dict()
-    #     for stream, rep_key in top_level_rep_keys.items():
-    #         md_level_rep_keys[stream] = md_level_rep_key
-
-    #     return md_level_rep_keys
 
     def expected_replication_key_values(self):
         md_rep_keys = self.metadata_level_rep_keys()
@@ -68,20 +53,9 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
         menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
 
-        # TODO Do we want to keep this assertion?
-        # Verify the bookmark is correct, LastUpdatedTime assumes no other Account records are added to Sandbox
-        # actual_state = menagerie.get_state(conn_id)
-        # expected_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-25T13:17:37-07:00'}}}
-        # self.assertEqual(actual_state, expected_state)
-
         # UPDATE STATE BETWEEN SYNCS
         new_state = dict()
         new_state['bookmarks'] = {key: {'LastUpdatedTime': value} for key, value in self.simulated_states_by_stream().items()}
-        # TODO make ^ this data driven, need to determine what values for each stream to set state
-        #      need to determine a reason to set a certain state. Do we want to just go a minute before
-        #      the last record? What does that make us more confident that we are bookmarking correctly?
-        #      take time to consider how we should focus our testing now that data is all static. Reference
-        #      the test_bookmarks_static.py in tap-square.
         menagerie.set_state(conn_id, new_state)
 
         # SYNC 2
@@ -152,11 +126,8 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 #     self.assertLessEqual(rk_value, second_state_value,
                 #                          msg="Second sync state was set incorrectly, a record with a greater rep key value was synced")
 
-                # Each stream should have 1 or more records returned # TODO drop?
-                # self.assertGreaterEqual(second_sync_record_count[stream], 1)
-
-                # # Verify only 1 record synced with the new state # TODO drop?
-                # self.assertEqual(second_sync_record_count, {'accounts': 1})
-
                 # Verify the number of records in the 2nd sync is less then the first
                 self.assertLessEqual(second_sync_count, first_sync_count) # TODO can this be assertLess
+
+                # Verify at least 1 record was replicated in the second sync
+                self.assertGreater(0, second_sync_count, msg="We are not fully testing bookmarking for {}".format(stream))
