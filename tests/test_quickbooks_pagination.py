@@ -17,7 +17,7 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         return {
             'start_date' : '2016-06-02T00:00:00Z',
             'sandbox': 'true',
-            'max_results': '10'
+            'max_results': '10' # TODO can we add enough data per stream to test the default max_results?
         }
 
 
@@ -45,6 +45,9 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
         menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
+
+        # Examine target file
+        sync_records = runner.get_records_from_target_output()
         sync_record_count = runner.examine_target_output_file(
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
 
@@ -52,14 +55,23 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         for stream in self.expected_streams():
             with self.subTest(stream=stream):
 
+                expected_count = self.minimum_record_count_by_stream().get(stream)
                 record_count = sync_record_count.get(stream, 0)
 
-                expected_count = self.minimum_record_count_by_stream().get(stream)
+                sync_messages = sync_records.get(stream, {'messages': []}).get('messages')
+
+                primary_key = self.expected_primary_keys().get(stream).pop()
 
                 # Verify the sync meets or exceeds the default record count
                 self.assertLessEqual(expected_count, record_count)
 
                 # Verify the number or records exceeds the max_results (api limit)
-                api_limit = self.get_properties().get('max_results')
+                api_limit = int(self.get_properties().get('max_results'))
                 self.assertGreater(record_count, api_limit,
                                    msg="Record count not large enough to gaurantee pagination.")
+
+                # Verify we did not duplicate any records across pages
+                records_pks_set = {message.get('data').get(primary_key) for message in sync_messages}
+                records_pks_list = [message.get('data').get(primary_key) for message in sync_messages]
+                self.assertCountEqual(records_pks_set, records_pks_list,
+                                      msg="We have duplicate records for {}".format(stream))
