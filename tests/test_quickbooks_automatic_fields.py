@@ -9,32 +9,6 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-
-    def select_streams_and_fields(self, conn_id, catalogs, select_all_fields: bool = True):
-        """
-        Select streams based on the catalog passed in.
-        Select all fields or only automatic fields depending on the flag
-        """
-        for catalog in catalogs:
-            schema = menagerie.get_annotated_schema(conn_id, catalog['stream_id'])
-            non_selected_properties = []
-            if not select_all_fields:
-                # get a list of all properties so that none are selected
-                non_selected_properties = schema.get('annotated-schema', {}).get(
-                    'properties', {})
-                # remove properties that are automatic
-                for prop in self.expected_automatic_fields().get(catalog['stream_name'], []):
-                    if prop in non_selected_properties:
-                        del non_selected_properties[prop]
-                non_selected_properties = non_selected_properties.keys()
-            additional_md = []
-
-            connections.select_catalog_and_fields_via_metadata(
-                conn_id, catalog, schema, additional_md=additional_md,
-                non_selected_fields=non_selected_properties
-            )
-
-
     @staticmethod
     def get_selected_fields_from_metadata(metadata):
         selected_fields = set()
@@ -67,7 +41,7 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         # Select only the expected streams tables
         expected_streams = self.expected_streams()
         catalog_entries = [ce for ce in found_catalogs if ce['tap_stream_id'] in expected_streams]
-        self.select_streams_and_fields(conn_id, catalog_entries, select_all_fields=False)
+        self.select_all_streams_and_fields(conn_id, catalog_entries, select_all_fields=False)
 
         # Verify our selection worked as expected
         catalogs_selection = menagerie.get_catalogs(conn_id)
