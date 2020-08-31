@@ -34,6 +34,10 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         return {'accounts'}
 
 
+    def simulated_states_by_stream(self):
+        return {'accounts': '2020-08-25T13:17:36-07:00'}
+
+
     def test_run(self):
         # SYNC 1
         conn_id = self.ensure_connection()
@@ -71,7 +75,8 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         # self.assertEqual(actual_state, expected_state)
 
         # UPDATE STATE BETWEEN SYNCS
-        new_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-25T13:17:36-07:00'}}}
+        new_state = dict()
+        new_state['bookmarks'] = {key: {'LastUpdatedTime': value} for key, value in self.simulated_states_by_stream().items()}
         # TODO make ^ this data driven, need to determine what values for each stream to set state
         #      need to determine a reason to set a certain state. Do we want to just go a minute before
         #      the last record? What does that make us more confident that we are bookmarking correctly?
@@ -95,7 +100,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
             with self.subTest(stream=stream):
                 # record counts
                 first_sync_count = first_sync_record_count.get(stream, 0)
-                expected_first_sync_count = self.minimum_record_count_by_stream().get(stream)
+                expected_first_sync_count = self.minimum_record_count_by_stream().get(stream) # TODO drop?
                 second_sync_count = second_sync_record_count.get(stream, 0)
 
                 # record messages
@@ -123,27 +128,35 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 first_state_value = first_state_key_value.get(sub_level_rk)
                 second_state_value = second_state_key_value.get(sub_level_rk)
 
-                # Verify the second sync state is Equal to the first sync state value # TODO
+                # Verify the second sync state is Equal to the first sync state value
                 self.assertEqual(second_state_value, first_state_value)
 
+                # Verify the second sync records respect the previous (simulated) bookmark value
+                simulated_state_value = new_state['bookmarks'][stream][sub_level_rk]
+                for message in second_sync_messages:
+                    rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
+                    self.assertGreaterEqual(rk_value, simulated_state_value,
+                                            msg="Second sync records do not repect the previous bookmark.")
 
                 # BUG | https://stitchdata.atlassian.net/browse/SRCE-3821
-                # Verify the first sync state value is the max replication key value for a given stream
+                # Verify the first sync bookmark value is the max replication key value for a given stream
                 # for message in first_sync_messages:
                 #     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
                 #     self.assertLessEqual(rk_value, first_state_value,
                 #                          msg="First sync state was set incorrectly, a record with a greater rep key value was synced")
 
                 # BUG | https://stitchdata.atlassian.net/browse/SRCE-3821
-                # Verify the second sync state value is the max replication key value for a given stream
+                # Verify the second sync bookmark value is the max replication key value for a given stream
                 # for message in second_sync_messages:
                 #     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
                 #     self.assertLessEqual(rk_value, second_state_value,
                 #                          msg="Second sync state was set incorrectly, a record with a greater rep key value was synced")
 
-
-                # Each stream should have 1 or more records returned # TODO
+                # Each stream should have 1 or more records returned # TODO drop?
                 # self.assertGreaterEqual(second_sync_record_count[stream], 1)
 
-                # # Verify only 1 record synced with the new state # TODO
+                # # Verify only 1 record synced with the new state # TODO drop?
                 # self.assertEqual(second_sync_record_count, {'accounts': 1})
+
+                # Verify the number of records in the 2nd sync is less then the first
+                self.assertLessEqual(second_sync_count, first_sync_count) # TODO can this be assertLess
