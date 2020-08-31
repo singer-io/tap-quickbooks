@@ -74,7 +74,6 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
             with self.subTest(stream=stream):
                 # record counts
                 first_sync_count = first_sync_record_count.get(stream, 0)
-                expected_first_sync_count = self.minimum_record_count_by_stream().get(stream) # TODO drop?
                 second_sync_count = second_sync_record_count.get(stream, 0)
 
                 # record messages
@@ -127,7 +126,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 #                          msg="Second sync state was set incorrectly, a record with a greater rep key value was synced")
 
                 # Verify the number of records in the 2nd sync is less then the first
-                self.assertLessEqual(second_sync_count, first_sync_count) # TODO can this be assertLess
+                self.assertLess(second_sync_count, first_sync_count)
 
                 # Verify at least 1 record was replicated in the second sync
                 self.assertGreater(second_sync_count, 0, msg="We are not fully testing bookmarking for {}".format(stream))
