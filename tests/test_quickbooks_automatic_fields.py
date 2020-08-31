@@ -9,14 +9,42 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-    def expected_replication_keys(self):
+
+    def select_streams_and_fields(self, conn_id, catalogs, select_all_fields: bool = True):
         """
-        return a dictionary with key of table name
-        and value as a set of replication key fields
+        Select streams based on the catalog passed in.
+        Select all fields or only automatic fields depending on the flag
         """
-        return {table: properties.get(self.REPLICATION_KEYS, set())
-                for table, properties
-                in self.expected_metadata().items()}
+        for catalog in catalogs:
+            schema = menagerie.get_annotated_schema(conn_id, catalog['stream_id'])
+            non_selected_properties = []
+            if not select_all_fields:
+                # get a list of all properties so that none are selected
+                non_selected_properties = schema.get('annotated-schema', {}).get(
+                    'properties', {})
+                # remove properties that are automatic
+                for prop in self.expected_automatic_fields().get(catalog['stream_name'], []):
+                    if prop in non_selected_properties:
+                        del non_selected_properties[prop]
+                non_selected_properties = non_selected_properties.keys()
+            additional_md = []
+
+            connections.select_catalog_and_fields_via_metadata(
+                conn_id, catalog, schema, additional_md=additional_md,
+                non_selected_fields=non_selected_properties
+            )
+
+
+    @staticmethod
+    def get_selected_fields_from_metadata(metadata):
+        selected_fields = set()
+        for field in metadata:
+            is_field_metadata = len(field['breadcrumb']) > 1
+            inclusion_automatic_or_selected = (field['metadata']['inclusion'] == 'automatic'
+                                               or field['metadata']['selected'] is True)
+            if is_field_metadata and inclusion_automatic_or_selected:
+                selected_fields.add(field['breadcrumb'][1])
+        return selected_fields
 
 
     def expected_streams(self):
@@ -36,9 +64,28 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         found_catalogs = menagerie.get_catalogs(conn_id)
         self.assertGreater(len(found_catalogs), 0, msg="unable to locate schemas for connection {}".format(conn_id))
 
-        # Select only the Accounts table, but only keep automatic fields
-        accounts_entry = [ce for ce in found_catalogs if ce['tap_stream_id'] == "accounts"]
-        self.select_all_streams_and_fields(conn_id, accounts_entry, select_all_fields=False)
+        # Select only the expected streams tables
+        expected_streams = self.expected_streams()
+        catalog_entries = [ce for ce in found_catalogs if ce['tap_stream_id'] in expected_streams]
+        self.select_streams_and_fields(conn_id, catalog_entries, select_all_fields=False)
+
+        # Verify our selection worked as expected
+        catalogs_selection = menagerie.get_catalogs(conn_id)
+        for cat in catalogs_selection:
+            catalog_entry = menagerie.get_annotated_schema(conn_id, cat['stream_id'])
+
+            # Verify the expected stream tables are selected
+            selected = catalog_entry.get('annotated-schema').get('selected')
+            print("Validating selection on {}: {}".format(cat['stream_name'], selected))
+            if cat['stream_name'] not in expected_streams:
+                self.assertFalse(selected, msg="Stream selected, but not testable.")
+                continue # Skip remaining assertions if we aren't selecting this stream
+            self.assertTrue(selected, msg="Stream not selected.")
+
+            # Verify only automatic fields are selected
+            expected_automatic_fields = self.expected_automatic_fields().get(cat['tap_stream_id'])
+            selected_fields = self.get_selected_fields_from_metadata(catalog_entry['metadata'])
+            self.assertEqual(expected_automatic_fields, selected_fields)
 
         # Run a sync job using orchestrator
         sync_job_name = runner.run_sync_mode(self, conn_id)
