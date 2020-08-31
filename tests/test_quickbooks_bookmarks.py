@@ -11,10 +11,6 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         return "tap_tester_quickbooks_combined_test"
 
 
-    def expected_replication_key_values(self):
-        md_rep_keys = self.metadata_level_rep_keys()
-
-
     def expected_streams(self):
         return {'accounts'}
 
@@ -47,7 +43,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         first_sync_records = runner.get_records_from_target_output()
         first_sync_record_count = runner.examine_target_output_file(
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
-        first_sync_state = menagerie.get_state(conn_id)
+        first_sync_bookmark = menagerie.get_state(conn_id)
 
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
@@ -63,7 +59,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         second_sync_records = runner.get_records_from_target_output()
         second_sync_record_count = runner.examine_target_output_file(
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
-        second_sync_state = menagerie.get_state(conn_id)
+        second_sync_bookmark = menagerie.get_state(conn_id)
 
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
@@ -81,49 +77,49 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 second_sync_messages = second_sync_records.get(stream, {'messages': []}).get('messages')
 
                 # replication key is an object (MetaData.LastUpdatedTime) in sync records
-                # but just the sub level pk is used in setting sync state
+                # but just the sub level pk is used in setting bookmarks
                 top_level_rk = 'MetaData'
                 sub_level_rk = 'LastUpdatedTime'
 
-                # sync states (top level objects)
-                first_state_key_value = first_sync_state.get('bookmarks').get(stream)
-                second_state_key_value = second_sync_state.get('bookmarks').get(stream)
+                # bookmarked states (top level objects)
+                first_bookmark_key_value = first_sync_bookmark.get('bookmarks').get(stream)
+                second_bookmark_key_value = second_sync_bookmark.get('bookmarks').get(stream)
 
-                # Verify the first sync sets a state value of the expected form
-                self.assertIsNotNone(first_state_key_value)
-                self.assertIsNotNone(first_state_key_value.get(sub_level_rk))
+                # Verify the first sync sets a bookmark of the expected form
+                self.assertIsNotNone(first_bookmark_key_value)
+                self.assertIsNotNone(first_bookmark_key_value.get(sub_level_rk))
 
-                # Verify the second sync sets a state value of the expected form
-                self.assertIsNotNone(second_state_key_value)
-                self.assertIsNotNone(second_state_key_value.get(sub_level_rk))
+                # Verify the second sync sets a bookmark of the expected form
+                self.assertIsNotNone(second_bookmark_key_value)
+                self.assertIsNotNone(second_bookmark_key_value.get(sub_level_rk))
 
-                # sync states (values)
-                first_state_value = first_state_key_value.get(sub_level_rk)
-                second_state_value = second_state_key_value.get(sub_level_rk)
+                # bookmarked states (actual values)
+                first_bookmark_value = first_bookmark_key_value.get(sub_level_rk)
+                second_bookmark_value = second_bookmark_key_value.get(sub_level_rk)
 
-                # Verify the second sync state is Equal to the first sync state value
-                self.assertEqual(second_state_value, first_state_value)
+                # Verify the second sync bookmark is Equal to the first sync bookmark
+                self.assertEqual(second_bookmark_value, first_bookmark_value) # assumes no changes to data during test
 
                 # Verify the second sync records respect the previous (simulated) bookmark value
-                simulated_state_value = new_state['bookmarks'][stream][sub_level_rk]
+                simulated_bookmark_value = new_state['bookmarks'][stream][sub_level_rk]
                 for message in second_sync_messages:
                     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
-                    self.assertGreaterEqual(rk_value, simulated_state_value,
+                    self.assertGreaterEqual(rk_value, simulated_bookmark_value,
                                             msg="Second sync records do not repect the previous bookmark.")
 
                 # BUG | https://stitchdata.atlassian.net/browse/SRCE-3821
                 # Verify the first sync bookmark value is the max replication key value for a given stream
                 # for message in first_sync_messages:
                 #     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
-                #     self.assertLessEqual(rk_value, first_state_value,
-                #                          msg="First sync state was set incorrectly, a record with a greater rep key value was synced")
+                #     self.assertLessEqual(rk_value, first_bookmark_value,
+                #                          msg="First sync bookmark was set incorrectly, a record with a greater rep key value was synced")
 
                 # BUG | https://stitchdata.atlassian.net/browse/SRCE-3821
                 # Verify the second sync bookmark value is the max replication key value for a given stream
                 # for message in second_sync_messages:
                 #     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
-                #     self.assertLessEqual(rk_value, second_state_value,
-                #                          msg="Second sync state was set incorrectly, a record with a greater rep key value was synced")
+                #     self.assertLessEqual(rk_value, second_bookmark_value,
+                #                          msg="Second sync bookmark was set incorrectly, a record with a greater rep key value was synced")
 
                 # Verify the number of records in the 2nd sync is less then the first
                 self.assertLess(second_sync_count, first_sync_count)
