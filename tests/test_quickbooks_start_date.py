@@ -44,6 +44,7 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
                 in self.expected_metadata().items()}
 
     def expected_streams(self):
+        """Test coverage for this test. If the stream is here, we test it."""
         return {
             'accounts',
             'customers',
@@ -112,6 +113,10 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
         second_sync_records = runner.get_records_from_target_output()
         second_sync_record_count = runner.examine_target_output_file(
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
+
+        # Verify tap and target exit codes
+        exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
+        menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
 
         # Test by stream
         for stream in self.expected_streams():
