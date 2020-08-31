@@ -130,4 +130,4 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 self.assertLessEqual(second_sync_count, first_sync_count) # TODO can this be assertLess
 
                 # Verify at least 1 record was replicated in the second sync
-                self.assertGreater(0, second_sync_count, msg="We are not fully testing bookmarking for {}".format(stream))
+                self.assertGreater(second_sync_count, 0, msg="We are not fully testing bookmarking for {}".format(stream))
