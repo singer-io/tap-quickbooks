@@ -12,11 +12,11 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
 
     def expected_streams(self):
-        return {'accounts'}
+        return {'accounts'} # TODO add remaining streams
 
 
     def simulated_states_by_stream(self):
-        return {'accounts': '2020-08-25T13:17:36-07:00'}
+        return {'accounts': '2020-08-25T13:17:36-07:00'} # TODO add times for new streams
 
 
     def test_run(self):
