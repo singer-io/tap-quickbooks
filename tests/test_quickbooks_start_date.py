@@ -9,31 +9,6 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-
-    def minimum_record_count_by_stream(self):
-        """
-        The US sandbox comes with the following preset data
-
-          Construction Trade
-            141 transactions
-            31 customers
-            26 vendors
-            4 employees
-            20 items
-            90 accounts
-
-        see their docs for more info:
-        https://developer.intuit.com/app/developer/qbo/docs/develop/sandboxes#launch-a-sandbox
-        """
-        return {
-            # "transactions": 141, # TODO currenltly zero
-            "customers": 29, # 31, TODO this one is also 2 less
-            "vendors": 26,
-            "employees": 2, # 4,TODO  why is this also 2 less?
-            "items": 18, # 20, TODO why is this different from their docs??
-            "accounts": 90,
-        }
-
     def expected_replication_keys(self):
         """
         return a dictionary with key of table name
@@ -68,7 +43,6 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
 
 
     def test_run(self):
-
         # SYNC 1
         conn_id = self.ensure_connection()
 
@@ -143,7 +117,9 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
                 # Verify by stream that all records have a rep key that is equal to or greater than that sync's start_date
                 for message in first_sync_messages:
                     rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
-                    self.assertGreaterEqual(rep_key_value, start_date_1, "A record was replicated with a replication key value prior to the start date")
+                    self.assertGreaterEqual(rep_key_value, start_date_1,
+                                            msg="A record was replicated with a replication key value prior to the start date")
                 for message in second_sync_messages:
                     rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
-                    self.assertGreaterEqual(rep_key_value, start_date_2, "A record was replicated with a replication key value prior to the start date")
+                    self.assertGreaterEqual(rep_key_value, start_date_2,
+                                            msg="A record was replicated with a replication key value prior to the start date")

@@ -5,24 +5,22 @@ import re
 
 from base import TestQuickbooksBase
 
+
 class TestQuickbooksBookmarks(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-    def expected_replication_keys(self):
-        """
-        return a dictionary with key of table name
-        and value as a set of replication key fields
-        """
-        return {table: properties.get(self.REPLICATION_KEYS, set())
-                for table, properties
-                in self.expected_metadata().items()}
 
     def expected_streams(self):
-        return {'accounts'}
+        return {'accounts'} # TODO add remaining streams
+
+
+    def simulated_states_by_stream(self):
+        return {'accounts': '2020-08-25T13:17:36-07:00'} # TODO add times for new streams
 
 
     def test_run(self):
+        # SYNC 1
         conn_id = self.ensure_connection()
 
         # Run in check mode
@@ -42,33 +40,89 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
         # Run a sync job using orchestrator
         sync_job_name = runner.run_sync_mode(self, conn_id)
+        first_sync_records = runner.get_records_from_target_output()
+        first_sync_record_count = runner.examine_target_output_file(
+            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+        first_sync_bookmark = menagerie.get_state(conn_id)
 
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
         menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
 
-        # Verify the bookmark is correct, LastUpdatedTime assumes no other Account records are added to Sandbox
-        actual_state = menagerie.get_state(conn_id)
-        expected_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-25T13:17:37-07:00'}}}
-        self.assertEqual(actual_state, expected_state)
+        # UPDATE STATE BETWEEN SYNCS
+        new_state = dict()
+        new_state['bookmarks'] = {key: {'LastUpdatedTime': value} for key, value in self.simulated_states_by_stream().items()}
+        menagerie.set_state(conn_id, new_state)
 
-        # Verify actual rows were synced
-        sync_record_count = runner.examine_target_output_file(
+        # SYNC 2
+        sync_job_name = runner.run_sync_mode(self, conn_id)
+        second_sync_records = runner.get_records_from_target_output()
+        second_sync_record_count = runner.examine_target_output_file(
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
+        second_sync_bookmark = menagerie.get_state(conn_id)
 
-        # Examine target output
+        # Verify tap and target exit codes
+        exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
+        menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
+
+        # Test by stream
         for stream in self.expected_streams():
             with self.subTest(stream=stream):
-                # Each stream should have 1 or more records returned
-                self.assertGreaterEqual(sync_record_count[stream], 1)
+                # record counts
+                first_sync_count = first_sync_record_count.get(stream, 0)
+                second_sync_count = second_sync_record_count.get(stream, 0)
 
-        # Update state and sync again
-        new_state = {'bookmarks': {'accounts': {'LastUpdatedTime': '2020-08-25T13:17:36-07:00'}}}
-        menagerie.set_state(conn_id, new_state, version=1)
+                # record messages
+                first_sync_messages = first_sync_records.get(stream, {'messages': []}).get('messages')
+                second_sync_messages = second_sync_records.get(stream, {'messages': []}).get('messages')
 
-        sync_job_name = runner.run_sync_mode(self, conn_id)
+                # replication key is an object (MetaData.LastUpdatedTime) in sync records
+                # but just the sub level pk is used in setting bookmarks
+                top_level_rk = 'MetaData'
+                sub_level_rk = 'LastUpdatedTime'
 
-        # Verify only 1 record synced with the new state
-        sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
-        self.assertEqual(sync_record_count, {'accounts': 1})
+                # bookmarked states (top level objects)
+                first_bookmark_key_value = first_sync_bookmark.get('bookmarks').get(stream)
+                second_bookmark_key_value = second_sync_bookmark.get('bookmarks').get(stream)
+
+                # Verify the first sync sets a bookmark of the expected form
+                self.assertIsNotNone(first_bookmark_key_value)
+                self.assertIsNotNone(first_bookmark_key_value.get(sub_level_rk))
+
+                # Verify the second sync sets a bookmark of the expected form
+                self.assertIsNotNone(second_bookmark_key_value)
+                self.assertIsNotNone(second_bookmark_key_value.get(sub_level_rk))
+
+                # bookmarked states (actual values)
+                first_bookmark_value = first_bookmark_key_value.get(sub_level_rk)
+                second_bookmark_value = second_bookmark_key_value.get(sub_level_rk)
+
+                # Verify the second sync bookmark is Equal to the first sync bookmark
+                self.assertEqual(second_bookmark_value, first_bookmark_value) # assumes no changes to data during test
+
+                # Verify the second sync records respect the previous (simulated) bookmark value
+                simulated_bookmark_value = new_state['bookmarks'][stream][sub_level_rk]
+                for message in second_sync_messages:
+                    rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
+                    self.assertGreaterEqual(rk_value, simulated_bookmark_value,
+                                            msg="Second sync records do not repect the previous bookmark.")
+
+                # BUG | https://stitchdata.atlassian.net/browse/SRCE-3821
+                # Verify the first sync bookmark value is the max replication key value for a given stream
+                # for message in first_sync_messages:
+                #     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
+                #     self.assertLessEqual(rk_value, first_bookmark_value,
+                #                          msg="First sync bookmark was set incorrectly, a record with a greater rep key value was synced")
+
+                # BUG | https://stitchdata.atlassian.net/browse/SRCE-3821
+                # Verify the second sync bookmark value is the max replication key value for a given stream
+                # for message in second_sync_messages:
+                #     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
+                #     self.assertLessEqual(rk_value, second_bookmark_value,
+                #                          msg="Second sync bookmark was set incorrectly, a record with a greater rep key value was synced")
+
+                # Verify the number of records in the 2nd sync is less then the first
+                self.assertLess(second_sync_count, first_sync_count)
+
+                # Verify at least 1 record was replicated in the second sync
+                self.assertGreater(second_sync_count, 0, msg="We are not fully testing bookmarking for {}".format(stream))
