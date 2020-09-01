@@ -31,11 +31,9 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         """
         date_object = dateutil.parser.parse(date_str)
         date_object_utc = date_object.astimezone(tz=pytz.UTC)
-        date_str_utc = datetime.datetime.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
-        print("converted state value {} --> {} for use in assertions".format(date_str, date_str_utc))
-        return date_str_utc
+        return datetime.datetime.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
 
-    def simulated_states_by_stream(self): # TODO refactor this if we add more streams, otherwise it's fine?
+    def simulated_states_by_stream(self): # TODO refactor?
         """
         States that will be set by the test between syncs.
         By default the state is set to August 1st to incorporate recent records in a second sync.
