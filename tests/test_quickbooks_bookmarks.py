@@ -18,7 +18,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         return {
             'accounts',
             'customers',
-            # 'employees', # TODO add this streams
+            'employees',
             'items',
             'vendors'
         }
@@ -35,16 +35,17 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         print("converted state value {} --> {} for use in assertions".format(date_str, date_str_utc))
         return date_str_utc
 
-    def simulated_states_by_stream(self): # TODO refactor into single variable if all streams use the default state value
+    def simulated_states_by_stream(self): # TODO refactor this if we add more streams, otherwise it's fine?
         """
         States that will be set by the test between syncs.
         By default the state is set to August 1st to incorporate recent records in a second sync.
+        The goal of this state is to result in a sync with at least 1 record but fewer records than a previous sync.
         """
         default_state = '2020-08-01T12:42:42-07:00'
         return {
             'accounts': default_state,
             'customers': default_state,
-            # 'employees': '',   # TODO figure out a time here
+            'employees': '2020-09-01T10:10:30-07:00',
             'items': default_state,
             'vendors': default_state,
         }
