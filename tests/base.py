@@ -186,3 +186,30 @@ class TestQuickbooksBase(unittest.TestCase):
                 conn_id, catalog, schema, additional_md=additional_md,
                 non_selected_fields=non_selected_properties
             )
+
+    ##########################################################################
+    ### Tap Specific Methods
+    ##########################################################################
+    def minimum_record_count_by_stream(self):
+        """
+        The US sandbox comes with the following preset data
+
+          Construction Trade
+            141 transactions
+            31 customers
+            26 vendors
+            4 employees
+            20 items
+            90 accounts
+
+        see their docs for more info:
+        https://developer.intuit.com/app/developer/qbo/docs/develop/sandboxes#launch-a-sandbox
+        """
+        return {
+            # "transactions": 141, # TODO currenltly zero
+            "customers": 29, # 31, TODO this one is also 2 less
+            "vendors": 26,
+            "employees": 2, # 4,TODO  why is this also 2 less?
+            "items": 18, # 20, TODO why is this different from their docs??
+            "accounts": 90,
+        }
