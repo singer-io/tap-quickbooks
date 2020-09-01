@@ -23,7 +23,7 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         return {
             'start_date' : '2016-06-02T00:00:00Z',
             'sandbox': 'true',
-            page_size_key: '10' # TODO can we add enough data per stream to test the default max_results (200)?
+            page_size_key: '10'
         }
 
 
