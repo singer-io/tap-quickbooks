@@ -10,7 +10,6 @@ class TestQuickbooksPagination(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-
     def expected_streams(self):
         return {
             'accounts',
@@ -19,8 +18,6 @@ class TestQuickbooksPagination(TestQuickbooksBase):
             'items',
             'vendors',
         }
-
-
 
     def get_properties(self):
         return {
