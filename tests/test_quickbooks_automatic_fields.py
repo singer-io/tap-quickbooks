@@ -22,7 +22,14 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
 
 
     def expected_streams(self):
-        return {'accounts'}
+        return {
+            'accounts',
+            'customers',
+            "employees",
+            "items",
+            # "transactions", see base TODO
+            "vendors",
+        }
 
 
     def test_run(self):
