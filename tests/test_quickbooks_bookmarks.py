@@ -14,7 +14,6 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-
     def expected_streams(self):
         return { # TODO add remaining streams
             'accounts',
@@ -23,6 +22,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
             # 'items',
             # 'vendors'
         }
+
     def convert_state_to_utc(self, date_str):
         """
         Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to utc,

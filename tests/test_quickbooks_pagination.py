@@ -21,6 +21,7 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         }
 
 
+
     def get_properties(self):
         return {
             'start_date' : '2016-06-02T00:00:00Z',
