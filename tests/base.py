@@ -39,7 +39,7 @@ class TestQuickbooksBase(unittest.TestCase):
         return {
             'start_date' : '2016-06-02T00:00:00Z',
             'sandbox': 'true'
-            #'end_date' : '2016-06-06T00:00:00Z'
+            #'end_date' : '2016-06-06T00:00:00Z' # TODO what is this about?
         }
 
 
