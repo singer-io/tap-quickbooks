@@ -14,7 +14,7 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         return {
             'accounts',
             'customers',
-            # 'employees', TODO only has 2 records make more if possible
+            'employees',
             'items',
             'vendors',
         }

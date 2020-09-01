@@ -41,10 +41,10 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         By default the state is set to August 1st to incorporate recent records in a second sync.
         """
         default_state = '2020-08-01T12:42:42-07:00'
-        return { # TODO add times for new streams
+        return {
             'accounts': default_state,
             'customers': default_state,
-            # 'employees': '', # TODO create an employee? Or like 10 for pagination test too.
+            # 'employees': '',   # TODO figure out a time here
             'items': default_state,
             'vendors': default_state,
         }

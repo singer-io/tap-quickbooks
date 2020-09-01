@@ -33,9 +33,9 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         return {
             'accounts',
             'customers',
-            # "employees", # TODO create more employees so we can test them here and pagination
-            "items",
-            "vendors",
+            'employees',
+            'items',
+            'vendors',
         }
 
 
