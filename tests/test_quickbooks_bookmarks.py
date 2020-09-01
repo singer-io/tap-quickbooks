@@ -15,22 +15,24 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         return "tap_tester_quickbooks_combined_test"
 
     def expected_streams(self):
-        return { # TODO add remaining streams
+        return {
             'accounts',
             'customers',
-            # 'employees',
-            # 'items',
-            # 'vendors'
+            # 'employees', # TODO add this streams
+            'items',
+            'vendors'
         }
 
     def convert_state_to_utc(self, date_str):
         """
-        Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to utc,
+        Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to
+        a string formatted utc datetime,
         in order to compare aginast json formatted datetime values
         """
         date_object = dateutil.parser.parse(date_str)
         date_object_utc = date_object.astimezone(tz=pytz.UTC)
         date_str_utc = datetime.datetime.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
+        print("converted state value {} --> {} for use in assertions".format(date_str, date_str_utc))
         return date_str_utc
 
     def simulated_states_by_stream(self): # TODO refactor into single variable if all streams use the default state value
@@ -40,12 +42,11 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         """
         default_state = '2020-08-01T12:42:42-07:00'
         return { # TODO add times for new streams
-            # 'accounts': '2020-08-25T13:17:36-07:00',
             'accounts': default_state,
             'customers': default_state,
             # 'employees': '', # TODO create an employee? Or like 10 for pagination test too.
-            # 'items': default_state,
-            # 'vendors': default_state,
+            'items': default_state,
+            'vendors': default_state,
         }
 
 
