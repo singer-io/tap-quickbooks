@@ -5,6 +5,8 @@ import re
 
 from base import TestQuickbooksBase
 
+page_size_key = 'max_results'
+
 class TestQuickbooksAutomaticFields(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
@@ -20,9 +22,21 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
                 selected_fields.add(field['breadcrumb'][1])
         return selected_fields
 
+    def get_properties(self):
+        return {
+            'start_date' : '2016-06-02T00:00:00Z',
+            'sandbox': 'true',
+            page_size_key: '10' # TODO can we add enough data per stream to test the default max_results (200)?
+        }
 
     def expected_streams(self):
-        return {'accounts'}
+        return {
+            'accounts',
+            'customers',
+            'employees',
+            'items',
+            'vendors',
+        }
 
 
     def test_run(self):
@@ -80,8 +94,19 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
                 record_messages_keys = [set(row['data'].keys()) for row in data['messages']]
                 expected_keys = self.expected_automatic_fields().get(stream)
 
+                expected_count = self.minimum_record_count_by_stream().get(stream)
+                record_count = sync_record_count.get(stream, 0)
+
                 # Verify that only the automatic fields are sent to the target
                 for actual_keys in record_messages_keys:
                     self.assertEqual(
                         actual_keys.symmetric_difference(expected_keys), set(),
                         msg="Expected automatic fields and nothing else.")
+
+                # Verify the sync meets or exceeds the default record count
+                self.assertLessEqual(expected_count, record_count)
+
+                # Verify the number or records exceeds the max_results (api limit)
+                pagination_threshold = int(self.get_properties().get(page_size_key))
+                self.assertGreater(record_count, pagination_threshold,
+                                   msg="Record count not large enough to gaurantee pagination.")

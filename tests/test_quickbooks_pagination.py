@@ -4,20 +4,26 @@ import tap_tester.runner      as runner
 
 from base import TestQuickbooksBase
 
+page_size_key = 'max_results'
+
 class TestQuickbooksPagination(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-
     def expected_streams(self):
-        return {'accounts'}
-
+        return {
+            'accounts',
+            'customers',
+            'employees',
+            'items',
+            'vendors',
+        }
 
     def get_properties(self):
         return {
             'start_date' : '2016-06-02T00:00:00Z',
             'sandbox': 'true',
-            'max_results': '10' # TODO can we add enough data per stream to test the default max_results?
+            page_size_key: '10'
         }
 
 
@@ -66,8 +72,8 @@ class TestQuickbooksPagination(TestQuickbooksBase):
                 self.assertLessEqual(expected_count, record_count)
 
                 # Verify the number or records exceeds the max_results (api limit)
-                api_limit = int(self.get_properties().get('max_results'))
-                self.assertGreater(record_count, api_limit,
+                pagination_threshold = int(self.get_properties().get(page_size_key))
+                self.assertGreater(record_count, pagination_threshold,
                                    msg="Record count not large enough to gaurantee pagination.")
 
                 # Verify we did not duplicate any records across pages

@@ -9,15 +9,6 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
-    def expected_replication_keys(self):
-        """
-        return a dictionary with key of table name
-        and value as a set of replication key fields
-        """
-        return {table: properties.get(self.REPLICATION_KEYS, set())
-                for table, properties
-                in self.expected_metadata().items()}
-
     def test_run(self):
         conn_id = self.ensure_connection()
 

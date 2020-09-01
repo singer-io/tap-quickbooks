@@ -112,6 +112,7 @@ class JournalEntries(Stream):
 class Items(Stream):
     stream_name = 'items'
     table_name = 'Item'
+    additional_where = "Active IN (true, false)"
 
 class Invoices(Stream):
     stream_name = 'invoices'
@@ -120,6 +121,7 @@ class Invoices(Stream):
 class Customers(Stream):
     stream_name = 'customers'
     table_name = 'Customer'
+    additional_where = "Active IN (true, false)"
 
 class RefundReceipts(Stream):
     stream_name = 'refund_receipts'
@@ -136,6 +138,7 @@ class Departments(Stream):
 class Employees(Stream):
     stream_name = 'employees'
     table_name = 'Employee'
+    additional_where = "Active IN (true, false)"
 
 class Estimates(Stream):
     stream_name = 'estimates'
