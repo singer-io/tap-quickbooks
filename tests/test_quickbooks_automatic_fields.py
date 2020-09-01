@@ -27,7 +27,6 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
             'customers',
             "employees",
             "items",
-            # "transactions", see base TODO
             "vendors",
         }
 

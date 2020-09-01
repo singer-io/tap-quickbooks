@@ -210,6 +210,6 @@ class TestQuickbooksBase(unittest.TestCase):
             "customers": 29, # 31, TODO this one is also 2 less
             "employees": 2, # 4,TODO  why is this also 2 less?
             "items": 18, # 20, TODO why is this different from their docs??
-            "transactions": 141, # TODO currenltly zero
+            # "transactions": 141, # TODO this is not a stream...what streams fall under this?
             "vendors": 26,
         }

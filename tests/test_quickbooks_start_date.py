@@ -25,7 +25,6 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
             'customers',
             'employees',
             'items',
-            # 'transactions', TODO see above
             'vendors'
         }
 
