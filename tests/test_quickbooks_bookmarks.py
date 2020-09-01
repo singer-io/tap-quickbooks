@@ -1,3 +1,7 @@
+import datetime
+import dateutil.parser
+import pytz
+
 import tap_tester.connections as connections
 import tap_tester.menagerie   as menagerie
 import tap_tester.runner      as runner
@@ -12,11 +16,27 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
 
     def expected_streams(self):
-        return {'accounts'} # TODO add remaining streams
-
+        return { # TODO add remaining streams
+            'accounts',
+            # 'customers',
+            # 'employees',
+            # 'items',
+            # 'vendors'
+        }
+    def convert_state_to_utc(self, date_str):
+        date_object = dateutil.parser.parse(date_str)
+        date_object_utc = date_object.astimezone(tz=pytz.UTC)
+        date_str_utc = datetime.datetime.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
+        return date_str_utc
 
     def simulated_states_by_stream(self):
-        return {'accounts': '2020-08-25T13:17:36-07:00'} # TODO add times for new streams
+        return { # TODO add times for new streams
+            'accounts': '2020-08-25T13:17:36-07:00',
+            # 'customers': '2020-08-18T00:00:00-00:00',
+            # 'employees': '',
+            # 'items': '',
+            # 'vendors': '',
+        }
 
 
     def test_run(self):
@@ -77,9 +97,9 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 second_sync_messages = second_sync_records.get(stream, {'messages': []}).get('messages')
 
                 # replication key is an object (MetaData.LastUpdatedTime) in sync records
-                # but just the sub level pk is used in setting bookmarks
-                top_level_rk = 'MetaData'
-                sub_level_rk = 'LastUpdatedTime'
+                # but just the sub level replication key is used in setting bookmarks
+                top_level_replication_key = 'MetaData'
+                sub_level_replication_key = 'LastUpdatedTime'
 
                 # bookmarked states (top level objects)
                 first_bookmark_key_value = first_sync_bookmark.get('bookmarks').get(stream)
@@ -87,39 +107,40 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
                 # Verify the first sync sets a bookmark of the expected form
                 self.assertIsNotNone(first_bookmark_key_value)
-                self.assertIsNotNone(first_bookmark_key_value.get(sub_level_rk))
+                self.assertIsNotNone(first_bookmark_key_value.get(sub_level_replication_key))
 
                 # Verify the second sync sets a bookmark of the expected form
                 self.assertIsNotNone(second_bookmark_key_value)
-                self.assertIsNotNone(second_bookmark_key_value.get(sub_level_rk))
+                self.assertIsNotNone(second_bookmark_key_value.get(sub_level_replication_key))
 
                 # bookmarked states (actual values)
-                first_bookmark_value = first_bookmark_key_value.get(sub_level_rk)
-                second_bookmark_value = second_bookmark_key_value.get(sub_level_rk)
+                first_bookmark_value = first_bookmark_key_value.get(sub_level_replication_key)
+                second_bookmark_value = second_bookmark_key_value.get(sub_level_replication_key)
+                # bookmarked values as utc for comparing against records
+                first_bookmark_value_utc = self.convert_state_to_utc(first_bookmark_value)
+                second_bookmark_value_utc = self.convert_state_to_utc(second_bookmark_value)
 
                 # Verify the second sync bookmark is Equal to the first sync bookmark
                 self.assertEqual(second_bookmark_value, first_bookmark_value) # assumes no changes to data during test
 
                 # Verify the second sync records respect the previous (simulated) bookmark value
-                simulated_bookmark_value = new_state['bookmarks'][stream][sub_level_rk]
+                simulated_bookmark_value = new_state['bookmarks'][stream][sub_level_replication_key]
                 for message in second_sync_messages:
-                    rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
-                    self.assertGreaterEqual(rk_value, simulated_bookmark_value,
+                    replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
+                    self.assertGreaterEqual(replication_key_value, simulated_bookmark_value,
                                             msg="Second sync records do not repect the previous bookmark.")
 
-                # BUG | https://stitchdata.atlassian.net/browse/SRCE-3821
                 # Verify the first sync bookmark value is the max replication key value for a given stream
-                # for message in first_sync_messages:
-                #     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
-                #     self.assertLessEqual(rk_value, first_bookmark_value,
-                #                          msg="First sync bookmark was set incorrectly, a record with a greater rep key value was synced")
+                for message in first_sync_messages:
+                    replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
+                    self.assertLessEqual(replication_key_value, first_bookmark_value_utc,
+                                         msg="First sync bookmark was set incorrectly, a record with a greater rep key value was synced")
 
-                # BUG | https://stitchdata.atlassian.net/browse/SRCE-3821
                 # Verify the second sync bookmark value is the max replication key value for a given stream
-                # for message in second_sync_messages:
-                #     rk_value = message.get('data').get(top_level_rk).get(sub_level_rk)
-                #     self.assertLessEqual(rk_value, second_bookmark_value,
-                #                          msg="Second sync bookmark was set incorrectly, a record with a greater rep key value was synced")
+                for message in second_sync_messages:
+                    replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
+                    self.assertLessEqual(replication_key_value, second_bookmark_value_utc,
+                                         msg="Second sync bookmark was set incorrectly, a record with a greater rep key value was synced")
 
                 # Verify the number of records in the 2nd sync is less then the first
                 self.assertLess(second_sync_count, first_sync_count)
