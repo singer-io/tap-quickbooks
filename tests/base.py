@@ -55,27 +55,25 @@ class TestQuickbooksBase(unittest.TestCase):
     def expected_check_streams():
         return {
             "accounts",
-            "invoices",
-            "items",
+            "bill_payments",
+            "bills",
             "budgets",
             "classes",
             "credit_memos",
-            "bill_payments",
-            "sales_receipts",
-            "purchases",
-            "payments",
-            "purchase_orders",
-            "payment_methods",
-            "journal_entries",
-            "items",
-            "invoices",
             "customers",
-            "refund_receipts",
-            "deposits",
             "departments",
+            "deposits",
             "employees",
             "estimates",
-            "bills",
+            "invoices",
+            "items",
+            "journal_entries",
+            "payment_methods",
+            "payments",
+            "purchase_orders",
+            "purchases",
+            "refund_receipts",
+            "sales_receipts",
             "tax_agencies",
             "tax_codes",
             "tax_rates",
@@ -203,12 +201,17 @@ class TestQuickbooksBase(unittest.TestCase):
 
         see their docs for more info:
         https://developer.intuit.com/app/developer/qbo/docs/develop/sandboxes#launch-a-sandbox
+
+        For the remaining streams at least 1 record existed already, or 1 has been added.
         """
-        return {
-            "accounts": 90,
-            "customers": 29,
-            "employees": 2,
-            "items": 18,
-            # "transactions": 141, # TODO this is not a stream...what streams fall under this?
-            "vendors": 26,
-        }
+        # All streams should have at least a record (thi)
+        record_counts = {stream: 1 for stream in self.expected_check_streams()}
+
+        # By default quickbooks sandbox apps come with the following records
+        record_counts["accounts"]= 90
+        record_counts["customers"] = 29
+        record_counts["employees"] = 2
+        record_counts["items"] = 18
+        record_counts["vendors"] = 26
+
+        return record_counts
