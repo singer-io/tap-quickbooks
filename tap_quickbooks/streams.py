@@ -42,7 +42,6 @@ class Stream:
         singer.write_state(self.state)
 
 
-
 class Accounts(Stream):
     stream_name = 'accounts'
     table_name = 'Account'
