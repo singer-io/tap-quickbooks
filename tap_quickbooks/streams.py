@@ -48,25 +48,17 @@ class Accounts(Stream):
     additional_where = "Active IN (true, false)"
 
 
-class Invoices(Stream):
-    stream_name = 'invoices'
-    table_name = 'Invoice'
-
-
-class Items(Stream):
-    stream_name = 'items'
-    table_name = 'Item'
-    additional_where = "Active IN (true, false)"
-
 class Budgets(Stream):
     stream_name = 'budgets'
     table_name = 'Budget'
     additional_where = "Active IN (true, false)"
 
+
 class Classes(Stream):
     stream_name = 'classes'
     table_name = 'Class'
     additional_where = "Active IN (true, false)"
+
 
 class CreditMemos(Stream):
     stream_name = 'credit_memos'
@@ -204,27 +196,25 @@ class Vendors(Stream):
 
 STREAM_OBJECTS = {
     "accounts": Accounts,
-    "invoices": Invoices,
-    "items": Items,
+    "bill_payments": BillPayments,
+    "bills": Bills,
     "budgets": Budgets,
     "classes": Classes,
     "credit_memos": CreditMemos,
-    "bill_payments": BillPayments,
-    "sales_receipts": SalesReceipts,
-    "purchases": Purchases,
-    "payments": Payments,
-    "purchase_orders": PurchaseOrders,
-    "payment_methods": PaymentMethods,
-    "journal_entries": JournalEntries,
-    "items": Items,
-    "invoices": Invoices,
     "customers": Customers,
-    "refund_receipts": RefundReceipts,
-    "deposits": Deposits,
     "departments": Departments,
+    "deposits": Deposits,
     "employees": Employees,
     "estimates": Estimates,
-    "bills": Bills,
+    "invoices": Invoices,
+    "items": Items,
+    "journal_entries": JournalEntries,
+    "payment_methods": PaymentMethods,
+    "payments": Payments,
+    "purchase_orders": PurchaseOrders,
+    "purchases": Purchases,
+    "refund_receipts": RefundReceipts,
+    "sales_receipts": SalesReceipts,
     "tax_agencies": TaxAgencies,
     "tax_codes": TaxCodes,
     "tax_rates": TaxRates,
