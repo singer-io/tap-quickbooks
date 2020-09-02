@@ -82,7 +82,6 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
         # UPDATE STATE BETWEEN SYNCS
         new_state = dict()
-        # new_state['bookmarks'] = {key: {'LastUpdatedTime': value} for key, value in self.simulated_states_by_stream().items()}
         new_state['bookmarks'] = {key: {'LastUpdatedTime': value}
                                   for key, value in self.calculated_states_by_stream(first_sync_bookmarks).items()}
         menagerie.set_state(conn_id, new_state)
