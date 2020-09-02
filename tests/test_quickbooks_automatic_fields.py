@@ -32,7 +32,8 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
     def expected_streams(self):
         """
         All streams are under test with the exception of 'budgets' which
-        has a workaround to skip the invalid assertion.
+        has a workaround to skip the invalid assertion. See if block in
+        test_run for details
         """
         return self.expected_check_streams()
 
@@ -107,6 +108,7 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
                 if stream == 'budgets': # Skip the pagination assertion for this stream
                     # This stream returns a single record of the current budget state
                     # and will never exceed our pagination size (max_results) in this test
+                    # so we can verify auto fields works, but only for 1 page of data
                     continue
 
                 # Verify the number or records exceeds the max_results (api limit)
