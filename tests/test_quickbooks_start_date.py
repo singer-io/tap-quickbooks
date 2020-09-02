@@ -9,36 +9,8 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
         return "tap_tester_quickbooks_combined_test"
 
     def expected_streams(self):
-        """Test coverage for this test. If the stream is here, we test it."""
-        return {
-            "accounts",
-            "bill_payments",
-            "bills",
-            "classes",
-            "credit_memos",
-            "customers",
-            "departments",
-            "deposits",
-            "employees",
-            "estimates",
-            "invoices",
-            "items",
-            "journal_entries",
-            "payment_methods",
-            "payments",
-            "purchase_orders",
-            "purchases",
-            "refund_receipts",
-            "sales_receipts",
-            "tax_agencies",
-            "tax_codes",
-            "tax_rates",
-            "terms",
-            "time_activities",
-            "transfers",
-            "vendor_credits",
-            "vendors",
-        }
+        """All streams are under test"""
+        return self.expected_check_streams()
 
     def get_properties(self, original=True):
         if original:
