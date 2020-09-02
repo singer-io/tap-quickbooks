@@ -26,17 +26,15 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         return {
             'start_date' : '2016-06-02T00:00:00Z',
             'sandbox': 'true',
-            page_size_key: '10' # TODO can we add enough data per stream to test the default max_results (200)?
+            page_size_key: '10'
         }
 
     def expected_streams(self):
-        return {
-            'accounts',
-            'customers',
-            'employees',
-            'items',
-            'vendors',
-        }
+        """
+        All streams are under test with the exception of 'budgets' which
+        has a workaround to skip the invalid assertion.
+        """
+        return self.expected_check_streams()
 
 
     def test_run(self):
@@ -105,6 +103,11 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
 
                 # Verify the sync meets or exceeds the default record count
                 self.assertLessEqual(expected_count, record_count)
+
+                if stream == 'budgets': # Skip the pagination assertion for this stream
+                    # This stream returns a single record of the current budget state
+                    # and will never exceed our pagination size (max_results) in this test
+                    continue
 
                 # Verify the number or records exceeds the max_results (api limit)
                 pagination_threshold = int(self.get_properties().get(page_size_key))

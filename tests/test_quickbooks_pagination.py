@@ -11,13 +11,14 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         return "tap_tester_quickbooks_combined_test"
 
     def expected_streams(self):
-        return {
-            'accounts',
-            'customers',
-            'employees',
-            'items',
-            'vendors',
-        }
+        """
+        All streams except 'budgets' are under test. The 'budgets' stream
+        returns a single record of the current budget state and will never exceed
+        our pagination size (max_results) for this test.
+        """
+        return self.expected_check_streams().difference({
+            'budgets' # TODO verify this is just a standard report and will only ever generate a single record
+        })
 
     def get_properties(self):
         return {
