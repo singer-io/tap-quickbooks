@@ -8,6 +8,10 @@ import tap_tester.connections as connections
 
 
 class TestQuickbooksBase(unittest.TestCase):
+    """
+    TODO Put a NOTE explaining the refresh token problem and how to run tests for the first time.
+    TODO add note in readme?
+    """
     REPLICATION_KEYS = "valid-replication-keys"
     PRIMARY_KEYS = "table-key-properties"
     FOREIGN_KEYS = "table-foreign-key-properties"

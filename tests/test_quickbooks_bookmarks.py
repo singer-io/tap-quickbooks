@@ -33,7 +33,30 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         date_object_utc = date_object.astimezone(tz=pytz.UTC)
         return datetime.datetime.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
 
-    def simulated_states_by_stream(self): # TODO refactor?
+    def calculated_states_by_stream(self, current_state):
+        """
+        Look at the bookmarks from a previous sync and determine an *appropriate state* to set for each stream.
+
+        *appropriate state* A state such that a subsequent sync will result in at least 1 record, but
+        fewer records then the original sync. For most (TODO all?) streams this is achieved by moving the state
+        back 1 day prior to the current bookmark.
+        """
+        stream_to_current_state = {stream : bookmark.get('LastUpdatedTime')
+                           for stream, bookmark in current_state['bookmarks'].items()}
+        stream_to_calculated_state = {stream: "" for stream in self.expected_streams()}
+
+        for stream, state in stream_to_current_state.items():
+            # convert state from string to datetime object
+            state_as_datetime = dateutil.parser.parse(state)
+            # subtract 1 day from the state
+            calculated_state_as_datetime = state_as_datetime - datetime.timedelta(days=1)
+            # convert back to string and format
+            calculated_state = str(calculated_state_as_datetime).replace(' ', 'T')
+            stream_to_calculated_state[stream] = calculated_state
+
+        return stream_to_calculated_state
+
+    def simulated_states_by_stream(self): # TODO REMOVE
         """
         States that will be set by the test between syncs.
         By default the state is set to August 1st to incorporate recent records in a second sync.
@@ -73,7 +96,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         first_sync_records = runner.get_records_from_target_output()
         first_sync_record_count = runner.examine_target_output_file(
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
-        first_sync_bookmark = menagerie.get_state(conn_id)
+        first_sync_bookmarks = menagerie.get_state(conn_id)
 
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
@@ -81,7 +104,9 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
         # UPDATE STATE BETWEEN SYNCS
         new_state = dict()
-        new_state['bookmarks'] = {key: {'LastUpdatedTime': value} for key, value in self.simulated_states_by_stream().items()}
+        # new_state['bookmarks'] = {key: {'LastUpdatedTime': value} for key, value in self.simulated_states_by_stream().items()}
+        new_state['bookmarks'] = {key: {'LastUpdatedTime': value}
+                                  for key, value in self.calculated_states_by_stream(first_sync_bookmarks).items()}
         menagerie.set_state(conn_id, new_state)
 
         # SYNC 2
@@ -89,7 +114,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         second_sync_records = runner.get_records_from_target_output()
         second_sync_record_count = runner.examine_target_output_file(
             self, conn_id, self.expected_streams(), self.expected_primary_keys())
-        second_sync_bookmark = menagerie.get_state(conn_id)
+        second_sync_bookmarks = menagerie.get_state(conn_id)
 
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
@@ -112,8 +137,8 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 sub_level_replication_key = 'LastUpdatedTime'
 
                 # bookmarked states (top level objects)
-                first_bookmark_key_value = first_sync_bookmark.get('bookmarks').get(stream)
-                second_bookmark_key_value = second_sync_bookmark.get('bookmarks').get(stream)
+                first_bookmark_key_value = first_sync_bookmarks.get('bookmarks').get(stream)
+                second_bookmark_key_value = second_sync_bookmarks.get('bookmarks').get(stream)
 
                 # Verify the first sync sets a bookmark of the expected form
                 self.assertIsNotNone(first_bookmark_key_value)
