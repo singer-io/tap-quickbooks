@@ -5,7 +5,6 @@ import pytz
 import tap_tester.connections as connections
 import tap_tester.menagerie   as menagerie
 import tap_tester.runner      as runner
-import re
 
 from base import TestQuickbooksBase
 
@@ -31,11 +30,9 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
 
     def calculated_states_by_stream(self, current_state):
         """
-        Look at the bookmarks from a previous sync and determine an *appropriate state* to set for each stream.
-
-        *appropriate state* A state such that a subsequent sync will result in at least 1 record, but
-        fewer records then the original sync. For most (TODO all?) streams this is achieved by moving the state
-        back 1 day prior to the current bookmark.
+        Look at the bookmarks from a previous sync and set a new bookmark
+        value that is 1 day prior. This ensures the subsequent sync will replicate
+        at least 1 record but, fewer records than the previous sync.
         """
         stream_to_current_state = {stream : bookmark.get('LastUpdatedTime')
                            for stream, bookmark in current_state['bookmarks'].items()}
@@ -51,21 +48,6 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
             stream_to_calculated_state[stream] = calculated_state
 
         return stream_to_calculated_state
-
-    def simulated_states_by_stream(self): # TODO REMOVE
-        """
-        States that will be set by the test between syncs.
-        By default the state is set to August 1st to incorporate recent records in a second sync.
-        The goal of this state is to result in a sync with at least 1 record but fewer records than a previous sync.
-        """
-        default_state = '2020-08-01T12:42:42-07:00'
-        return {
-            'accounts': default_state,
-            'customers': default_state,
-            'employees': '2020-09-01T10:10:30-07:00',
-            'items': default_state,
-            'vendors': default_state,
-        }
 
 
     def test_run(self):

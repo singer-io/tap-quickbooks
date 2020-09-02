@@ -17,7 +17,7 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         our pagination size (max_results) for this test.
         """
         return self.expected_check_streams().difference({
-            'budgets' # TODO verify this is just a standard report and will only ever generate a single record
+            'budgets'
         })
 
     def get_properties(self):

@@ -9,8 +9,11 @@ import tap_tester.connections as connections
 
 class TestQuickbooksBase(unittest.TestCase):
     """
-    TODO Put a NOTE explaining the refresh token problem and how to run tests for the first time.
-    TODO add note in readme?
+    To run tests that use this base method, a connection must be manually authed first
+    using the dev credentials with a connection named 'tap_tester_quickbooks_combined_test'.
+
+    This enables the tests to grab a new refresh token. Any test runs after the inital auth will
+    grab the token from the previous connection.
     """
     REPLICATION_KEYS = "valid-replication-keys"
     PRIMARY_KEYS = "table-key-properties"
