@@ -61,7 +61,6 @@
         "Long": {
           "type": [
             "null",
-            "string",
             "string"
           ]
         },
@@ -284,7 +283,6 @@
         "Lat": {
           "type": [
             "null",
-            "string",
             "string"
           ]
         },
@@ -321,7 +319,6 @@
         "PostalCode": {
           "type": [
             "null",
-            "string",
             "string"
           ]
         },
