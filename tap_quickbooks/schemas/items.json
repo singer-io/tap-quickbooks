@@ -174,7 +174,8 @@
         "null",
         "object"
       ]
-    }
+    },
+    "patternProperties": {".+": {}}
   },
   "type": [
     "null",

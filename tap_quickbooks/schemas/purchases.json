@@ -456,6 +456,7 @@
         "null",
         "string"
       ]
-    }
+    },
+    "patternProperties": {".+": {}}
   }
 }

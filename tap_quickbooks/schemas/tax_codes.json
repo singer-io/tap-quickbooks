@@ -6,6 +6,19 @@
         "boolean"
       ]
     },
+    "PurchaseTaxRateList": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {}
+    },
+    "Hidden": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
     "domain": {
       "type": [
         "null",

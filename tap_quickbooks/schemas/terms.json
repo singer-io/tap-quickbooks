@@ -6,6 +6,31 @@
         "string"
       ]
     },
+    "DiscountPercent": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "DayOfMonthDue": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "DiscountDayOfMonth": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "DueNextMonthDays": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
     "domain": {
       "type": [
         "null",

@@ -1,5 +1,25 @@
 {
   "properties": {
+    "ClassRef": {
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
     "BillEmail": {
       "properties": {
         "Address": {
@@ -194,6 +214,26 @@
       "type": [
         "null",
         "string"
+      ]
+    },
+    "SalesTermRef": {
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
       ]
     },
     "ShipAddr": {
@@ -416,7 +456,8 @@
         "null",
         "object"
       ]
-    }
+    },
+    "patternProperties": {".+": {}}
   },
   "type": [
     "null",
