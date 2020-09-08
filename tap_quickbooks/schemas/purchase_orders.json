@@ -135,7 +135,6 @@
         "Long": {
           "type": [
             "null",
-            "string",
             "string"
           ]
         },
