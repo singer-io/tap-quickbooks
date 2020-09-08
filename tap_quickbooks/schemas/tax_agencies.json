@@ -6,6 +6,12 @@
         "string"
       ]
     },
+    "TaxRegistrationNumber": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "domain": {
       "type": [
         "null",

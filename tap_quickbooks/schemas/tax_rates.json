@@ -90,6 +90,35 @@
         "null",
         "string"
       ]
+    },
+    "EffectiveTaxRate": {
+      "properties": {
+        "RateValue": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "singer.decimal"
+        },
+        "EndDate": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "date-time"
+        },
+        "EffectiveDate ": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "date-time"
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
     }
   },
   "type": [

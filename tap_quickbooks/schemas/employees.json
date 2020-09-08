@@ -105,6 +105,77 @@
       ]
     }
   },
+  "PrimaryAddr": {
+    "type": [
+      "null",
+      "object"
+    ],
+    "properties": {}
+  },
+  "PrimaryEmailAddr": {
+    "type": [
+      "null",
+      "object"
+    ],
+    "properties": {}
+  },
+  "Title": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "MiddleName": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "ReleasedDate": {
+    "type": [
+      "null",
+      "string"
+    ],
+    "format": "date-time"
+  },
+  "Mobile": {
+    "type": [
+      "null",
+      "object"
+    ],
+    "properties": {}
+  },
+  "Gender": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "BillRate": {
+    "type": [
+      "null",
+      "string"
+    ],
+    "format": "singer.decimal"
+  },
+  "Suffix": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "EmployeeNumber": {
+    "type": [
+      "null",
+      "string"
+    ]
+  },
+  "Organization": {
+    "type": [
+      "null",
+      "boolean"
+    ]
+  },
   "type": [
     "null",
     "object"

@@ -95,7 +95,7 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
                 self.assertLessEqual(expected_first_sync_count, first_sync_count)
 
                 # Verify by stream more records were replicated in the first sync, with an older start_date than the second
-                self.assertGreater(first_sync_count, second_sync_count)
+                self.assertGreaterEqual(first_sync_count, second_sync_count)
 
                 # Verify by stream that all records have a rep key that is equal to or greater than that sync's start_date
                 for message in first_sync_messages:

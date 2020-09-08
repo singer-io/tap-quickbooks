@@ -705,7 +705,8 @@
         "null",
         "string"
       ]
-    }
+    },
+    "patternProperties": {".+": {}}
   },
   "type": [
     "null",
