@@ -279,6 +279,19 @@
         "null",
         "string"
       ]
+    },
+    "PrivateNote": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Balance": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
     }
   },
   "type": [
