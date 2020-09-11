@@ -108,6 +108,46 @@
         }
       }
     },
+    "PaymentMethodRef": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "DepartmentRef": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
     "ExchangeRate": {
       "type": [
         "null",
@@ -123,6 +163,12 @@
       "format": "singer.decimal"
     },
     "PrintStatus": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TxnSource": {
       "type": [
         "null",
         "string"
@@ -261,6 +307,46 @@
                 ],
                 "format": "singer.decimal"
               },
+              "CustomerRef": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                }
+              },
+              "ClassRef": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                }
+              },
               "TaxCodeRef": {
                 "type": [
                   "null",
@@ -284,6 +370,26 @@
             ],
             "properties": {
               "AccountRef": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                }
+              },
+              "ClassRef": {
                 "type": [
                   "null",
                   "object"
@@ -328,6 +434,13 @@
                   "null",
                   "string"
                 ]
+              },
+              "TaxAmount": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "singer.decimal"
               },
               "TaxCodeRef": {
                 "type": [
@@ -457,6 +570,105 @@
         "string"
       ]
     },
-    "patternProperties": {".+": {}}
+    "TxnTaxDetail": {
+      "properties": {
+        "TotalTax": {
+          "format": "singer.decimal",
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "TaxLine": {
+          "items": {
+            "properties": {
+              "Amount": {
+                "format": "singer.decimal",
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TaxLineDetail": {
+                "properties": {
+                  "PercentBased": {
+                    "type": [
+                      "null",
+                      "boolean"
+                    ]
+                  },
+                  "TaxPercent": {
+                    "type": [
+                      "null",
+                      "integer"
+                    ]
+                  },
+                  "NetAmountTaxable": {
+                    "format": "singer.decimal",
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "TaxRateRef": {
+                    "properties": {
+                      "value": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      }
+                    },
+                    "type": [
+                      "null",
+                      "object"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "DetailType": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        },
+        "TxnTaxCodeRef": {
+          "properties": {
+            "value": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          "type": [
+            "null",
+            "object"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "patternProperties": {
+      ".+": {}
+    }
   }
 }
