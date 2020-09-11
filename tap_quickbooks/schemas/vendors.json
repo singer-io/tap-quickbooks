@@ -20,6 +20,40 @@
         "object"
       ]
     },
+    "AlternatePhone": {
+      "properties": {
+        "FreeFormNumber": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "OtherContactInfo": {
+      "properties": {
+        "Type": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Telephone": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
     "AcctNum": {
       "type": [
         "null",
@@ -103,6 +137,13 @@
       ]
     },
     "Balance": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "BillRate": {
       "format": "singer.decimal",
       "type": [
         "null",
@@ -279,7 +320,9 @@
         "string"
       ]
     },
-    "patternProperties": {".+": {}}
+    "patternProperties": {
+      ".+": {}
+    }
   },
   "type": [
     "null",
