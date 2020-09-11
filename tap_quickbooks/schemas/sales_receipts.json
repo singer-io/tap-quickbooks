@@ -514,6 +514,25 @@
       ],
       "format": "singer.decimal"
     },
+    "PrivateNote": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TrackingNum": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ShipDate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
     "DepositToAccountRef": {
       "type": [
         "null",
@@ -534,6 +553,48 @@
         }
       }
     },
-    "patternProperties": {".+": {}}
+    "DepartmentRef": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "ClassRef": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "patternProperties": {
+      ".+": {}
+    }
   }
 }
