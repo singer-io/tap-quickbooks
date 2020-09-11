@@ -7,11 +7,58 @@
       ]
     },
     "PurchaseTaxRateList": {
+      "properties": {
+        "TaxRateDetail": {
+          "items": {
+            "properties": {
+              "TaxOrder": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              },
+              "TaxTypeApplicable": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TaxRateRef": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        }
+      },
       "type": [
         "null",
         "object"
-      ],
-      "properties": {}
+      ]
     },
     "Hidden": {
       "type": [
