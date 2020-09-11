@@ -34,6 +34,46 @@
         "object"
       ]
     },
+    "ClassRef": {
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "DepartmentRef": {
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
     "CustomerRef": {
       "properties": {
         "name": {
@@ -262,6 +302,18 @@
         "string"
       ]
     },
+    "PrivateNote": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "PaymentType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "domain": {
       "type": [
         "null",
@@ -327,13 +379,13 @@
             "string"
           ]
         },
-        "Line2": {
+        "Line1": {
           "type": [
             "null",
             "string"
           ]
         },
-        "Line4": {
+        "Line2": {
           "type": [
             "null",
             "string"
@@ -345,13 +397,111 @@
             "string"
           ]
         },
-        "Line1": {
+        "Line4": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Line5": {
           "type": [
             "null",
             "string"
           ]
         },
         "Long": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "CountrySubDivisionCode": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "City": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Country": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "ShipAddr": {
+      "properties": {
+        "Lat": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Id": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Line1": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Line2": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Line3": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Line4": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Line5": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Long": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "CountrySubDivisionCode": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "City": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Country": {
           "type": [
             "null",
             "string"
@@ -396,7 +546,145 @@
         "string"
       ]
     },
-    "patternProperties": {".+": {}}
+    "CreditCardPayment": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "CreditChargeResponse": {
+          "type": [
+            "null",
+            "object"
+          ],
+          "properties": {
+            "Status": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "AuthCode": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "TxnAuthorizationTime": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "foramt": "date-time"
+            },
+            "CCTransId": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        },
+        "CreditChargeInfo": {
+          "type": [
+            "null",
+            "object"
+          ],
+          "properties": {
+            "CcExpiryMonth": {
+              "type": [
+                "null",
+                "integer"
+              ]
+            },
+            "ProcessPayment": {
+              "type": [
+                "null",
+                "boolean"
+              ]
+            },
+            "PostalCode": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Amount": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "singer.decimal"
+            },
+            "NameOnAcct": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "CcExpiryYear": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Type": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "BillAddrStreet": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "CheckPayment": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "CheckNum": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Status": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "NameOnAcct": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "AcctNum": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "BankName": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "patternProperties": {
+      ".+": {}
+    }
   },
   "type": [
     "null",
