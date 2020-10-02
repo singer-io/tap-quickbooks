@@ -117,6 +117,9 @@ class Customers(Stream):
     table_name = 'Customer'
     additional_where = "Active IN (true, false)"
 
+class CustomerType(Stream):
+    stream_name = 'customertypes'
+    table_name  = 'CustomerType'
 
 class RefundReceipts(Stream):
     stream_name = 'refund_receipts'
@@ -202,6 +205,7 @@ STREAM_OBJECTS = {
     "classes": Classes,
     "credit_memos": CreditMemos,
     "customers": Customers,
+    "customertypes": CustomerType,
     "departments": Departments,
     "deposits": Deposits,
     "employees": Employees,
