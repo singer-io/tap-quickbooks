@@ -2,6 +2,7 @@ import json
 import backoff
 import requests
 import singer
+import requests
 
 from requests_oauthlib import OAuth2Session
 
@@ -25,30 +26,34 @@ class Quickbooks4XXException(Exception):
 
 class QuickbooksClient():
     def __init__(self, config_path, config):
-        token = {
-            'refresh_token': config['refresh_token'],
-            'token_type': 'Bearer',
-            # Set a fake access_token and expires_in to a negative number to force the client to reauthenticate
-            'access_token': "wrong",
-            'expires_in': '-30'
-        }
-        extra = {
-            'client_id': config['client_id'],
-            'client_secret': config['client_secret']
-        }
+        # token = {
+        #     'refresh_token': config['refresh_token'],
+        #     'token_type': 'Bearer',
+        #     # Set a fake access_token and expires_in to a negative number to force the client to reauthenticate
+        #     'access_token': "wrong",
+        #     'expires_in': '-30'
+        # }
+        # extra = {
+        #     'client_id': config['client_id'],
+        #     'client_secret': config['client_secret']
+        # }
 
         self.sandbox = False
         if config['sandbox'] in ['true', 'True', True]:
             self.sandbox = True
 
-        self.user_agent = config['user_agent']
-        self.realm_id = config['realm_id']
-        self.config_path = config_path
-        self.session = OAuth2Session(config['client_id'],
-                                     token=token,
-                                     auto_refresh_url=TOKEN_REFRESH_URL,
-                                     auto_refresh_kwargs=extra,
-                                     token_updater=self._write_config)
+        self.username           = config['username']
+        self.password           = config['password']
+        self.PROD_ENDPOINT_BASE = config.get('endpoint') or PROD_ENDPOINT_BASE
+        # self.user_agent         = config['user_agent']
+        self.realm_id           = config['realm_id']
+        self.config_path        = config_path
+        # self.session = OAuth2Session(config['client_id'],
+        #                              token=token,
+        #                              auto_refresh_url=TOKEN_REFRESH_URL,
+        #                              auto_refresh_kwargs=extra,
+        #                              token_updater=self._write_config)
+
         try:
             # Make an authenticated request after creating the object to any endpoint
             self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo"})
@@ -82,7 +87,7 @@ class QuickbooksClient():
         if self.sandbox:
             full_url = SANDBOX_ENDPOINT_BASE + endpoint
         else:
-            full_url = PROD_ENDPOINT_BASE + endpoint
+            full_url = self.PROD_ENDPOINT_BASE + endpoint
 
         full_url = full_url.format(realm_id=self.realm_id)
         LOGGER.info(
@@ -103,7 +108,7 @@ class QuickbooksClient():
         else:
             headers = {**default_headers}
 
-        response = self.session.request(method, full_url, headers=headers, params=params, data=data)
+        response = requests.request(method, full_url, headers=headers, params=params, data=data, auth=(self.username, self.password))
 
         # TODO: Check error status, rate limit, etc.
         if response.status_code >= 500:
