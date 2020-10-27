@@ -38,7 +38,7 @@ class QuickbooksClient():
         }
 
         self.sandbox = False
-        if config['sandbox'] in ['true', 'True', True]:
+        if config.get('sandbox') in ['true', 'True', True]:
             self.sandbox = True
 
         self.user_agent = config['user_agent']

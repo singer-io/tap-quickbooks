@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.1
+
+* Fix bug with sandbox check
+
 ## 1.0.0
 
 * Releasing GA
