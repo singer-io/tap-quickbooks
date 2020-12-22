@@ -92,39 +92,72 @@
       ]
     },
     "EffectiveTaxRate": {
-      "type": [
-        "null",
-        "array"
-      ],
-      "items": {
-        "properties": {
-          "RateValue": {
+      "anyOf": [
+        {
+            "properties": {
+              "RateValue": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "singer.decimal"
+              },
+              "EndDate": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "date-time"
+              },
+              "EffectiveDate ": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "date-time"
+              }
+            },
             "type": [
               "null",
-              "string"
-            ],
-            "format": "singer.decimal"
-          },
-          "EndDate": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          },
-          "EffectiveDate ": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          }
+              "object"
+            ]
         },
-        "type": [
-          "null",
-          "object"
-        ]
-      }
+        {
+          "type": [
+            "null",
+            "array"
+          ],
+          "items": {
+            "properties": {
+              "RateValue": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "singer.decimal"
+              },
+              "EndDate": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "date-time"
+              },
+              "EffectiveDate ": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "date-time"
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          }
+        }
+      ]
     }
   },
   "type": [
