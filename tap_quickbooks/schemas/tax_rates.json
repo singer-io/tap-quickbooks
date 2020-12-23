@@ -94,33 +94,33 @@
     "EffectiveTaxRate": {
       "anyOf": [
         {
-            "properties": {
-              "RateValue": {
-                "type": [
-                  "null",
-                  "string"
-                ],
-                "format": "singer.decimal"
-              },
-              "EndDate": {
-                "type": [
-                  "null",
-                  "string"
-                ],
-                "format": "date-time"
-              },
-              "EffectiveDate ": {
-                "type": [
-                  "null",
-                  "string"
-                ],
-                "format": "date-time"
-              }
+          "properties": {
+            "RateValue": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "singer.decimal"
             },
-            "type": [
-              "null",
-              "object"
-            ]
+            "EndDate": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time"
+            },
+            "EffectiveDate ": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time"
+            }
+          },
+          "type": [
+            "null",
+            "object"
+          ]
         },
         {
           "type": [
