@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.2
+
+* Fix EffectiveTaxRates issue in tax_rates schema
+
 ## 1.0.1
 
 * Fix bug with sandbox check
