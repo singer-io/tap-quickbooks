@@ -7,6 +7,12 @@
         "string"
       ]
     },
+    "AcctNum": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "AccountSubType": {
       "type": [
         "null",
