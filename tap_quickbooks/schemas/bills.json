@@ -26,6 +26,12 @@
         "string"
       ]
     },
+    "DocNumber": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "CurrencyRef": {
       "properties": {
         "name": {
