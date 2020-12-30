@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.3
+
+* Added AcctNum and DocNumber fields
+
 ## 1.0.2
 
 * Fix EffectiveTaxRates issue in tax_rates schema
