@@ -10,24 +10,24 @@ jobs:
           command: |
             python3 -mvenv /usr/local/share/virtualenvs/tap-quickbooks
             source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
-            pip install -U 'pip<19.2' 'setuptools<51.0.0'
+            pip install -U pip setuptools
             pip install .[dev]
       - run:
           name: 'JSON Validator'
           command: |
             source /usr/local/share/virtualenvs/tap-tester/bin/activate
-            stitch-validate-json /usr/local/share/virtualenvs/tap-quickbooks/lib/python3.5/site-packages/tap_quickbooks/schemas/*.json
-      - run:
-          name: 'pylint'
-          command: |
-            source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
-            # TODO: Adjust the pylint disables
-            #pylint tap_quickbooks --disable 'broad-except,chained-comparison,empty-docstring,fixme,invalid-name,line-too-long,missing-class-docstring,missing-function-docstring,missing-module-docstring,no-else-raise,no-else-return,too-few-public-methods,too-many-arguments,too-many-branches,too-many-lines,too-many-locals,ungrouped-imports,wrong-spelling-in-comment,wrong-spelling-in-docstring,bad-whitespace'
+            stitch-validate-json tap_quickbooks/schemas/*.json
+      #- run:
+      #    name: 'pylint'
+      #    command: |
+      #      source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
+      #      # TODO: Adjust the pylint disables
+      #      #pylint tap_quickbooks --disable 'broad-except,chained-comparison,empty-docstring,fixme,invalid-name,line-too-long,missing-class-docstring,missing-function-docstring,missing-module-docstring,no-else-raise,no-else-return,too-few-public-methods,too-many-arguments,too-many-branches,too-many-lines,too-many-locals,ungrouped-imports,wrong-spelling-in-comment,wrong-spelling-in-docstring,bad-whitespace'
       - run:
           name: 'Unit Tests'
           command: |
             source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
-            nosetests tests/unittests            
+            nosetests tests/unittests
       - run:
           name: 'Integration Tests'
           command: |
