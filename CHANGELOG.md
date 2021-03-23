@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.4
+
+* Bumps `singer-python` to `5.12.1`
+
 ## 1.0.3
 
 * Added AcctNum and DocNumber fields
