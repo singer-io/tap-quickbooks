@@ -82,6 +82,26 @@
           },
           "JournalEntryLineDetail": {
             "properties": {
+              "JournalCodeRef": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
               "AccountRef": {
                 "properties": {
                   "name": {
@@ -102,7 +122,80 @@
                   "object"
                 ]
               },
+              "ClassRef": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "DepartmentRef": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "TaxCodeRef": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "BillableStatus": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
               "PostingType": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TaxAmount": {
+                "format": "singer.decimal",
                 "type": [
                   "null",
                   "string"
