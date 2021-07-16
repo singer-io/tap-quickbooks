@@ -153,6 +153,26 @@
         "string"
       ]
     },
+    "ParentRef": {
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
     "MetaData": {
       "properties": {
         "CreateTime": {
