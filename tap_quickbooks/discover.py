@@ -47,10 +47,14 @@ def do_discover():
         ))
         # Set the replication_key MetaData to automatic as well
         mdata = metadata.write(mdata, ('properties', stream.replication_keys[0]), 'inclusion', 'automatic')
+        custom_field = singer.utils.load_json(
+            os.path.normpath(
+                os.path.join(_get_abs_path("schemas/custom_field.json"))))
+        refs = {"custom_field.json": custom_field}
         catalog_entry = {
             "stream": stream_name,
             "tap_stream_id": stream_name,
-            "schema": schema,
+            "schema": singer.resolve_schema_references(schema, refs),
             "metadata": metadata.to_list(mdata),
             "key_properties": stream.key_properties
         }
