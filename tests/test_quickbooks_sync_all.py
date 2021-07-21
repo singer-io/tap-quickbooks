@@ -42,3 +42,23 @@ class TestQuickbooksSyncAll(TestQuickbooksBase):
                 # Each stream should have 1 or more records returned
                 self.assertGreaterEqual(sync_record_count[stream], 1)
 
+        # Taking sync response
+        synced_records = runner.get_records_from_target_output()
+
+        # Taking all streams from the response
+        streams = synced_records.keys()
+
+        # list of streams supporting custom field
+        custom_command_streams = ['invoices','estimates','credit_memos','refund_receipts','sales_receipts','purchase_orders']
+
+        for stream in streams:
+            if stream in custom_command_streams:
+                first_record = synced_records.get(stream).get('messages')[0].get('data')
+                actual_custom_field_keys = list(first_record.get("CustomField")[0].keys())
+                # For sand box only 3 fields are coming
+                expected_custom_field_keys = ['DefinitionId','Name','Type']
+                actual_custom_field_keys.sort()
+                expected_custom_field_keys.sort()
+                self.assertListEqual(actual_custom_field_keys,expected_custom_field_keys)
+            else:
+                continue 
