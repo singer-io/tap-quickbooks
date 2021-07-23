@@ -138,20 +138,29 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 # Verify the second sync records respect the previous (simulated) bookmark value
                 simulated_bookmark_value = new_state['bookmarks'][stream][sub_level_replication_key]
                 for message in second_sync_messages:
-                    replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
-                    self.assertGreaterEqual(replication_key_value, simulated_bookmark_value,
+                    if self.is_report_stream(stream):
+                        replication_key_value = message.get('data').get('ReportDate')
+                    else:
+                        replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
+                    self.assertGreaterEqual(self.dt_to_ts(replication_key_value), self.dt_to_ts(simulated_bookmark_value),
                                             msg="Second sync records do not repect the previous bookmark.")
 
                 # Verify the first sync bookmark value is the max replication key value for a given stream
                 for message in first_sync_messages:
-                    replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
-                    self.assertLessEqual(replication_key_value, first_bookmark_value_utc,
+                    if self.is_report_stream(stream):
+                        replication_key_value = message.get('data').get('ReportDate')
+                    else:
+                        replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
+                    self.assertLessEqual(self.dt_to_ts(replication_key_value), self.dt_to_ts(first_bookmark_value_utc),
                                          msg="First sync bookmark was set incorrectly, a record with a greater rep key value was synced")
 
                 # Verify the second sync bookmark value is the max replication key value for a given stream
                 for message in second_sync_messages:
-                    replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
-                    self.assertLessEqual(replication_key_value, second_bookmark_value_utc,
+                    if self.is_report_stream(stream):
+                        replication_key_value = message.get('data').get('ReportDate')
+                    else:
+                        replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
+                    self.assertLessEqual(self.dt_to_ts(replication_key_value), self.dt_to_ts(second_bookmark_value_utc),
                                          msg="Second sync bookmark was set incorrectly, a record with a greater rep key value was synced")
 
                 # Verify the number of records in the 2nd sync is less then the first

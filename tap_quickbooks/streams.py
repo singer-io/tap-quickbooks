@@ -1,6 +1,11 @@
 import tap_quickbooks.query_builder as query_builder
 
 import singer
+from singer import utils
+from singer.utils import strptime_to_utc, strftime
+from datetime import timedelta
+
+DATE_WINDOW_SIZE = 30
 
 class Stream:
     endpoint = '/v3/company/{realm_id}/query'
@@ -193,6 +198,133 @@ class Vendors(Stream):
     table_name = 'Vendor'
     additional_where = "Active IN (true, false)"
 
+class ReportStream(Stream):
+    parsed_metadata = {
+        'dates': [],
+        'data': []
+    }
+    key_properties = []
+    replication_method = 'INCREMENTAL'
+    # replication keys is ReportDate, manually created from data
+    replication_keys = ['ReportDate']
+
+    def sync(self):
+
+        start_dttm_str = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.config.get('start_date'))
+        start_dttm = strptime_to_utc(start_dttm_str)
+
+        end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
+        now_dttm = utils.now()
+
+        if end_dttm > now_dttm:
+            end_dttm = now_dttm
+        params = {
+            'summarize_column_by': 'Days'
+        }
+
+        while start_dttm < now_dttm:
+            self.parsed_metadata = {
+                'dates': [],
+                'data': []
+            }
+
+            start_tm_str = strftime(start_dttm)[0:10]
+            end_tm_str = strftime(end_dttm)[0:10]
+
+            params["start_date"] = start_tm_str
+            params["end_date"] = end_tm_str
+
+            resp = self.client.get(self.endpoint, params=params)
+            self.parse_report_metadata(resp)
+
+            for report in self.day_wise_reports():
+                yield report
+
+            self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', strptime_to_utc(report.get('ReportDate')).isoformat())
+            singer.write_state(self.state)
+
+            start_dttm = end_dttm
+            end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
+
+            if end_dttm > now_dttm:
+                end_dttm = now_dttm
+
+        singer.write_state(self.state)
+
+    def parse_report_metadata(self, pileOfRows):
+        '''
+            Restructure data from report response on daily basis and update self.parsed_metadata dictionary
+            {
+                "dates": ["2021-07-01", "2021-07-02", "2021-07-03"],
+                "data": [ {
+                    "name": "Total Income",
+                    "values": ["4.00", "4.00", "4.00", "12.00"]
+                }, {
+                    "name": "Gross Profit",
+                    "values": ["4.00", "4.00", "4.00", "12.00"]
+                }, {
+                    "name": "Total Expenses",
+                    "values": ["1.00", "1.00", "1.00", "3.00"]
+                }, {
+                    "name": "Net Income",
+                    "values": ["3.00", "3.00", "3.00", "9.00"]
+                }]
+            }
+        '''
+
+        if isinstance(pileOfRows, list):
+            for x in pileOfRows:
+                self.parse_report_metadata(x)
+
+        else:
+
+            if 'Rows' in pileOfRows.keys():
+                self.parse_report_metadata(pileOfRows['Rows'])
+
+            if 'Row' in pileOfRows.keys():
+                self.parse_report_metadata(pileOfRows['Row'])
+
+            if 'Summary' in pileOfRows.keys():
+                self.parse_report_metadata(pileOfRows['Summary'])
+
+            if 'ColData' in pileOfRows.keys():
+                d = dict()
+                d['name'] = pileOfRows['ColData'][0]['value']
+                vals = []
+                for x in pileOfRows['ColData'][1:]:
+                    vals.append(x['value'])
+                d['values'] = vals
+                self.parsed_metadata['data'].append(d)
+
+            if 'Columns' in pileOfRows.keys():
+                self.parse_report_metadata(pileOfRows['Columns'])
+
+            if 'Column' in pileOfRows.keys():
+                for x in pileOfRows['Column']:
+                    if 'MetaData' in x.keys():
+                        for md in x['MetaData']:
+                            if md['Name'] in ['StartDate']:
+                                self.parsed_metadata['dates'].append(md['Value'])
+
+    def day_wise_reports(self):
+        '''
+            Return record for every day formed using output of parse_report_metadata
+        '''
+        for i, date in enumerate(self.parsed_metadata['dates']):
+            report = dict()
+            report['ReportDate'] = date
+            report['AccountingMethod'] = 'Accrual'
+            report['Details'] = {}
+
+            for data in self.parsed_metadata['data']:
+                report['Details'][data['name']] = data['values'][i]
+
+            yield report
+
+
+class ProfitAndLossReport(ReportStream):
+    stream_name = 'profit_loss_report'
+    endpoint = '/v3/company/{realm_id}/reports/ProfitAndLoss'
 
 STREAM_OBJECTS = {
     "accounts": Accounts,
@@ -222,5 +354,6 @@ STREAM_OBJECTS = {
     "time_activities": TimeActivities,
     "transfers": Transfers,
     "vendor_credits": VendorCredits,
-    "vendors": Vendors
+    "vendors": Vendors,
+    "profit_loss_report": ProfitAndLossReport
 }

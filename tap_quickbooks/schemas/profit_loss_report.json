@@ -1,0 +1,28 @@
+{
+    "type": [
+      "null",
+      "object"
+    ],
+    "properties": {
+      "ReportDate": {
+        "type": [
+          "null",
+          "string"
+        ],
+        "format": "date-time"
+      },
+      "AccountingMethod": {
+        "type": [
+          "null",
+          "string"
+        ]
+      },
+      "Details": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "properties": {}
+      }
+    }
+}
