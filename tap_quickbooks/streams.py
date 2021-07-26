@@ -237,11 +237,12 @@ class ReportStream(Stream):
             resp = self.client.get(self.endpoint, params=params)
             self.parse_report_metadata(resp)
 
-            for report in self.day_wise_reports():
-                yield report
-
-            self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', strptime_to_utc(report.get('ReportDate')).isoformat())
-            singer.write_state(self.state)
+            reports = self.day_wise_reports()
+            if reports:
+                for report in reports:
+                    yield report
+                self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', strptime_to_utc(report.get('ReportDate')).isoformat())
+                singer.write_state(self.state)
 
             start_dttm = end_dttm
             end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
