@@ -193,6 +193,43 @@ class Vendors(Stream):
     table_name = 'Vendor'
     additional_where = "Active IN (true, false)"
 
+class DeletedObjects(Stream):
+    endpoint = '/v3/company/{realm_id}/cdc'
+    stream_name = 'deleted_objects'
+    table_name = 'Deleted Objects'
+    key_properties = ['Id', 'Type']
+
+    # Change tracking is not supported for TimeActivities, TaxAgencies, TaxCodes and TaxRates
+    # Reference: https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/change-data-capture
+    entities = ['Account', 'BillPayment', 'Bill', 'Budget', 'Class', 'CreditMemo',
+                'Customer', 'Department', 'Deposit', 'Employee', 'Estimate', 'Invoice',
+                'Item', 'JournalEntry', 'PaymentMethod', 'Payment', 'PurchaseOrder', 'Purchase',
+                'RefundReceipt', 'SalesReceipt', 'Term', 'Transfer', 'VendorCredit', 'Vendor']
+  
+
+    def sync(self):
+
+        bookmark = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.config.get('start_date'))
+        max_date = bookmark
+        params = {
+            'entities': ','.join(self.entities),
+            'changedSince': bookmark
+        }
+
+        resp = self.client.get(self.endpoint, params=params).get('CDCResponse',[{}])[0].get('QueryResponse', [{}])
+
+        for entities in resp:
+            for entity, values in entities.items():
+                if isinstance(values, list):
+                    for rec in values:
+                        if rec.get('status', None) == 'Deleted':
+                            rec['Type'] = entity
+                            max_date = max(max_date, rec.get('MetaData').get('LastUpdatedTime'))
+                            yield rec
+
+        self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', max_date)
+        singer.write_state(self.state)
+
 
 STREAM_OBJECTS = {
     "accounts": Accounts,
@@ -222,5 +259,6 @@ STREAM_OBJECTS = {
     "time_activities": TimeActivities,
     "transfers": Transfers,
     "vendor_credits": VendorCredits,
-    "vendors": Vendors
+    "vendors": Vendors,
+    "deleted_objects": DeletedObjects
 }
