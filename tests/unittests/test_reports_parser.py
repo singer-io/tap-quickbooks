@@ -5,6 +5,9 @@ import tap_quickbooks.streams as streams
 class TestReportsParser(unittest.TestCase):
 
     def test_day_wise_reports(self):
+        """
+        Test that day wise reports are generated from formatted parsed_metadata
+        """
         reports = streams.ReportStream("", "", "")
         reports.parsed_metadata = {
             "dates": ["2021-07-01", "2021-07-02", "2021-07-03"],
@@ -41,6 +44,9 @@ class TestReportsParser(unittest.TestCase):
         self.assertListEqual(expected_records, records)
 
     def test_report_parser(self):
+        """
+        Test that metadata returned from report API is formatted in desired format
+        """
         reports = streams.ReportStream("", "", "")
 
         response = {

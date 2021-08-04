@@ -311,14 +311,14 @@ class ReportStream(Stream):
         '''
             Return record for every day formed using output of parse_report_metadata
         '''
-        for i, date in enumerate(self.parsed_metadata['dates']):
+        for index, date in enumerate(self.parsed_metadata['dates']):
             report = dict()
             report['ReportDate'] = date
             report['AccountingMethod'] = 'Accrual'
             report['Details'] = {}
 
             for data in self.parsed_metadata['data']:
-                report['Details'][data['name']] = data['values'][i]
+                report['Details'][data['name']] = data['values'][index]
 
             yield report
 
