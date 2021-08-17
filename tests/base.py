@@ -106,6 +106,7 @@ class TestQuickbooksBase(unittest.TestCase):
         for stream in self.expected_check_streams():
             if self.is_report_stream(stream):
                 mdata[stream] = {
+                    self.PRIMARY_KEYS: {'ReportDate'},
                     self.REPLICATION_METHOD: self.INCREMENTAL,
                     self.REPLICATION_KEYS: {'ReportDate'},
                 }

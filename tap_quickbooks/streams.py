@@ -5,7 +5,7 @@ from singer import utils
 from singer.utils import strptime_to_utc, strftime
 from datetime import timedelta
 
-DATE_WINDOW_SIZE = 30
+DATE_WINDOW_SIZE = 29
 
 class Stream:
     endpoint = '/v3/company/{realm_id}/query'
@@ -203,24 +203,35 @@ class ReportStream(Stream):
         'dates': [],
         'data': []
     }
-    key_properties = []
+    key_properties = ['ReportDate']
     replication_method = 'INCREMENTAL'
     # replication keys is ReportDate, manually created from data
     replication_keys = ['ReportDate']
 
     def sync(self):
 
-        start_dttm_str = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.config.get('start_date'))
-        start_dttm = strptime_to_utc(start_dttm_str)
-
-        end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
-        now_dttm = utils.now()
-
-        if end_dttm > now_dttm:
-            end_dttm = now_dttm
+        is_start_date_used = False
         params = {
             'summarize_column_by': 'Days'
         }
+
+        start_dttm_str = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime')
+        if start_dttm_str is None:
+            start_dttm_str = self.config.get('start_date')
+            is_start_date_used = True
+
+        start_dttm = strptime_to_utc(start_dttm_str)
+        end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
+        now_dttm = utils.now()
+        
+        # Fetch records for minimum 30 days 
+        # if bookmark from state file is used and it's less than 30 days away
+        # Fetch records for start_date to current date 
+        # if start_date is used and it'sless than 30 days away
+        if end_dttm > now_dttm:
+            end_dttm = now_dttm
+            if not is_start_date_used:
+                start_dttm = end_dttm - timedelta(days=DATE_WINDOW_SIZE)
 
         while start_dttm < now_dttm:
             self.parsed_metadata = {

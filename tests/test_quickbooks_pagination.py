@@ -67,6 +67,8 @@ class TestQuickbooksPagination(TestQuickbooksBase):
 
                 sync_messages = sync_records.get(stream, {'messages': []}).get('messages')
 
+                primary_key = self.expected_primary_keys().get(stream).pop()
+
                 # Verify the sync meets or exceeds the default record count
                 self.assertLessEqual(expected_count, record_count)
 
@@ -79,12 +81,8 @@ class TestQuickbooksPagination(TestQuickbooksBase):
                 self.assertGreater(record_count, pagination_threshold,
                                    msg="Record count not large enough to gaurantee pagination.")
 
-                # ProfitAndLoss report stream doesn't have any primary key
-                if not self.is_report_stream(stream):
-                    primary_key = self.expected_primary_keys().get(stream).pop()
-
-                    # Verify we did not duplicate any records across pages
-                    records_pks_set = {message.get('data').get(primary_key) for message in sync_messages}
-                    records_pks_list = [message.get('data').get(primary_key) for message in sync_messages]
-                    self.assertCountEqual(records_pks_set, records_pks_list,
-                                        msg="We have duplicate records for {}".format(stream))
+                # Verify we did not duplicate any records across pages
+                records_pks_set = {message.get('data').get(primary_key) for message in sync_messages}
+                records_pks_list = [message.get('data').get(primary_key) for message in sync_messages]
+                self.assertCountEqual(records_pks_set, records_pks_list,
+                                      msg="We have duplicate records for {}".format(stream))
