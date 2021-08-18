@@ -255,7 +255,7 @@ class ReportStream(Stream):
                 self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', strptime_to_utc(report.get('ReportDate')).isoformat())
                 singer.write_state(self.state)
 
-            start_dttm = end_dttm
+            start_dttm = end_dttm + timedelta(days=1) # one record is emitted for every day so start from next day
             end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
 
             if end_dttm > now_dttm:

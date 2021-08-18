@@ -128,21 +128,26 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                 # bookmarked states (actual values)
                 first_bookmark_value = first_bookmark_key_value.get(sub_level_replication_key)
                 second_bookmark_value = second_bookmark_key_value.get(sub_level_replication_key)
-                # bookmarked values as utc for comparing against records
-                first_bookmark_value_utc = self.convert_state_to_utc(first_bookmark_value)
-                second_bookmark_value_utc = self.convert_state_to_utc(second_bookmark_value)
+                # bookmarked values as epoch of utc for comparing against records
+                first_bookmark_value_utc = self.dt_to_ts(self.convert_state_to_utc(first_bookmark_value))
+                second_bookmark_value_utc = self.dt_to_ts(self.convert_state_to_utc(second_bookmark_value))
 
                 # Verify the second sync bookmark is Equal to the first sync bookmark
                 self.assertEqual(second_bookmark_value, first_bookmark_value) # assumes no changes to data during test
 
                 # Verify the second sync records respect the previous (simulated) bookmark value
-                simulated_bookmark_value = new_state['bookmarks'][stream][sub_level_replication_key]
+                simulated_bookmark_value = self.dt_to_ts(new_state['bookmarks'][stream][sub_level_replication_key])
+                
+                # Decrease 30 days from expected epoch time for reports stream as tap sync minimum data for last 30 days in bookmark scenario
+                if self.is_report_stream(stream):
+                    simulated_bookmark_value -= 2592000
+                
                 for message in second_sync_messages:
                     if self.is_report_stream(stream):
                         replication_key_value = message.get('data').get('ReportDate')
                     else:
                         replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
-                    self.assertGreaterEqual(self.dt_to_ts(replication_key_value), self.dt_to_ts(simulated_bookmark_value),
+                    self.assertGreaterEqual(self.dt_to_ts(replication_key_value), simulated_bookmark_value,
                                             msg="Second sync records do not repect the previous bookmark.")
 
                 # Verify the first sync bookmark value is the max replication key value for a given stream
@@ -151,7 +156,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                         replication_key_value = message.get('data').get('ReportDate')
                     else:
                         replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
-                    self.assertLessEqual(self.dt_to_ts(replication_key_value), self.dt_to_ts(first_bookmark_value_utc),
+                    self.assertLessEqual(self.dt_to_ts(replication_key_value), first_bookmark_value_utc,
                                          msg="First sync bookmark was set incorrectly, a record with a greater rep key value was synced")
 
                 # Verify the second sync bookmark value is the max replication key value for a given stream
@@ -160,7 +165,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
                         replication_key_value = message.get('data').get('ReportDate')
                     else:
                         replication_key_value = message.get('data').get(top_level_replication_key).get(sub_level_replication_key)
-                    self.assertLessEqual(self.dt_to_ts(replication_key_value), self.dt_to_ts(second_bookmark_value_utc),
+                    self.assertLessEqual(self.dt_to_ts(replication_key_value), second_bookmark_value_utc,
                                          msg="Second sync bookmark was set incorrectly, a record with a greater rep key value was synced")
 
                 # Verify the number of records in the 2nd sync is less then the first
