@@ -3,12 +3,6 @@
     "SalesTermRef": {
       "$ref": "ref_schema.json"
     },
-    "LinkedTxn": {
-      "type": [
-        "null",
-        "string"
-      ]
-    },
     "DocNumber": {
       "type": [
         "null",
@@ -236,20 +230,6 @@
     },
     "DepartmentRef": {
       "$ref": "ref_schema.json"
-    },
-    "SalesTermRef": {
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
     },
     "PrivateNote": {
       "type": [
