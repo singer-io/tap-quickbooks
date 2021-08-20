@@ -196,9 +196,10 @@ class Vendors(Stream):
 class DeletedObjects(Stream):
     endpoint = '/v3/company/{realm_id}/cdc'
     stream_name = 'deleted_objects'
-    table_name = 'Deleted Objects'
+    table_name = 'DeletedObjects'
     key_properties = ['Id', 'Type']
     max_date = None
+    is_deleted_object_found = False
 
     # Change tracking is not supported for TimeActivities, TaxAgencies, TaxCodes and TaxRates
     # Reference: https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/change-data-capture
@@ -240,8 +241,11 @@ class DeletedObjects(Stream):
                 }
                 resp = self.client.get(self.endpoint, params=params).get('CDCResponse',[{}])[0].get('QueryResponse', [{}])
                 yield from self.parse_data_and_write(resp)
-        
-        self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.max_date)
+
+        # Write bookmark if any deleted object found
+        if self.is_deleted_object_found:
+            self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.max_date)
+
         singer.write_state(self.state)
 
     def parse_data_and_write(self, response):
@@ -253,6 +257,7 @@ class DeletedObjects(Stream):
                 if isinstance(values, list):
                     for rec in values:
                         if rec.get('status', None) == 'Deleted':
+                            self.is_deleted_object_found = True
                             rec['Type'] = entity
                             self.max_date = max(self.max_date, rec.get('MetaData').get('LastUpdatedTime'))
                             yield rec
