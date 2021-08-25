@@ -29,6 +29,13 @@
       ],
       "format": "singer.decimal"
     },
+    "Balance": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
     "TotalAmt": {
       "type": [
         "null",
@@ -49,63 +56,18 @@
       ]
     },
     "VendorRef": {
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "DepartmentRef": {
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "APAccountRef": {
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
+      "$ref": "ref_schema.json"
+    },
+    "PrivateNote": {
       "type": [
         "null",
-        "object"
+        "string"
       ]
     },
     "TxnDate": {
@@ -133,64 +95,13 @@
           "AccountBasedExpenseLineDetail": {
             "properties": {
               "CustomerRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
               },
               "ClassRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
               },
               "AccountRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
               },
               "BillableStatus": {
                 "type": [
@@ -199,17 +110,44 @@
                 ]
               },
               "TaxCodeRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
+                "$ref": "ref_schema.json"
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "ItemBasedExpenseLineDetail": {
+            "properties": {
+              "ItemRef": {
+                "$ref": "ref_schema.json"
+              },
+              "CustomerRef": {
+                "$ref": "ref_schema.json"
+              },
+              "ClassRef": {
+                "$ref": "ref_schema.json"
+              },
+              "TaxCodeRef": {
+                "$ref": "ref_schema.json"
+              },
+              "BillableStatus": {
                 "type": [
                   "null",
-                  "object"
+                  "string"
+                ]
+              },
+              "Qty": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              },
+              "UnitPrice": {
+                "type": [
+                  "null",
+                  "integer"
                 ]
               }
             },
@@ -255,24 +193,7 @@
       ]
     },
     "CurrencyRef": {
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "DocNumber": {
       "type": [
