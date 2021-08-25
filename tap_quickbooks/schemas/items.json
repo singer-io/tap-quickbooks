@@ -1,24 +1,7 @@
 {
   "properties": {
     "IncomeAccountRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "PurchaseDesc": {
       "type": [
@@ -27,24 +10,7 @@
       ]
     },
     "ExpenseAccountRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "InvStartDate": {
       "format": "date-time",
@@ -102,24 +68,7 @@
       ]
     },
     "AssetAccountRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "domain": {
       "type": [
@@ -152,6 +101,9 @@
         "integer",
         "string"
       ]
+    },
+    "ParentRef": {
+      "$ref": "ref_schema.json"
     },
     "MetaData": {
       "properties": {

@@ -1,66 +1,15 @@
 {
   "properties": {
     "DepartmentRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "CurrencyRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "CashBack": {
       "properties": {
         "AccountRef": {
-          "properties": {
-            "name": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "value": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          },
-          "type": [
-            "null",
-            "object"
-          ]
+          "$ref": "ref_schema.json"
         },
         "Amount": {
           "format": "singer.decimal",
@@ -108,6 +57,12 @@
               "string"
             ]
           },
+          "Description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "Amount": {
             "format": "singer.decimal",
             "type": [
@@ -118,44 +73,37 @@
           "DepositLineDetail": {
             "properties": {
               "PaymentMethodRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
               },
               "AccountRef": {
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
+              },
+              "ClassRef": {
+                "$ref": "ref_schema.json"
               },
               "CheckNum": {
                 "type": [
                   "null",
                   "string"
                 ]
+              },
+              "TaxCodeRef": {
+                "$ref": "ref_schema.json"
+              },
+              "TaxApplicableOn": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TxnType": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "Entity": {
+                "$ref": "ref_schema.json"
               }
             },
             "type": [
@@ -229,24 +177,7 @@
       ]
     },
     "DepositToAccountRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "Id": {
       "type": [
