@@ -51,6 +51,12 @@
         "string"
       ]
     },
+    "Description": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "FullyQualifiedName": {
       "type": [
         "null",

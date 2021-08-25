@@ -108,6 +108,12 @@
               "string"
             ]
           },
+          "Description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "Amount": {
             "format": "singer.decimal",
             "type": [
@@ -119,6 +125,12 @@
             "properties": {
               "PaymentMethodRef": {
                 "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
                   "value": {
                     "type": [
                       "null",
@@ -151,10 +163,82 @@
                   "object"
                 ]
               },
+              "ClassRef": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
               "CheckNum": {
                 "type": [
                   "null",
                   "string"
+                ]
+              },
+              "TaxCodeRef": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "TaxApplicableOn": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TxnType": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "Entity": {
+                "properties": {
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
                 ]
               }
             },

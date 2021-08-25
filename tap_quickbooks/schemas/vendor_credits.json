@@ -29,6 +29,13 @@
       ],
       "format": "singer.decimal"
     },
+    "Balance": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
     "TotalAmt": {
       "type": [
         "null",
@@ -106,6 +113,12 @@
       "type": [
         "null",
         "object"
+      ]
+    },
+    "PrivateNote": {
+      "type": [
+        "null",
+        "string"
       ]
     },
     "TxnDate": {
@@ -205,11 +218,123 @@
                       "null",
                       "string"
                     ]
+                  },
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
                   }
                 },
                 "type": [
                   "null",
                   "object"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "ItemBasedExpenseLineDetail": {
+            "properties": {
+              "ItemRef": {
+                "properties": {
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "CustomerRef": {
+                "properties": {
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "ClassRef": {
+                "properties": {
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "TaxCodeRef": {
+                "properties": {
+                  "value": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "name": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "BillableStatus": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "Qty": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              },
+              "UnitPrice": {
+                "type": [
+                  "null",
+                  "integer"
                 ]
               }
             },
