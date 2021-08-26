@@ -89,24 +89,7 @@
       }
     },
     "CurrencyRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "ExchangeRate": {
       "type": [
@@ -129,24 +112,10 @@
       ]
     },
     "AccountRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
+    },
+    "DepartmentRef": {
+      "$ref": "ref_schema.json"
     },
     "Id": {
       "type": [
@@ -223,24 +192,13 @@
             ],
             "properties": {
               "ItemRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
+                "$ref": "ref_schema.json"
+              },
+              "CustomerRef": {
+                "$ref": "ref_schema.json"
+              },
+              "ClassRef": {
+                "$ref": "ref_schema.json"
               },
               "Qty": {
                 "type": [
@@ -262,18 +220,7 @@
                 "format": "singer.decimal"
               },
               "TaxCodeRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
+                "$ref": "ref_schema.json"
               }
             }
           },
@@ -284,44 +231,10 @@
             ],
             "properties": {
               "AccountRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
+                "$ref": "ref_schema.json"
               },
               "CustomerRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
+                "$ref": "ref_schema.json"
               },
               "BillableStatus": {
                 "type": [
@@ -329,19 +242,11 @@
                   "string"
                 ]
               },
+              "ClassRef": {
+                "$ref": "ref_schema.json"
+              },
               "TaxCodeRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
+                "$ref": "ref_schema.json"
               }
             }
           },

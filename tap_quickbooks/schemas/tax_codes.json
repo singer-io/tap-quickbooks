@@ -79,24 +79,7 @@
                 ]
               },
               "TaxRateRef": {
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
               }
             },
             "type": [
