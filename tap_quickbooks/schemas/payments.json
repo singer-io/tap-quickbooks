@@ -19,44 +19,10 @@
       }
     },
     "CurrencyRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "ARAccountRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "Line": {
       "type": [
@@ -303,24 +269,7 @@
       }
     },
     "CustomerRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "PaymentRefNum": {
       "type": [

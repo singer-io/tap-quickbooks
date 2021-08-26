@@ -26,26 +26,15 @@
       ]
     },
     "CurrencyRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "Name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Description": {
       "type": [
         "null",
         "string"

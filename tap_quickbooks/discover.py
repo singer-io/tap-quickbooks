@@ -51,6 +51,10 @@ def do_discover():
             os.path.normpath(
                 os.path.join(_get_abs_path("schemas/custom_field.json"))))
         refs = {"custom_field.json": custom_field}
+        ref_schema = singer.utils.load_json(
+            os.path.normpath(
+                os.path.join(_get_abs_path("schemas/ref_schema.json"))))
+        refs.update({"ref_schema.json": ref_schema})
         catalog_entry = {
             "stream": stream_name,
             "tap_stream_id": stream_name,

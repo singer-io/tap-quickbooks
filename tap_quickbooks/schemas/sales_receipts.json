@@ -11,24 +11,7 @@
       ]
     },
     "CustomerRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "LinkedTxn": {
       "type": [
@@ -81,6 +64,12 @@
           ]
         }
       }
+    },
+    "ClassRef": {
+      "$ref": "ref_schema.json"
+    },
+    "DepartmentRef": {
+      "$ref": "ref_schema.json"
     },
     "PrintStatus": {
       "type": [
@@ -217,24 +206,7 @@
                 ]
               },
               "DiscountAccountRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
+                "$ref": "ref_schema.json"
               }
             }
           },
@@ -264,24 +236,7 @@
             ],
             "properties": {
               "ItemRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
+                "$ref": "ref_schema.json"
               },
               "Qty": {
                 "type": [
@@ -296,19 +251,14 @@
                   "integer"
                 ]
               },
+              "ClassRef": {
+                "$ref": "ref_schema.json"
+              },
               "TaxCodeRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
+                "$ref": "ref_schema.json"
+              },
+              "ItemAccountRef": {
+                "$ref": "ref_schema.json"
               }
             }
           },
@@ -328,44 +278,10 @@
       }
     },
     "CurrencyRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "PaymentMethodRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "TxnDate": {
       "type": [
@@ -492,24 +408,7 @@
       "format": "singer.decimal"
     },
     "DepositToAccountRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "patternProperties": {".+": {}}
   }

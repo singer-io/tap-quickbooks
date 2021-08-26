@@ -5,44 +5,10 @@
   ],
   "properties": {
     "APAccountRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "DepartmentRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "CheckPayment": {
       "type": [
@@ -51,24 +17,7 @@
       ],
       "properties": {
         "BankAccountRef": {
-          "type": [
-            "null",
-            "object"
-          ],
-          "properties": {
-            "name": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "value": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          }
+          "$ref": "ref_schema.json"
         },
         "PrintStatus": {
           "type": [
@@ -79,24 +28,7 @@
       }
     },
     "CurrencyRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "TotalAmt": {
       "type": [
@@ -147,24 +79,7 @@
       }
     },
     "VendorRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "ref_schema.json"
     },
     "domain": {
       "type": [
@@ -179,24 +94,7 @@
       ],
       "properties": {
         "CCAccountRef": {
-          "type": [
-            "null",
-            "object"
-          ],
-          "properties": {
-            "name": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "value": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          }
+          "$ref": "ref_schema.json"
         }
       }
     },

@@ -1,24 +1,7 @@
 {
   "properties": {
     "ClassRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "BillEmail": {
       "properties": {
@@ -67,24 +50,7 @@
       ]
     },
     "CurrencyRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "PrintStatus": {
       "type": [
@@ -123,24 +89,10 @@
           "SalesItemLineDetail": {
             "properties": {
               "ItemRef": {
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
+              },
+              "ClassRef": {
+                "$ref": "ref_schema.json"
               },
               "UnitPrice": {
                 "type": [
@@ -149,24 +101,33 @@
                 ]
               },
               "TaxCodeRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
+              },
+              "ItemAccountRef": {
+                "$ref": "ref_schema.json"
               },
               "Qty": {
                 "type": [
                   "null",
                   "integer"
                 ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "DiscountLineDetail": {
+            "properties": {
+              "ClassRef": {
+                "$ref": "ref_schema.json"
+              },
+              "TaxCodeRef": {
+                "$ref": "ref_schema.json"
+              },
+              "DiscountAccountRef": {
+                "$ref": "ref_schema.json"
               }
             },
             "type": [
@@ -217,24 +178,7 @@
       ]
     },
     "SalesTermRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "ShipAddr": {
       "properties": {
@@ -285,6 +229,9 @@
         "null",
         "object"
       ]
+    },
+    "DepartmentRef": {
+      "$ref": "ref_schema.json"
     },
     "TxnTaxDetail": {
       "properties": {
@@ -373,24 +320,7 @@
       ]
     },
     "CustomerRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "RemainingCredit": {
       "type": [
