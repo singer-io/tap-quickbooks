@@ -246,7 +246,8 @@ class ReportStream(Stream):
             params["end_date"] = end_tm_str
 
             resp = self.client.get(self.endpoint, params=params)
-            self.parse_report_metadata(resp)
+            self.parse_report_columns(resp.get('Columns', {}))
+            self.parse_report_rows(resp.get('Rows', {}))
 
             reports = self.day_wise_reports()
             if reports:
@@ -263,7 +264,22 @@ class ReportStream(Stream):
 
         singer.write_state(self.state)
 
-    def parse_report_metadata(self, pileOfRows):
+    def parse_report_columns(self, pileOfColumns):
+        '''
+            Restructure columns data in list of dates and update self.parsed_metadata dictionary.
+            {
+                "dates": ["2021-07-01", "2021-07-02", "2021-07-03"],
+                "data": []
+            }
+        '''
+        columns = pileOfColumns.get('Column', [])
+        for column in columns:
+            metadatas = column.get('MetaData', [])
+            for md in metadatas:
+                if md['Name'] in ['StartDate']:
+                    self.parsed_metadata['dates'].append(md['Value'])
+
+    def parse_report_rows(self, pileOfRows):
         '''
             Restructure data from report response on daily basis and update self.parsed_metadata dictionary
             {
@@ -286,18 +302,18 @@ class ReportStream(Stream):
 
         if isinstance(pileOfRows, list):
             for x in pileOfRows:
-                self.parse_report_metadata(x)
+                self.parse_report_rows(x)
 
         else:
 
             if 'Rows' in pileOfRows.keys():
-                self.parse_report_metadata(pileOfRows['Rows'])
+                self.parse_report_rows(pileOfRows['Rows'])
 
             if 'Row' in pileOfRows.keys():
-                self.parse_report_metadata(pileOfRows['Row'])
+                self.parse_report_rows(pileOfRows['Row'])
 
             if 'Summary' in pileOfRows.keys():
-                self.parse_report_metadata(pileOfRows['Summary'])
+                self.parse_report_rows(pileOfRows['Summary'])
 
             if 'ColData' in pileOfRows.keys():
                 d = dict()
@@ -308,19 +324,9 @@ class ReportStream(Stream):
                 d['values'] = vals
                 self.parsed_metadata['data'].append(d)
 
-            if 'Columns' in pileOfRows.keys():
-                self.parse_report_metadata(pileOfRows['Columns'])
-
-            if 'Column' in pileOfRows.keys():
-                for x in pileOfRows['Column']:
-                    if 'MetaData' in x.keys():
-                        for md in x['MetaData']:
-                            if md['Name'] in ['StartDate']:
-                                self.parsed_metadata['dates'].append(md['Value'])
-
     def day_wise_reports(self):
         '''
-            Return record for every day formed using output of parse_report_metadata
+            Return record for every day formed using output of parse_report_columns and parse_report_rows
         '''
         for index, date in enumerate(self.parsed_metadata['dates']):
             report = dict()

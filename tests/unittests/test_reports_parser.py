@@ -206,7 +206,12 @@ class TestReportsParser(unittest.TestCase):
             }
         }
 
-        expected_data = {
+        expected_data_after_parse_columns = {
+            "dates": ["2021-07-20", "2021-07-21"],
+            "data": []
+        }
+
+        expected_data_after_parse_rows = {
             "dates": ["2021-07-20", "2021-07-21"],
             "data": [{
                 "name": "Total Income",
@@ -226,6 +231,9 @@ class TestReportsParser(unittest.TestCase):
             }]
         }
 
-        reports.parse_report_metadata(response)
-        self.assertEqual(reports.parsed_metadata, expected_data)
+        reports.parse_report_columns(response['Columns'])
+        self.assertEqual(reports.parsed_metadata, expected_data_after_parse_columns)
+
+        reports.parse_report_rows(response["Rows"])
+        self.assertEqual(reports.parsed_metadata, expected_data_after_parse_rows)
     
