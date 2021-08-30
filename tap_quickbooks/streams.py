@@ -193,6 +193,75 @@ class Vendors(Stream):
     table_name = 'Vendor'
     additional_where = "Active IN (true, false)"
 
+class DeletedObjects(Stream):
+    endpoint = '/v3/company/{realm_id}/cdc'
+    stream_name = 'deleted_objects'
+    table_name = 'DeletedObjects'
+    key_properties = ['Id', 'Type']
+    max_date = None
+    is_deleted_object_found = False
+
+    # Change tracking is not supported for TimeActivities, TaxAgencies, TaxCodes and TaxRates
+    # Reference: https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/change-data-capture
+    deleted_entities = ['Account', 'BillPayment', 'Bill', 'Budget', 'Class', 'CreditMemo',
+                        'Customer', 'Department', 'Deposit', 'Employee', 'Estimate', 'Invoice',
+                        'Item', 'JournalEntry', 'PaymentMethod', 'Payment', 'PurchaseOrder', 'Purchase',
+                        'RefundReceipt', 'SalesReceipt', 'Term', 'Transfer', 'VendorCredit', 'Vendor']
+
+    def sync(self):
+
+        bookmark = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.config.get('start_date'))
+        self.max_date = bookmark
+        params = {
+            'entities': ','.join(self.deleted_entities),
+            'changedSince': bookmark
+        }
+
+        # Get change tracking for all the entities in single call
+        resp = self.client.get(self.endpoint, params=params).get('CDCResponse',[{}])[0].get('QueryResponse', [{}])
+
+        # Calculate number of objects found in response 
+        total_objects = 0
+        for entities in resp:
+            for entity, values in entities.items():
+                if isinstance(values, list):
+                    total_objects += len(values)
+
+        # Change tracking API return maximum 1000 object changes. 
+        # So if objects are not less than 1000 then make individual call for every entity
+        # Reference: https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/change-data-capture
+
+        if total_objects < 1000:
+            yield from self.parse_data_and_write(resp)
+        else:
+            for entity in self.deleted_entities:
+                params = {
+                    'entities': entity,
+                    'changedSince': bookmark
+                }
+                resp = self.client.get(self.endpoint, params=params).get('CDCResponse',[{}])[0].get('QueryResponse', [{}])
+                yield from self.parse_data_and_write(resp)
+
+        # Write bookmark if any deleted object found
+        if self.is_deleted_object_found:
+            self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.max_date)
+
+        singer.write_state(self.state)
+
+    def parse_data_and_write(self, response):
+        '''
+            Parse change tracking response and return every deleted entity 
+        '''
+        for entities in response:
+            for entity, values in entities.items():
+                if isinstance(values, list):
+                    for rec in values:
+                        if rec.get('status', None) == 'Deleted':
+                            self.is_deleted_object_found = True
+                            rec['Type'] = entity
+                            self.max_date = max(self.max_date, rec.get('MetaData').get('LastUpdatedTime'))
+                            yield rec
+
 
 STREAM_OBJECTS = {
     "accounts": Accounts,
@@ -222,5 +291,6 @@ STREAM_OBJECTS = {
     "time_activities": TimeActivities,
     "transfers": Transfers,
     "vendor_credits": VendorCredits,
-    "vendors": Vendors
+    "vendors": Vendors,
+    "deleted_objects": DeletedObjects
 }

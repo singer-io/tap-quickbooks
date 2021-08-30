@@ -91,6 +91,7 @@ class TestQuickbooksBase(unittest.TestCase):
             "transfers",
             "vendor_credits",
             "vendors",
+            "deleted_objects"
         }
 
     def expected_metadata(self):
@@ -98,11 +99,18 @@ class TestQuickbooksBase(unittest.TestCase):
 
         mdata = {}
         for stream in self.expected_check_streams():
-            mdata[stream] = {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            }
+            if stream == "deleted_objects":
+                mdata[stream] = {
+                    self.PRIMARY_KEYS: {'Id', 'Type'},
+                    self.REPLICATION_METHOD: self.INCREMENTAL,
+                    self.REPLICATION_KEYS: {'MetaData'},
+                }
+            else:
+                mdata[stream] = {
+                    self.PRIMARY_KEYS: {'Id'},
+                    self.REPLICATION_METHOD: self.INCREMENTAL,
+                    self.REPLICATION_KEYS: {'MetaData'},
+                }
 
         return mdata
 
