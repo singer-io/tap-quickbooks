@@ -60,6 +60,8 @@ class TestQuickbooksPagination(TestQuickbooksBase):
 
         # Test by stream
         for stream in self.expected_streams():
+            if stream == "deleted_objects": # Deleted Objects stream does not have Pagination support
+                continue
             with self.subTest(stream=stream):
 
                 expected_count = self.minimum_record_count_by_stream().get(stream)
