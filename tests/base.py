@@ -96,7 +96,11 @@ class TestQuickbooksBase(unittest.TestCase):
             "transfers",
             "vendor_credits",
             "vendors",
+<<<<<<< HEAD
             "profit_loss_report"
+=======
+            "deleted_objects"
+>>>>>>> 7fa0b1c4e139280c731f6ec095a5cdbd5eca8d64
         }
 
     def expected_metadata(self):
@@ -109,6 +113,12 @@ class TestQuickbooksBase(unittest.TestCase):
                     self.PRIMARY_KEYS: {'ReportDate'},
                     self.REPLICATION_METHOD: self.INCREMENTAL,
                     self.REPLICATION_KEYS: {'ReportDate'},
+                }
+            elif stream == "deleted_objects":
+                mdata[stream] = {
+                    self.PRIMARY_KEYS: {'Id', 'Type'},
+                    self.REPLICATION_METHOD: self.INCREMENTAL,
+                    self.REPLICATION_KEYS: {'MetaData'},
                 }
             else:
                 mdata[stream] = {
