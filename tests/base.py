@@ -96,11 +96,8 @@ class TestQuickbooksBase(unittest.TestCase):
             "transfers",
             "vendor_credits",
             "vendors",
-<<<<<<< HEAD
-            "profit_loss_report"
-=======
+            "profit_loss_report",
             "deleted_objects"
->>>>>>> 7fa0b1c4e139280c731f6ec095a5cdbd5eca8d64
         }
 
     def expected_metadata(self):
