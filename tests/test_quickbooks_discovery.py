@@ -148,14 +148,15 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
                          not in actual_automatic_fields}),
                     msg="Not all non key properties are set to available in metadata")
 
-                # verify custom field schema
+                # verify custom field in metadata
                 if stream in self.custom_command_streams:
-                    actual_custom_field_keys = list(schema["properties"]
-                                                    .get("CustomField").get("items").get("properties").keys())
-                    expected_custom_field_keys = ['DefinitionId','Name','Type','StringValue']
-                    actual_custom_field_keys.sort()
-                    expected_custom_field_keys.sort()
-                    self.assertListEqual(actual_custom_field_keys,expected_custom_field_keys)
+                    actual_all_fields = [item.get("breadcrumb", ["properties", None])[1]
+                                         for item in metadata
+                                         if item.get("breadcrumb", []) != []]
+
+                    self.assertTrue('CustomField' in actual_all_fields,
+                                    msg="CustomField is not found in stream {}.".format(stream))
+
                     custom_field_stream_count += 1
                     
         self.assertEqual(custom_field_stream_count,6)
