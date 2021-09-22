@@ -239,8 +239,8 @@ class ReportStream(Stream):
                 'data': []
             }
 
-            start_tm_str = strftime(start_dttm)[0:10]
-            end_tm_str = strftime(end_dttm)[0:10]
+            start_tm_str = str(start_dttm.date())
+            end_tm_str = str(end_dttm.date())
 
             params["start_date"] = start_tm_str
             params["end_date"] = end_tm_str
