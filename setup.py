@@ -15,10 +15,12 @@ setup(name='tap-quickbooks',
           'requests_oauthlib==1.3.0',
       ],
       extras_require={
-          'dev': [
-              'ipdb==0.11',
+          'test': [
               'pylint==2.5.3',
               'nose'
+          ],
+          'dev': [
+              'ipdb'
           ]
       },
       entry_points='''
