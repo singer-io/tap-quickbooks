@@ -221,7 +221,7 @@ class ReportStream(Stream):
             start_dttm_str = self.config.get('start_date')
             is_start_date_used = True
 
-        # Set start_date and end_date for first date window of API calls
+        # Set start_date and end_date for first date window(30 days) of API calls
         start_dttm = strptime_to_utc(start_dttm_str)
         end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
         now_dttm = utils.now()
@@ -235,6 +235,7 @@ class ReportStream(Stream):
             if not is_start_date_used:
                 start_dttm = end_dttm - timedelta(days=DATE_WINDOW_SIZE)
 
+        # Make a API call in 30 days date window until reach current_time
         while start_dttm < now_dttm:
             self.parsed_metadata = {
                 'dates': [],
@@ -244,6 +245,7 @@ class ReportStream(Stream):
             start_tm_str = str(start_dttm.date())
             end_tm_str = str(end_dttm.date())
 
+            # Set date window
             params["start_date"] = start_tm_str
             params["end_date"] = end_tm_str
 
