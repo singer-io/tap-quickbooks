@@ -215,11 +215,13 @@ class ReportStream(Stream):
             'summarize_column_by': 'Days'
         }
 
+        # Get bookmark for the stream
         start_dttm_str = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime')
         if start_dttm_str is None:
             start_dttm_str = self.config.get('start_date')
             is_start_date_used = True
 
+        # Set start_date and end_date for first date window of API calls
         start_dttm = strptime_to_utc(start_dttm_str)
         end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
         now_dttm = utils.now()
@@ -246,16 +248,17 @@ class ReportStream(Stream):
             params["end_date"] = end_tm_str
 
             resp = self.client.get(self.endpoint, params=params)
-            self.parse_report_columns(resp.get('Columns', {}))
-            self.parse_report_rows(resp.get('Rows', {}))
+            self.parse_report_columns(resp.get('Columns', {})) # parse report columns from response's metadata
+            self.parse_report_rows(resp.get('Rows', {})) # parse report rows from response's metadata
 
-            reports = self.day_wise_reports()
+            reports = self.day_wise_reports() # get reports for every days from parsed metadata
             if reports:
                 for report in reports:
                     yield report
                 self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', strptime_to_utc(report.get('ReportDate')).isoformat())
                 singer.write_state(self.state)
 
+            # Set start_date and end_date of date window for next API call
             start_dttm = end_dttm + timedelta(days=1) # one record is emitted for every day so start from next day
             end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
 
@@ -271,13 +274,14 @@ class ReportStream(Stream):
                 "dates": ["2021-07-01", "2021-07-02", "2021-07-03"],
                 "data": []
             }
+            Reference for report metadata: https://developer.intuit.com/app/developer/qbo/docs/api/accounting/report-entities/profitandloss
         '''
         columns = pileOfColumns.get('Column', [])
         for column in columns:
             metadatas = column.get('MetaData', [])
-            for md in metadatas:
-                if md['Name'] in ['StartDate']:
-                    self.parsed_metadata['dates'].append(md['Value'])
+            for metadata in metadatas:
+                if metadata['Name'] in ['StartDate']:
+                    self.parsed_metadata['dates'].append(metadata['Value'])
 
     def parse_report_rows(self, pileOfRows):
         '''
@@ -298,11 +302,12 @@ class ReportStream(Stream):
                     "values": ["3.00", "3.00", "3.00", "9.00"]
                 }]
             }
+            Reference for report metadata: https://developer.intuit.com/app/developer/qbo/docs/api/accounting/report-entities/profitandloss
         '''
 
         if isinstance(pileOfRows, list):
-            for x in pileOfRows:
-                self.parse_report_rows(x)
+            for row in pileOfRows:
+                self.parse_report_rows(row)
 
         else:
 
@@ -316,13 +321,13 @@ class ReportStream(Stream):
                 self.parse_report_rows(pileOfRows['Summary'])
 
             if 'ColData' in pileOfRows.keys():
-                d = dict()
-                d['name'] = pileOfRows['ColData'][0]['value']
+                entry_data = dict()
+                entry_data['name'] = pileOfRows['ColData'][0]['value']
                 vals = []
-                for x in pileOfRows['ColData'][1:]:
-                    vals.append(x['value'])
-                d['values'] = vals
-                self.parsed_metadata['data'].append(d)
+                for column_value in pileOfRows['ColData'][1:]:
+                    vals.append(column_value['value'])
+                entry_data['values'] = vals
+                self.parsed_metadata['data'].append(entry_data)
 
     def day_wise_reports(self):
         '''
