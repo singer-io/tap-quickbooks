@@ -89,7 +89,9 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
 
                 # start dates
                 start_date_1 = self.get_properties()['start_date']
+                start_date_1_epoch = self.dt_to_ts(start_date_1)
                 start_date_2 = self.get_properties(original=False)['start_date']
+                start_date_2_epoch = self.dt_to_ts(start_date_2)
 
                 # Verify by stream that our first sync meets or exceeds the default record count
                 self.assertLessEqual(expected_first_sync_count, first_sync_count)
@@ -99,10 +101,16 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
 
                 # Verify by stream that all records have a rep key that is equal to or greater than that sync's start_date
                 for message in first_sync_messages:
-                    rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
-                    self.assertGreaterEqual(rep_key_value, start_date_1,
+                    if self.is_report_stream(stream):
+                        rep_key_value = message.get('data').get('ReportDate')
+                    else :
+                        rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
+                    self.assertGreaterEqual(self.dt_to_ts(rep_key_value), start_date_1_epoch,
                                             msg="A record was replicated with a replication key value prior to the start date")
                 for message in second_sync_messages:
-                    rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
-                    self.assertGreaterEqual(rep_key_value, start_date_2,
+                    if self.is_report_stream(stream):
+                        rep_key_value = message.get('data').get('ReportDate')
+                    else :
+                        rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
+                    self.assertGreaterEqual(self.dt_to_ts(rep_key_value), start_date_2_epoch,
                                             msg="A record was replicated with a replication key value prior to the start date")
