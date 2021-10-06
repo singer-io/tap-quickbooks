@@ -37,6 +37,7 @@ This tap:
     * Transfers
     * VendorCredits
     * Vendors
+    * ProfitAndLossReport
     * DeletedObjects
 
 - Includes a schema for each resource reflecting most recent tested data retrieved using the api. See [the schema folder](https://github.com/singer-io/tap-quickbooks/tree/master/tap_quickbooks/schemas) for details.
