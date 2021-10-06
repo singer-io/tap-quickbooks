@@ -11,7 +11,7 @@ jobs:
             python3 -mvenv /usr/local/share/virtualenvs/tap-quickbooks
             source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
             pip install -U pip setuptools
-            pip install .[dev]
+            pip install .[test]
       - run:
           name: 'JSON Validator'
           command: |
