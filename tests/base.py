@@ -24,6 +24,8 @@ class TestQuickbooksBase(unittest.TestCase):
     INCREMENTAL = "INCREMENTAL"
     FULL = "FULL_TABLE"
     START_DATE_FORMAT = "%Y-%m-%dT00:00:00Z" # %H:%M:%SZ
+    # list of streams which supports custom field
+    custom_command_streams = ['invoices','estimates','credit_memos','refund_receipts','sales_receipts','purchase_orders']
     DATETIME_FMT = {
         "%Y-%m-%dT%H:%M:%SZ",
         "%Y-%m-%d %H:%M:%S",
