@@ -44,6 +44,7 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
         self.assertEqual(len(diff), 0, msg="discovered schemas do not match: {}".format(diff))
         print("discovered schemas are OK")
 
+        custom_field_stream_count = 0
         for stream in self.expected_streams():
             with self.subTest(stream=stream):
                 catalog = next(iter([catalog for catalog in found_catalogs
@@ -146,3 +147,16 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
                          and item.get("breadcrumb", ["properties", None])[1]
                          not in actual_automatic_fields}),
                     msg="Not all non key properties are set to available in metadata")
+
+                # verify custom field in metadata
+                if stream in self.custom_command_streams:
+                    actual_all_fields = [item.get("breadcrumb", ["properties", None])[1]
+                                         for item in metadata
+                                         if item.get("breadcrumb", []) != []]
+
+                    self.assertTrue('CustomField' in actual_all_fields,
+                                    msg="CustomField is not found in stream {}.".format(stream))
+
+                    custom_field_stream_count += 1
+                    
+        self.assertEqual(custom_field_stream_count,6)

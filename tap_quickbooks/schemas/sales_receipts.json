@@ -100,36 +100,13 @@
       }
     },
     "CustomField": {
+      "items": {
+          "$ref": "custom_field.json"
+      },
       "type": [
         "null",
         "array"
-      ],
-      "items": {
-        "type": [
-          "null",
-          "object"
-        ],
-        "properties": {
-          "Name": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "DefinitionId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "Type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        }
-      }
+      ]
     },
     "BillAddr": {
       "type": [

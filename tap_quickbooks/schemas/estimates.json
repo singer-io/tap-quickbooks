@@ -391,30 +391,7 @@
     },
     "CustomField": {
       "items": {
-        "properties": {
-          "DefinitionId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "Name": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "Type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ]
+          "$ref": "custom_field.json"
       },
       "type": [
         "null",

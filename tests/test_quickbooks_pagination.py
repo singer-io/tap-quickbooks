@@ -75,7 +75,11 @@ class TestQuickbooksPagination(TestQuickbooksBase):
                 self.assertLessEqual(expected_count, record_count)
 
                 # Verify the number or records exceeds the max_results (api limit)
-                pagination_threshold = int(self.get_properties().get(page_size_key))
+                if self.is_report_stream(stream):
+                    #Tap is making API call in 30 days window for reports stream
+                    pagination_threshold = 30
+                else:
+                    pagination_threshold = int(self.get_properties().get(page_size_key))
                 self.assertGreater(record_count, pagination_threshold,
                                    msg="Record count not large enough to gaurantee pagination.")
 

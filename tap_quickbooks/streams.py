@@ -1,6 +1,11 @@
 import tap_quickbooks.query_builder as query_builder
 
 import singer
+from singer import utils
+from singer.utils import strptime_to_utc, strftime
+from datetime import timedelta
+
+DATE_WINDOW_SIZE = 29
 
 class Stream:
     endpoint = '/v3/company/{realm_id}/query'
@@ -193,6 +198,158 @@ class Vendors(Stream):
     table_name = 'Vendor'
     additional_where = "Active IN (true, false)"
 
+class ReportStream(Stream):
+    parsed_metadata = {
+        'dates': [],
+        'data': []
+    }
+    key_properties = ['ReportDate']
+    replication_method = 'INCREMENTAL'
+    # replication keys is ReportDate, manually created from data
+    replication_keys = ['ReportDate']
+
+    def sync(self):
+
+        is_start_date_used = False
+        params = {
+            'summarize_column_by': 'Days'
+        }
+
+        # Get bookmark for the stream
+        start_dttm_str = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime')
+        if start_dttm_str is None:
+            start_dttm_str = self.config.get('start_date')
+            is_start_date_used = True
+
+        # Set start_date and end_date for first date window(30 days) of API calls
+        start_dttm = strptime_to_utc(start_dttm_str)
+        end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
+        now_dttm = utils.now()
+        
+        # Fetch records for minimum 30 days 
+        # if bookmark from state file is used and it's less than 30 days away
+        # Fetch records for start_date to current date 
+        # if start_date is used and it'sless than 30 days away
+        if end_dttm > now_dttm:
+            end_dttm = now_dttm
+            if not is_start_date_used:
+                start_dttm = end_dttm - timedelta(days=DATE_WINDOW_SIZE)
+
+        # Make a API call in 30 days date window until reach current_time
+        while start_dttm < now_dttm:
+            self.parsed_metadata = {
+                'dates': [],
+                'data': []
+            }
+
+            start_tm_str = str(start_dttm.date())
+            end_tm_str = str(end_dttm.date())
+
+            # Set date window
+            params["start_date"] = start_tm_str
+            params["end_date"] = end_tm_str
+
+            resp = self.client.get(self.endpoint, params=params)
+            self.parse_report_columns(resp.get('Columns', {})) # parse report columns from response's metadata
+            self.parse_report_rows(resp.get('Rows', {})) # parse report rows from response's metadata
+
+            reports = self.day_wise_reports() # get reports for every days from parsed metadata
+            if reports:
+                for report in reports:
+                    yield report
+                self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', strptime_to_utc(report.get('ReportDate')).isoformat())
+                singer.write_state(self.state)
+
+            # Set start_date and end_date of date window for next API call
+            start_dttm = end_dttm + timedelta(days=1) # one record is emitted for every day so start from next day
+            end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
+
+            if end_dttm > now_dttm:
+                end_dttm = now_dttm
+
+        singer.write_state(self.state)
+
+    def parse_report_columns(self, pileOfColumns):
+        '''
+            Restructure columns data in list of dates and update self.parsed_metadata dictionary.
+            {
+                "dates": ["2021-07-01", "2021-07-02", "2021-07-03"],
+                "data": []
+            }
+            Reference for report metadata: https://developer.intuit.com/app/developer/qbo/docs/api/accounting/report-entities/profitandloss
+        '''
+        columns = pileOfColumns.get('Column', [])
+        for column in columns:
+            metadatas = column.get('MetaData', [])
+            for metadata in metadatas:
+                if metadata['Name'] in ['StartDate']:
+                    self.parsed_metadata['dates'].append(metadata['Value'])
+
+    def parse_report_rows(self, pileOfRows):
+        '''
+            Restructure data from report response on daily basis and update self.parsed_metadata dictionary
+            {
+                "dates": ["2021-07-01", "2021-07-02", "2021-07-03"],
+                "data": [ {
+                    "name": "Total Income",
+                    "values": ["4.00", "4.00", "4.00", "12.00"]
+                }, {
+                    "name": "Gross Profit",
+                    "values": ["4.00", "4.00", "4.00", "12.00"]
+                }, {
+                    "name": "Total Expenses",
+                    "values": ["1.00", "1.00", "1.00", "3.00"]
+                }, {
+                    "name": "Net Income",
+                    "values": ["3.00", "3.00", "3.00", "9.00"]
+                }]
+            }
+            Reference for report metadata: https://developer.intuit.com/app/developer/qbo/docs/api/accounting/report-entities/profitandloss
+        '''
+
+        if isinstance(pileOfRows, list):
+            for row in pileOfRows:
+                self.parse_report_rows(row)
+
+        else:
+
+            if 'Rows' in pileOfRows.keys():
+                self.parse_report_rows(pileOfRows['Rows'])
+
+            if 'Row' in pileOfRows.keys():
+                self.parse_report_rows(pileOfRows['Row'])
+
+            if 'Summary' in pileOfRows.keys():
+                self.parse_report_rows(pileOfRows['Summary'])
+
+            if 'ColData' in pileOfRows.keys():
+                entry_data = dict()
+                entry_data['name'] = pileOfRows['ColData'][0]['value']
+                vals = []
+                for column_value in pileOfRows['ColData'][1:]:
+                    vals.append(column_value['value'])
+                entry_data['values'] = vals
+                self.parsed_metadata['data'].append(entry_data)
+
+    def day_wise_reports(self):
+        '''
+            Return record for every day formed using output of parse_report_columns and parse_report_rows
+        '''
+        for index, date in enumerate(self.parsed_metadata['dates']):
+            report = dict()
+            report['ReportDate'] = date
+            report['AccountingMethod'] = 'Accrual'
+            report['Details'] = {}
+
+            for data in self.parsed_metadata['data']:
+                report['Details'][data['name']] = data['values'][index]
+
+            yield report
+
+class ProfitAndLossReport(ReportStream):
+    stream_name = 'profit_loss_report'
+    endpoint = '/v3/company/{realm_id}/reports/ProfitAndLoss'
+
 class DeletedObjects(Stream):
     endpoint = '/v3/company/{realm_id}/cdc'
     stream_name = 'deleted_objects'
@@ -292,5 +449,6 @@ STREAM_OBJECTS = {
     "transfers": Transfers,
     "vendor_credits": VendorCredits,
     "vendors": Vendors,
+    "profit_loss_report": ProfitAndLossReport,
     "deleted_objects": DeletedObjects
 }
