@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.1.0
+
+   * Add ProfitAndLoss report stream [#37] (https://github.com/singer-io/tap-quickbooks/pull/37)
+   * Update custom fields [#36] (https://github.com/singer-io/tap-quickbooks/pull/36)
+
 ## 1.0.4
 
 * Bumps `singer-python` to `5.12.1`
