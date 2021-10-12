@@ -125,44 +125,10 @@
       ]
     },
     "CurrencyRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "CustomerRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "domain": {
       "type": [
@@ -364,24 +330,7 @@
           "SalesItemLineDetail": {
             "properties": {
               "ItemRef": {
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
               },
               "Qty": {
                 "format": "singer.decimal",
@@ -442,30 +391,7 @@
     },
     "CustomField": {
       "items": {
-        "properties": {
-          "DefinitionId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "Name": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "Type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ]
+          "$ref": "custom_field.json"
       },
       "type": [
         "null",

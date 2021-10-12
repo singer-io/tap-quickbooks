@@ -60,6 +60,8 @@ class TestQuickbooksPagination(TestQuickbooksBase):
 
         # Test by stream
         for stream in self.expected_streams():
+            if stream == "deleted_objects": # Deleted Objects stream does not have Pagination support
+                continue
             with self.subTest(stream=stream):
 
                 expected_count = self.minimum_record_count_by_stream().get(stream)
@@ -73,7 +75,11 @@ class TestQuickbooksPagination(TestQuickbooksBase):
                 self.assertLessEqual(expected_count, record_count)
 
                 # Verify the number or records exceeds the max_results (api limit)
-                pagination_threshold = int(self.get_properties().get(page_size_key))
+                if self.is_report_stream(stream):
+                    #Tap is making API call in 30 days window for reports stream
+                    pagination_threshold = 30
+                else:
+                    pagination_threshold = int(self.get_properties().get(page_size_key))
                 self.assertGreater(record_count, pagination_threshold,
                                    msg="Record count not large enough to gaurantee pagination.")
 

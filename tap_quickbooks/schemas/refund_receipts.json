@@ -15,44 +15,10 @@
       ]
     },
     "PaymentMethodRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "CustomerRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "SyncToken": {
       "type": [
@@ -97,24 +63,10 @@
           "SalesItemLineDetail": {
             "properties": {
               "ItemRef": {
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
+              },
+              "ClassRef": {
+                "$ref": "ref_schema.json"
               },
               "Qty": {
                 "format": "singer.decimal",
@@ -124,24 +76,33 @@
                 ]
               },
               "TaxCodeRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "ref_schema.json"
+              },
+              "ItemAccountRef": {
+                "$ref": "ref_schema.json"
               },
               "UnitPrice": {
                 "type": [
                   "null",
                   "integer"
                 ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "DiscountLineDetail": {
+            "properties": {
+              "ClassRef": {
+                "$ref": "ref_schema.json"
+              },
+              "TaxCodeRef": {
+                "$ref": "ref_schema.json"
+              },
+              "DiscountAccountRef": {
+                "$ref": "ref_schema.json"
               }
             },
             "type": [
@@ -161,24 +122,7 @@
       ]
     },
     "CurrencyRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "Balance": {
       "type": [
@@ -201,24 +145,7 @@
       ]
     },
     "DepositToAccountRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "MetaData": {
       "properties": {
@@ -275,6 +202,12 @@
         "string"
       ]
     },
+    "ClassRef": {
+      "$ref": "ref_schema.json"
+    },
+    "DepartmentRef": {
+      "$ref": "ref_schema.json"
+    },
     "PrintStatus": {
       "type": [
         "null",
@@ -283,30 +216,7 @@
     },
     "CustomField": {
       "items": {
-        "properties": {
-          "DefinitionId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "Name": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "Type": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ]
+          "$ref": "custom_field.json"
       },
       "type": [
         "null",

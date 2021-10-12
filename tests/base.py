@@ -1,5 +1,6 @@
 import os
 import unittest
+import time
 from datetime import datetime as dt
 from datetime import timedelta
 
@@ -23,6 +24,14 @@ class TestQuickbooksBase(unittest.TestCase):
     INCREMENTAL = "INCREMENTAL"
     FULL = "FULL_TABLE"
     START_DATE_FORMAT = "%Y-%m-%dT00:00:00Z" # %H:%M:%SZ
+    # list of streams which supports custom field
+    custom_command_streams = ['invoices','estimates','credit_memos','refund_receipts','sales_receipts','purchase_orders']
+    DATETIME_FMT = {
+        "%Y-%m-%dT%H:%M:%SZ",
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S.000000Z",
+        "%Y-%m-%dT%H:%M:%S%z"
+    }
 
     def setUp(self):
         missing_envs = [x for x in [
@@ -89,6 +98,8 @@ class TestQuickbooksBase(unittest.TestCase):
             "transfers",
             "vendor_credits",
             "vendors",
+            "profit_loss_report",
+            "deleted_objects"
         }
 
     def expected_metadata(self):
@@ -96,11 +107,24 @@ class TestQuickbooksBase(unittest.TestCase):
 
         mdata = {}
         for stream in self.expected_check_streams():
-            mdata[stream] = {
-                self.PRIMARY_KEYS: {'Id'},
-                self.REPLICATION_METHOD: self.INCREMENTAL,
-                self.REPLICATION_KEYS: {'MetaData'},
-            }
+            if self.is_report_stream(stream):
+                mdata[stream] = {
+                    self.PRIMARY_KEYS: {'ReportDate'},
+                    self.REPLICATION_METHOD: self.INCREMENTAL,
+                    self.REPLICATION_KEYS: {'ReportDate'},
+                }
+            elif stream == "deleted_objects":
+                mdata[stream] = {
+                    self.PRIMARY_KEYS: {'Id', 'Type'},
+                    self.REPLICATION_METHOD: self.INCREMENTAL,
+                    self.REPLICATION_KEYS: {'MetaData'},
+                }
+            else:
+                mdata[stream] = {
+                    self.PRIMARY_KEYS: {'Id'},
+                    self.REPLICATION_METHOD: self.INCREMENTAL,
+                    self.REPLICATION_KEYS: {'MetaData'},
+                }
 
         return mdata
 
@@ -222,3 +246,14 @@ class TestQuickbooksBase(unittest.TestCase):
         record_counts["vendors"] = 26
 
         return record_counts
+
+    def dt_to_ts(self, dtime):
+        for date_format in self.DATETIME_FMT:
+            try:
+                date_stripped = int(time.mktime(dt.strptime(dtime, date_format).timetuple()))
+                return date_stripped
+            except ValueError:
+                continue
+
+    def is_report_stream(self, stream):
+        return stream in ["profit_loss_report"]

@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='tap-quickbooks',
-      version='1.0.4',
+      version='1.1.0',
       description='Singer.io tap for extracting data from the Quickbooks API',
       author='Stitch',
       url='http://singer.io',
@@ -15,10 +15,12 @@ setup(name='tap-quickbooks',
           'requests_oauthlib==1.3.0',
       ],
       extras_require={
-          'dev': [
-              'ipdb==0.11',
+          'test': [
               'pylint==2.5.3',
               'nose'
+          ],
+          'dev': [
+              'ipdb'
           ]
       },
       entry_points='''

@@ -1,24 +1,7 @@
 {
   "properties": {
     "TaxRateRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "DocNumber": {
       "type": [
@@ -27,24 +10,7 @@
       ]
     },
     "CurrencyRef": {
-      "properties": {
-        "name": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "ref_schema.json"
     },
     "Id": {
       "type": [
@@ -82,24 +48,25 @@
           },
           "JournalEntryLineDetail": {
             "properties": {
+              "JournalCodeRef": {
+                "$ref": "ref_schema.json"
+              },
               "AccountRef": {
-                "properties": {
-                  "name": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
+                "$ref": "ref_schema.json"
+              },
+              "ClassRef": {
+                "$ref": "ref_schema.json"
+              },
+              "DepartmentRef": {
+                "$ref": "ref_schema.json"
+              },
+              "TaxCodeRef": {
+                "$ref": "ref_schema.json"
+              },
+              "BillableStatus": {
                 "type": [
                   "null",
-                  "object"
+                  "string"
                 ]
               },
               "Entity": {
@@ -157,6 +124,13 @@
                 ]
               },
               "PostingType": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TaxAmount": {
+                "format": "singer.decimal",
                 "type": [
                   "null",
                   "string"
