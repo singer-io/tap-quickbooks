@@ -4,9 +4,11 @@ import requests
 import singer
 
 from requests_oauthlib import OAuth2Session
+from requests.exceptions import Timeout
 
 
 LOGGER = singer.get_logger()
+REQUEST_TIMEOUT = 300
 
 PROD_ENDPOINT_BASE = "https://quickbooks.api.intuit.com"
 SANDBOX_ENDPOINT_BASE = "https://sandbox-quickbooks.api.intuit.com"
@@ -44,6 +46,7 @@ class QuickbooksClient():
         self.user_agent = config['user_agent']
         self.realm_id = config['realm_id']
         self.config_path = config_path
+        self.config = config
         self.session = OAuth2Session(config['client_id'],
                                      token=token,
                                      auto_refresh_url=TOKEN_REFRESH_URL,
@@ -68,7 +71,8 @@ class QuickbooksClient():
         with open(self.config_path, 'w') as file:
             json.dump(config, file, indent=2)
 
-
+    # backoff when Tmimeout error occurs
+    @backoff.on_exception(backoff.expo, Timeout, max_tries=5)
     @backoff.on_exception(backoff.constant,
                           (Quickbooks5XXException,
                            Quickbooks4XXException,
@@ -102,8 +106,11 @@ class QuickbooksClient():
             headers = {**default_headers, **headers}
         else:
             headers = {**default_headers}
-
-        response = self.session.request(method, full_url, headers=headers, params=params, data=data)
+        # Set request timeout to config param `request_timeout` value.
+        # If value is 0,"0", "" or None then it will set default to default to 300.0 seconds if not passed in config.
+        config_request_timeout = self.config.get('request_timeout')
+        request_timeout = config_request_timeout and float(config_request_timeout) or REQUEST_TIMEOUT # pylint: disable=consider-using-ternary
+        response = self.session.request(method, full_url, headers=headers, params=params, data=data, timeout = request_timeout)
 
         # TODO: Check error status, rate limit, etc.
         if response.status_code >= 500:
