@@ -107,9 +107,12 @@ class QuickbooksClient():
         else:
             headers = {**default_headers}
         # Set request timeout to config param `request_timeout` value.
-        # If value is 0,"0", "" or None then it will set default to default to 300.0 seconds if not passed in config.
-        config_request_timeout = self.config.get('request_timeout')
-        request_timeout = config_request_timeout and float(config_request_timeout) or REQUEST_TIMEOUT # pylint: disable=consider-using-ternary
+        request_timeout = self.config.get('request_timeout')
+        # if request_timeout is other than 0,"0" or "" then use request_timeout
+        if request_timeout and float(request_timeout):
+            request_timeout = float(request_timeout)
+        else: # If value is 0,"0" or "" then set default to 300 seconds.
+            request_timeout = REQUEST_TIMEOUT
         response = self.session.request(method, full_url, headers=headers, params=params, data=data, timeout = request_timeout)
 
         # TODO: Check error status, rate limit, etc.
