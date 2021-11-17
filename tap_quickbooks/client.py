@@ -71,8 +71,8 @@ class QuickbooksClient():
         with open(self.config_path, 'w') as file:
             json.dump(config, file, indent=2)
 
-    # backoff when Tmimeout error occurs
-    @backoff.on_exception(backoff.expo, Timeout, max_tries=5)
+    # Backoff th request for 5 times when Timeout error occurs
+    @backoff.on_exception(backoff.expo, Timeout, max_tries=5, factor=2)
     @backoff.on_exception(backoff.constant,
                           (Quickbooks5XXException,
                            Quickbooks4XXException,
