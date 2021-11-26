@@ -80,7 +80,7 @@ These values are all obtained from the oauth steps documented on [quickbook's do
 		"client_secret": "<app_secret>",
 		"sandbox": "<true|false>",
 		"user_agent": "Stitch Tap (+support@stitchdata.com)",
-        "request_timeout": 300
+        	"request_timeout": 300
 	}
 	```
 
