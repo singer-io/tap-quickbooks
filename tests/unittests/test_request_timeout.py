@@ -1,9 +1,8 @@
 import unittest
 from unittest import mock
-from unittest.case import TestCase
 from requests.exceptions import Timeout
 import tap_quickbooks
-from tap_quickbooks import LOGGER, QuickbooksClient
+from tap_quickbooks import QuickbooksClient
 
 class TestBackoffError(unittest.TestCase):
     '''
@@ -16,8 +15,8 @@ class TestBackoffError(unittest.TestCase):
         Check whether the request backoffs properly for 5 times in case of Timeout error.
         """
         mock_send.side_effect = Timeout
+        client = QuickbooksClient("", {"start_date": "dummy_start_date", "refresh_token": "dummy_token", "client_id": "dummy_client_id", "client_secret": "dummy_client_secret", "user_agent": "dummy_ua", "realm_id": "dummy_ri"})
         with self.assertRaises(Timeout):
-            client = QuickbooksClient("", {"start_date": "dummy_start_date", "refresh_token": "dummy_token", "client_id": "dummy_client_id", "client_secret": "dummy_client_secret", "user_agent": "dummy_ua", "realm_id": "dummy_ri"})
             client._make_request('GET', '/v3/company/dummy_ri/query')
         self.assertEquals(mock_send.call_count, 5)
 
@@ -120,6 +119,3 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
         
         mock_request.assert_called_with("GET", "https://quickbooks.api.intuit.com/v3/company/dummy_ri/query", headers=headers, params=None, data=None, timeout=100.8)
-
-
-
