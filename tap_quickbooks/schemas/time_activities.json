@@ -98,7 +98,6 @@
         "integer"
       ]
     },
-    ,
     "BreakHours BreakMinutes": {
       "type": [
         "null",

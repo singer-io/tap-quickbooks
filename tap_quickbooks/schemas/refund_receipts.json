@@ -306,7 +306,6 @@
         "string"
       ]
     },
-    ,
     "CheckPayment": {
       "properties": {
         "CheckNum": {

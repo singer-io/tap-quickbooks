@@ -613,7 +613,6 @@
         "string"
       ]
     },
-    ,
     "BillEmailBcc": {
       "properties": {
         "Address": {

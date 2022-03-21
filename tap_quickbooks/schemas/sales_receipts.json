@@ -410,7 +410,6 @@
     "DepositToAccountRef": {
       "$ref": "ref_schema.json"
     },
-    ,
     "CreditCardPayment": {
       "type": [
         "null",

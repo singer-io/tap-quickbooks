@@ -262,7 +262,6 @@
         "string"
       ]
     },
-    ,
     "APAccountRef": {
       "$ref": "ref_schema.json"
     },
