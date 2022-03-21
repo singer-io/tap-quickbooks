@@ -262,6 +262,121 @@
         "string"
       ]
     },
+    ,
+    "APAccountRef": {
+      "$ref": "ref_schema.json"
+    },
+    "AlternatePhone": {
+      "properties": {
+        "FreeFormNumber": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "BillRate": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "BusinessNumber": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "GSTIN": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "GSTRegistrationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "HasTPAR": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "OtherContactInfo": {
+      "properties": {
+        "Type": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Telephone": {
+          "properties": {
+            "FreeFormNumber": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          "type": [
+            "null",
+            "object"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "TaxReportingBasis": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "VendorPaymentBankDetail": {
+      "properties": {
+        "BankAccountName": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "BankBranchIdentifier": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "BankAccountNumber": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "StatementText": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
     "patternProperties": {".+": {}}
   },
   "type": [

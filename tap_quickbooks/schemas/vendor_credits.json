@@ -200,6 +200,59 @@
         "null",
         "string"
       ]
+    },
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "IncludeInAnnualTPAR": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "LinkedTxn": {
+      "items": {
+        "properties": {
+          "TxnId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "TxnType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "TxnLineId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "type": [
+          "null",
+          "object"
+        ]
+      },
+      "type": [
+        "null",
+        "array"
+      ]
+    },
+    "RecurDataRef": {
+      "$ref": "ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   },
   "type": [

@@ -75,6 +75,15 @@
     },
     "FromAccountRef": {
       "$ref": "ref_schema.json"
+    },
+    "RecurDataRef": {
+      "$ref": "ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   },
   "type": [

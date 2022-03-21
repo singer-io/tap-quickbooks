@@ -124,6 +124,21 @@
         "null",
         "string"
       ]
+    },
+    "AccountAlias": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TxnLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TaxCodeRef": {
+      "$ref": "ref_schema.json"
     }
   },
   "type": [

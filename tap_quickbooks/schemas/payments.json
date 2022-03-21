@@ -276,6 +276,119 @@
         "null",
         "string"
       ]
+    },
+    "CreditCardPayment": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "CreditChargeResponse": {
+          "type": [
+            "null",
+            "object"
+          ],
+          "properties": {
+            "Status": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "AuthCode": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "CCTransId": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "TxnAuthorizationTime": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time"
+            }
+          }
+        },
+        "CreditChargeInfo": {
+          "type": [
+            "null",
+            "object"
+          ],
+          "properties": {
+            "CcExpiryMonth": {
+              "type": [
+                "null",
+                "integer"
+              ]
+            },
+            "ProcessPayment": {
+              "type": [
+                "null",
+                "boolean"
+              ]
+            },
+            "PostalCode": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Amount": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "singer.decimal"
+            },
+            "NameOnAcct": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "CcExpiryYear": {
+              "type": [
+                "null",
+                "integer"
+              ]
+            },
+            "Type": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "BillAddrStreet": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "TaxExemptionRef": {
+      "$ref": "ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TxnSource": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }

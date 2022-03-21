@@ -129,6 +129,12 @@
               "null",
               "string"
             ]
+          },
+          "TxnLineId": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       }
@@ -365,6 +371,38 @@
           }
         }
       }
+    },
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "POEmail": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "Address": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "RecurDataRef": {
+      "$ref": "ref_schema.json"
+    },
+    "ShipMethodRef": {
+      "$ref": "ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }

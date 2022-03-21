@@ -98,6 +98,59 @@
         "integer"
       ]
     },
+    ,
+    "BreakHours BreakMinutes": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "ClassRef": {
+      "$ref": "ref_schema.json"
+    },
+    "DepartmentRef": {
+      "$ref": "ref_schema.json"
+    },
+    "EndTime": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "dateTime": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "StartTime": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "dateTime": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "PayrollItemRef": {
+      "$ref": "ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "VendorRef": {
+      "$ref": "ref_schema.json"
+    },
     "patternProperties": {".+": {}}
   },
   "type": [

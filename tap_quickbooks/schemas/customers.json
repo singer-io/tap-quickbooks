@@ -345,6 +345,91 @@
         "null",
         "object"
       ]
+    },
+    "ARAccountRef": {
+      "$ref": "ref_schema.json"
+    },
+    "AlternatePhone": {
+      "properties": {
+        "FreeFormNumber": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "BusinessNumber": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "CustomerTypeRef": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "GSTIN": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "GSTRegistrationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "IsProject": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "Notes": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "OpenBalanceDate": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "PrimaryTaxIdentifier": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "SecondaryTaxIdentifier": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Suffix": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TaxExemptionReasonId": {},
+    "Title": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   },
   "type": [

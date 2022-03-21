@@ -77,6 +77,12 @@
               "null",
               "string"
             ]
+          },
+          "TxnLineId": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         },
         "type": [
@@ -235,6 +241,135 @@
       "type": [
         "null",
         "string"
+      ]
+    },
+    "HomeBalance": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "IncludeInAnnualTPAR": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "RecurDataRef": {
+      "$ref": "ref_schema.json"
+    },
+    "TxnTaxDetail": {
+      "properties": {
+        "TxnTaxCodeRef": {
+          "$ref": "ref_schema.json"
+        },
+        "TotalTax": {
+          "format": "singer.decimal",
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "TaxLine": {
+          "properties": {
+            "DetailType": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Amount": {
+              "format": "singer.decimal",
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "TaxLineDetail": {
+              "items": {
+                "properties": {
+                  "TaxRateRef": {
+                    "properties": {
+                      "value": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      },
+                      "name": {
+                        "type": [
+                          "null",
+                          "string"
+                        ]
+                      }
+                    },
+                    "type": [
+                      "null",
+                      "object"
+                    ]
+                  },
+                  "NetAmountTaxable": {
+                    "format": "singer.decimal",
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "PercentBased": {
+                    "type": [
+                      "null",
+                      "boolean"
+                    ]
+                  },
+                  "TaxInclusiveAmount": {
+                    "format": "singer.decimal",
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "OverrideDeltaAmount": {
+                    "format": "singer.decimal",
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  },
+                  "TaxPercent": {
+                    "format": "singer.decimal",
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                },
+                "type": [
+                  "null",
+                  "object"
+                ]
+              },
+              "type": [
+                "null",
+                "array"
+              ]
+            }
+          },
+          "type": [
+            "null",
+            "object"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
       ]
     }
   },

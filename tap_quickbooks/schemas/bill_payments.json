@@ -163,6 +163,24 @@
         "string"
       ],
       "format": "singer.decimal"
+    },
+    "PrivateNote": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ProcessBillPayment": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }

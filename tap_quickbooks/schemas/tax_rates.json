@@ -158,6 +158,9 @@
           }
         }
       ]
+    },
+    "TaxReturnLineRef": {
+      "$ref": "ref_schema.json"
     }
   },
   "type": [

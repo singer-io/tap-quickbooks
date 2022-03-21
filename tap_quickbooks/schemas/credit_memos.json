@@ -364,6 +364,61 @@
         "object"
       ]
     },
+    ,
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "HomeBalance": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "InvoiceRef": {
+      "$ref": "ref_schema.json"
+    },
+    "PaymentMethodRef": {
+      "properties": {
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
+    "PrivateNote": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "RecurDataRef": {
+      "$ref": "ref_schema.json"
+    },
+    "TaxExemptionRef": {
+      "$ref": "ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "patternProperties": {".+": {}}
   },
   "type": [

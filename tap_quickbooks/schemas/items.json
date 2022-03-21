@@ -127,6 +127,97 @@
         "object"
       ]
     },
+    ,
+    "AbatementRate": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ClassRef": {
+      "$ref": "ref_schema.json"
+    },
+    "ItemCategoryType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Level": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "PurchaseTaxCodeRef": {
+      "$ref": "ref_schema.json"
+    },
+    "PrefVendorRef": {
+      "$ref": "ref_schema.json"
+    },
+    "PurchaseTaxIncluded": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "ReorderPoint": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ReverseChargeRate": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "SalesTaxCodeRef": {
+      "$ref": "ref_schema.json"
+    },
+    "SalesTaxIncluded": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "ServiceType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Sku": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "SubItem": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "TaxClassificationRef": {
+      "$ref": "ref_schema.json"
+    },
+    "UQCDisplayText": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "UQCId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "patternProperties": {".+": {}}
   },
   "type": [
