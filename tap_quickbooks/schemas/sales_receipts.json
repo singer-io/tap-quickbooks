@@ -523,16 +523,9 @@
         "DeliveryTime": {
           "type": [
             "null",
-            "object"
+            "string"
           ],
-          "properties": {
-            "dateTime": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          }
+          "format": "date-time"
         }
       }
     },

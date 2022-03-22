@@ -488,33 +488,17 @@
       "$ref": "ref_schema.json"
     },
     "DueDate": {
-      "properties": {
-        "date": {
-          "format": "date-time",
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
+      "format": "date-time",
       "type": [
         "null",
-        "object"
+        "string"
       ]
     },
     "ExpirationDate": {
-      "properties": {
-        "date": {
-          "format": "date-time",
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
+      "format": "date-time",
       "type": [
         "null",
-        "object"
+        "string"
       ]
     },
     "GlobalTaxCalculation": {
@@ -536,18 +520,10 @@
       "$ref": "ref_schema.json"
     },
     "ShipDate": {
-      "properties": {
-        "date": {
-          "format": "date-time",
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
+      "format": "date-time",
       "type": [
         "null",
-        "object"
+        "string"
       ]
     },
     "ShipFromAddr": {

@@ -113,30 +113,16 @@
     "EndTime": {
       "type": [
         "null",
-        "object"
+        "string"
       ],
-      "properties": {
-        "dateTime": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "format": "date-time"
     },
     "StartTime": {
       "type": [
         "null",
-        "object"
+        "string"
       ],
-      "properties": {
-        "dateTime": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "format": "date-time"
     },
     "PayrollItemRef": {
       "$ref": "ref_schema.json"

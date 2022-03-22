@@ -278,22 +278,22 @@
           ]
         },
         "TaxLine": {
-          "properties": {
-            "DetailType": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "Amount": {
-              "format": "singer.decimal",
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "TaxLineDetail": {
-              "items": {
+          "items": {
+            "properties": {
+              "DetailType": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "Amount": {
+                "format": "singer.decimal",
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TaxLineDetail": {
                 "properties": {
                   "TaxRateRef": {
                     "properties": {
@@ -354,16 +354,16 @@
                   "null",
                   "object"
                 ]
-              },
-              "type": [
-                "null",
-                "array"
-              ]
-            }
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
           },
           "type": [
             "null",
-            "object"
+            "array"
           ]
         }
       },

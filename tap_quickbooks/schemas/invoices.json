@@ -680,18 +680,10 @@
       "$ref": "ref_schema.json"
     },
     "ShipDate": {
-      "properties": {
-        "date": {
-          "format": "date-time",
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
+      "format": "date-time",
       "type": [
         "null",
-        "object"
+        "string"
       ]
     },
     "ShipFromAddr": {
