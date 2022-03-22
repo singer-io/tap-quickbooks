@@ -424,7 +424,12 @@
         "string"
       ]
     },
-    "TaxExemptionReasonId": {},
+    "TaxExemptionReasonId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "Title": {
       "type": [
         "null",
