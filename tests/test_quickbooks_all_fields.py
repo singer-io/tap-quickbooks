@@ -240,7 +240,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
     }
 
     def name(self):
-        return "tap_tester_quickbooks_all_fields_test"
+        return "tap_tester_quickbooks_combined_test"
 
     def test_run(self):
         """
