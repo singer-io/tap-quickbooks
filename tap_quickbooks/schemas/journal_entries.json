@@ -1,7 +1,7 @@
 {
   "properties": {
     "TaxRateRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "DocNumber": {
       "type": [
@@ -10,7 +10,7 @@
       ]
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Id": {
       "type": [
@@ -49,19 +49,19 @@
           "JournalEntryLineDetail": {
             "properties": {
               "JournalCodeRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "AccountRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "ClassRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "DepartmentRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "TaxCodeRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "BillableStatus": {
                 "type": [
@@ -81,6 +81,36 @@
                   "null",
                   "string"
                 ]
+              },
+              "Entity": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {
+                  "EntityRef": {
+                    "$ref": "shared/ref_schema.json"
+                  },
+                  "Type": {
+                    "type": [
+                      "null",
+                      "string"
+                    ]
+                  }
+                }
+              },
+              "TaxApplicableOn": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TaxInclusiveAmt": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "singer.decimal"
               }
             },
             "type": [
@@ -99,6 +129,16 @@
               "null",
               "string"
             ]
+          },
+          "LineNum": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "singer.decimal"
+          },
+          "DescriptionLineDetail": {
+            "$ref": "shared/description_line.json"
           }
         },
         "type": [
@@ -173,10 +213,10 @@
       ]
     },
     "JournalCodeRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "RecurDataRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TotalAmt": {
       "format": "singer.decimal",
@@ -192,128 +232,7 @@
       ]
     },
     "TxnTaxDetail": {
-      "properties": {
-        "TxnTaxCodeRef": {
-          "properties": {
-            "value": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "name": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          },
-          "type": [
-            "null",
-            "object"
-          ]
-        },
-        "TotalTax": {
-          "format": "singer.decimal",
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "TaxLine": {
-          "items": {
-            "properties": {
-              "DetailType": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "Amount": {
-                "format": "singer.decimal",
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "TaxLineDetail": {
-                "properties": {
-                  "TaxRateRef": {
-                    "properties": {
-                      "value": {
-                        "type": [
-                          "null",
-                          "string"
-                        ]
-                      },
-                      "name": {
-                        "type": [
-                          "null",
-                          "string"
-                        ]
-                      }
-                    },
-                    "type": [
-                      "null",
-                      "object"
-                    ]
-                  },
-                  "NetAmountTaxable": {
-                    "format": "singer.decimal",
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "PercentBased": {
-                    "type": [
-                      "null",
-                      "boolean"
-                    ]
-                  },
-                  "TaxInclusiveAmount": {
-                    "format": "singer.decimal",
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "OverrideDeltaAmount": {
-                    "format": "singer.decimal",
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "TaxPercent": {
-                    "format": "singer.decimal",
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
-          },
-          "type": [
-            "null",
-            "array"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/txn_tax_detail.json"
     }
   },
   "type": [

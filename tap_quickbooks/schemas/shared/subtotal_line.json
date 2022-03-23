@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "ItemRef": {
+      "$ref": "shared/ref_schema.json"
+    }
+  },
+  "type": ["null", "object"]
+}

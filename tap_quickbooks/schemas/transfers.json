@@ -68,16 +68,16 @@
       ]
     },
     "ToAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "FromAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "RecurDataRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TransactionLocationType": {
       "type": [

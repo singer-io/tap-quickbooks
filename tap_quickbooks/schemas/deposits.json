@@ -1,15 +1,15 @@
 {
   "properties": {
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "CashBack": {
       "properties": {
         "AccountRef": {
-          "$ref": "ref_schema.json"
+          "$ref": "shared/ref_schema.json"
         },
         "Amount": {
           "format": "singer.decimal",
@@ -48,8 +48,9 @@
           "LineNum": {
             "type": [
               "null",
-              "integer"
-            ]
+              "string"
+            ],
+            "format": "singer.decimal"
           },
           "DetailType": {
             "type": [
@@ -73,13 +74,13 @@
           "DepositLineDetail": {
             "properties": {
               "PaymentMethodRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "AccountRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "ClassRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "CheckNum": {
                 "type": [
@@ -88,7 +89,7 @@
                 ]
               },
               "TaxCodeRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "TaxApplicableOn": {
                 "type": [
@@ -103,7 +104,7 @@
                 ]
               },
               "Entity": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               }
             },
             "type": [
@@ -142,6 +143,38 @@
               "null",
               "array"
             ]
+          },
+          "CustomField": {
+            "properties": {
+              "DefinitionId": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "StringValue": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "Name": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "Type": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
           }
         },
         "type": [
@@ -177,7 +210,7 @@
       ]
     },
     "DepositToAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Id": {
       "type": [
@@ -232,7 +265,7 @@
       "format": "singer.decimal"
     },
     "RecurDataRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TransactionLocationType": {
       "type": [
@@ -249,24 +282,7 @@
     "TxnTaxDetail": {
       "properties": {
         "TxnTaxCodeRef": {
-          "properties": {
-            "value": {
-              "type": [
-                "null",
-                "string"
-              ]
-            },
-            "name": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          },
-          "type": [
-            "null",
-            "object"
-          ]
+          "$ref": "shared/ref_schema.json"
         },
         "TotalTax": {
           "format": "singer.decimal",
@@ -294,24 +310,7 @@
               "TaxLineDetail": {
                 "properties": {
                   "TaxRateRef": {
-                    "properties": {
-                      "value": {
-                        "type": [
-                          "null",
-                          "string"
-                        ]
-                      },
-                      "name": {
-                        "type": [
-                          "null",
-                          "string"
-                        ]
-                      }
-                    },
-                    "type": [
-                      "null",
-                      "object"
-                    ]
+                    "$ref": "shared/ref_schema.json"
                   },
                   "NetAmountTaxable": {
                     "format": "singer.decimal",

@@ -13,18 +13,7 @@
       ]
     },
     "AgencyRef": {
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/ref_schema.json"
     },
     "Description": {
       "type": [
@@ -160,7 +149,13 @@
       ]
     },
     "TaxReturnLineRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
+    },
+    "OriginalTaxRate": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   },
   "type": [

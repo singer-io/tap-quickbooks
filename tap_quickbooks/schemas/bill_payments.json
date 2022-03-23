@@ -5,10 +5,10 @@
   ],
   "properties": {
     "APAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "CheckPayment": {
       "type": [
@@ -17,7 +17,7 @@
       ],
       "properties": {
         "BankAccountRef": {
-          "$ref": "ref_schema.json"
+          "$ref": "shared/ref_schema.json"
         },
         "PrintStatus": {
           "type": [
@@ -28,7 +28,7 @@
       }
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TotalAmt": {
       "type": [
@@ -79,7 +79,7 @@
       }
     },
     "VendorRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "domain": {
       "type": [
@@ -94,7 +94,7 @@
       ],
       "properties": {
         "CCAccountRef": {
-          "$ref": "ref_schema.json"
+          "$ref": "shared/ref_schema.json"
         }
       }
     },
@@ -140,6 +140,12 @@
                   ]
                 },
                 "TxnId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "TxnLineId": {
                   "type": [
                     "null",
                     "string"

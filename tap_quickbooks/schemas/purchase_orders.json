@@ -24,11 +24,7 @@
       ]
     },
     "TxnTaxDetail": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {}
+      "$ref": "shared/txn_tax_detail.json"
     },
     "EmailStatus": {
       "type": [
@@ -37,19 +33,19 @@
       ]
     },
     "ShipTo": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ClassRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "SalesTermRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "APAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Id": {
       "type": [
@@ -64,48 +60,7 @@
       ]
     },
     "ShipAddr": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line3": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line2": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "shared/address.json"
     },
     "LinkedTxn": {
       "type": [
@@ -140,66 +95,7 @@
       }
     },
     "VendorAddr": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line4": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line3": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line2": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Country": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "shared/address.json"
     },
     "domain": {
       "type": [
@@ -209,7 +105,7 @@
     },
     "CustomField": {
       "items": {
-          "$ref": "custom_field.json"
+          "$ref": "shared/custom_field.json"
       },
       "type": [
         "null",
@@ -259,7 +155,7 @@
       ]
     },
     "VendorRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TxnDate": {
       "type": [
@@ -275,7 +171,7 @@
       ]
     },
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Line": {
       "type": [
@@ -298,8 +194,9 @@
           "LineNum": {
             "type": [
               "null",
-              "integer"
-            ]
+              "string"
+            ],
+            "format": "singer.decimal"
           },
           "Id": {
             "type": [
@@ -314,60 +211,48 @@
             ]
           },
           "ItemBasedExpenseLineDetail": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "properties": {
-              "BillableStatus": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "ItemRef": {
-                "$ref": "ref_schema.json"
-              },
-              "UnitPrice": {
-                "type": [
-                  "null",
-                  "string"
-                ],
-                "format": "singer.decimal"
-              },
-              "TaxCodeRef": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                }
-              },
-              "Qty": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              },
-              "CustomerRef": {
-                "$ref": "ref_schema.json"
-              }
-            }
+            "$ref": "shared/item_based_line.json"
           },
           "Description": {
             "type": [
               "null",
               "string"
             ]
+          },
+          "AccountBasedExpenseLineDetail": {
+            "$ref": "shared/account_based_line.json"
+          },
+          "LinkedTxn": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": [
+                "null",
+                "object"
+              ],
+              "properties": {
+                "TxnType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "TxnId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "TxnLineId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -393,10 +278,10 @@
       }
     },
     "RecurDataRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ShipMethodRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TransactionLocationType": {
       "type": [

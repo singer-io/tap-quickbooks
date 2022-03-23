@@ -60,16 +60,16 @@
       "items": {
         "properties": {
           "ClassRef": {
-            "$ref": "ref_schema.json"
+            "$ref": "shared/ref_schema.json"
           },
           "DepartmentRef": {
-            "$ref": "ref_schema.json"
+            "$ref": "shared/ref_schema.json"
           },
           "CustomerRef": {
-            "$ref": "ref_schema.json"
+            "$ref": "shared/ref_schema.json"
           },
           "AccountRef": {
-            "$ref": "ref_schema.json"
+            "$ref": "shared/ref_schema.json"
           },
           "BudgetDate": {
             "format": "date-time",

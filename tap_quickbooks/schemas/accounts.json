@@ -26,7 +26,7 @@
       ]
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Name": {
       "type": [
@@ -106,18 +106,7 @@
       ]
     },
     "ParentRef": {
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/ref_schema.json"
     },
     "SyncToken": {
       "type": [
@@ -138,7 +127,7 @@
       ]
     },
     "TaxCodeRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     }
   },
   "type": [

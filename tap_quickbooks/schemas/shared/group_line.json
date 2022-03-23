@@ -1,0 +1,40 @@
+{
+  "properties": {
+    "GroupItemRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "Quantity": {
+      "format": "singer.decimal",
+      "type": ["null", "string"]
+    },
+    "Line": {
+      "items": {
+        "properties": {
+          "SalesItemLineDetail": {
+            "$ref": "shared/sales_item_line.json"
+          },
+          "LineNum": {
+            "type": ["null", "string"],
+            "format": "singer.decimal"
+          },
+          "Description": {
+            "type": ["null", "string"]
+          },
+          "Amount": {
+            "format": "singer.decimal",
+            "type": ["null", "string"]
+          },
+          "DetailType": {
+            "type": ["null", "string"]
+          },
+          "Id": {
+            "type": ["null", "string"]
+          }
+        },
+        "type": ["null", "object"]
+      },
+      "type": ["null", "array"]
+    }
+  },
+  "type": ["null", "object"]
+}

@@ -5,24 +5,13 @@
   ],
   "properties": {
     "DepositToAccountRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "shared/ref_schema.json"
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ARAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Line": {
       "type": [
@@ -131,6 +120,12 @@
                   ]
                 },
                 "TxnId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "TxnLineId": {
                   "type": [
                     "null",
                     "string"
@@ -255,21 +250,10 @@
       ]
     },
     "PaymentMethodRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "shared/ref_schema.json"
     },
     "CustomerRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PaymentRefNum": {
       "type": [
@@ -376,7 +360,7 @@
       }
     },
     "TaxExemptionRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TransactionLocationType": {
       "type": [

@@ -105,18 +105,21 @@
       ]
     },
     "PrimaryAddr": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {}
+      "$ref": "shared/address.json"
     },
     "PrimaryEmailAddr": {
       "type": [
         "null",
         "object"
       ],
-      "properties": {}
+      "properties": {
+        "Address": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
     },
     "Title": {
       "type": [
@@ -142,7 +145,14 @@
         "null",
         "object"
       ],
-      "properties": {}
+      "properties": {
+        "FreeFormNumber": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
     },
     "Gender": {
       "type": [
@@ -186,6 +196,13 @@
         "null",
         "string"
       ]
+    },
+    "CostRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
     }
   },
   "type": [

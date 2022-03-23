@@ -7,75 +7,10 @@
       ]
     },
     "CustomerRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "BillAddr": {
-      "properties": {
-        "CountrySubDivisionCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line3": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line2": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line4": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "PostalCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/address.json"
     },
     "DocNumber": {
       "type": [
@@ -84,7 +19,7 @@
       ]
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "SyncToken": {
       "type": [
@@ -99,16 +34,9 @@
             "null",
             "string"
           ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
-    },
-    "SalesTermRef": {
-      "properties": {
-        "value": {
+        },
+        "DeliveryTime": {
+          "format": "date-time",
           "type": [
             "null",
             "string"
@@ -119,6 +47,9 @@
         "null",
         "object"
       ]
+    },
+    "SalesTermRef": {
+      "$ref": "shared/ref_schema.json"
     },
     "AllowIPNPayment": {
       "type": [
@@ -176,7 +107,7 @@
     },
     "CustomField": {
       "items": {
-          "$ref": "custom_field.json"
+          "$ref": "shared/custom_field.json"
       },
       "type": [
         "null",
@@ -267,91 +198,17 @@
             ]
           },
           "SalesItemLineDetail": {
-            "properties": {
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
-              },
-              "ItemAccountRef": {
-                "$ref": "ref_schema.json"
-              },
-              "UnitPrice": {
-                "format": "singer.decimal",
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "ServiceDate": {
-                "format": "date-time",
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "ItemRef": {
-                "$ref": "ref_schema.json"
-              },
-              "Qty": {
-                "format": "singer.decimal",
-                "type": [
-                  "null",
-                  "string"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
+            "$ref": "shared/sales_item_line.json"
+          },
+          "DiscountLineDetail": {
+            "$ref": "shared/discount_line.json"
           },
           "LineNum": {
             "type": [
               "null",
-              "integer"
-            ]
-          },
-          "DiscountLineDetail": {
-            "properties": {
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
-              },
-              "DiscountAccountRef": {
-                "$ref": "ref_schema.json"
-              },
-              "DiscountPercent": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              },
-              "PercentBased": {
-                "type": [
-                  "null",
-                  "boolean"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
+              "string"
+            ],
+            "format": "singer.decimal"
           },
           "Description": {
             "type": [
@@ -364,6 +221,15 @@
               "null",
               "string"
             ]
+          },
+          "SubtotalLineDetail": {
+            "$ref": "shared/subtotal_line.json"
+          },
+          "GroupLineDetail": {
+            "$ref": "shared/group_line.json"
+          },
+          "DescriptionLineDetail": {
+            "$ref": "shared/description_line.json"
           }
         },
         "type": [
@@ -383,102 +249,7 @@
       ]
     },
     "TxnTaxDetail": {
-      "properties": {
-        "TotalTax": {
-          "format": "singer.decimal",
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "TaxLine": {
-          "items": {
-            "properties": {
-              "Amount": {
-                "format": "singer.decimal",
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "DetailType": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "TaxLineDetail": {
-                "properties": {
-                  "NetAmountTaxable": {
-                    "format": "singer.decimal",
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "TaxPercent": {
-                    "format": "singer.decimal",
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  },
-                  "TaxRateRef": {
-                    "properties": {
-                      "value": {
-                        "type": [
-                          "null",
-                          "string"
-                        ]
-                      }
-                    },
-                    "type": [
-                      "null",
-                      "object"
-                    ]
-                  },
-                  "PercentBased": {
-                    "type": [
-                      "null",
-                      "boolean"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
-          },
-          "type": [
-            "null",
-            "array"
-          ]
-        },
-        "TxnTaxCodeRef": {
-          "properties": {
-            "value": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          },
-          "type": [
-            "null",
-            "object"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/txn_tax_detail.json"
     },
     "EmailStatus": {
       "type": [
@@ -531,10 +302,10 @@
       ]
     },
     "DepositToAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "BillEmail": {
       "properties": {
@@ -551,54 +322,7 @@
       ]
     },
     "ShipAddr": {
-      "properties": {
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "PostalCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "CountrySubDivisionCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/address.json"
     },
     "PrivateNote": {
       "type": [
@@ -642,7 +366,7 @@
       ]
     },
     "ClassRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Deposit": {
       "format": "singer.decimal",
@@ -677,7 +401,7 @@
       ]
     },
     "RecurDataRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ShipDate": {
       "format": "date-time",
@@ -687,90 +411,13 @@
       ]
     },
     "ShipFromAddr": {
-      "properties": {
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "CountrySubDivisionCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "PostalCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line2": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line3": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line4": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line5": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Country": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/address.json"
     },
     "ShipMethodRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TaxExemptionRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TrackingNum": {
       "type": [

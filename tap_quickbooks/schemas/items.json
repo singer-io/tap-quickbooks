@@ -1,7 +1,7 @@
 {
   "properties": {
     "IncomeAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PurchaseDesc": {
       "type": [
@@ -10,7 +10,7 @@
       ]
     },
     "ExpenseAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "InvStartDate": {
       "format": "date-time",
@@ -68,7 +68,7 @@
       ]
     },
     "AssetAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "domain": {
       "type": [
@@ -103,7 +103,7 @@
       ]
     },
     "ParentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "MetaData": {
       "properties": {
@@ -135,7 +135,7 @@
       ]
     },
     "ClassRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ItemCategoryType": {
       "type": [
@@ -150,10 +150,10 @@
       ]
     },
     "PurchaseTaxCodeRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PrefVendorRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PurchaseTaxIncluded": {
       "type": [
@@ -176,7 +176,7 @@
       ]
     },
     "SalesTaxCodeRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "SalesTaxIncluded": {
       "type": [
@@ -203,7 +203,7 @@
       ]
     },
     "TaxClassificationRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "UQCDisplayText": {
       "type": [
@@ -212,6 +212,12 @@
       ]
     },
     "UQCId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Source": {
       "type": [
         "null",
         "string"

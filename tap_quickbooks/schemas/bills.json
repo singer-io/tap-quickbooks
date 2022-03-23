@@ -1,7 +1,7 @@
 {
   "properties": {
     "SalesTermRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "DocNumber": {
       "type": [
@@ -10,7 +10,7 @@
       ]
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "SyncToken": {
       "type": [
@@ -32,7 +32,7 @@
       ]
     },
     "APAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "DueDate": {
       "format": "date-time",
@@ -107,8 +107,9 @@
           "LineNum": {
             "type": [
               "null",
-              "integer"
-            ]
+              "string"
+            ],
+            "format": "singer.decimal"
           },
           "DetailType": {
             "type": [
@@ -123,42 +124,7 @@
             ]
           },
           "ItemBasedExpenseLineDetail": {
-            "properties": {
-              "ItemRef": {
-                "$ref": "ref_schema.json"
-              },
-              "CustomerRef": {
-                "$ref": "ref_schema.json"
-              },
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "Qty": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
-              },
-              "BillableStatus": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "UnitPrice": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
+            "$ref": "shared/item_based_line.json"
           },
           "Amount": {
             "format": "singer.decimal",
@@ -168,30 +134,39 @@
             ]
           },
           "AccountBasedExpenseLineDetail": {
-            "properties": {
-              "BillableStatus": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "AccountRef": {
-                "$ref": "ref_schema.json"
-              },
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
-              },
-              "CustomerRef": {
-                "$ref": "ref_schema.json"
-              }
-            },
+            "$ref": "shared/account_based_line.json"
+          },
+          "LinkedTxn": {
             "type": [
               "null",
-              "object"
-            ]
+              "array"
+            ],
+            "items": {
+              "type": [
+                "null",
+                "object"
+              ],
+              "properties": {
+                "TxnType": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "TxnId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                "TxnLineId": {
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                }
+              }
+            }
           }
         },
         "type": [
@@ -218,7 +193,7 @@
       ]
     },
     "VendorRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TotalAmt": {
       "format": "singer.decimal",
@@ -235,7 +210,7 @@
       "format": "singer.decimal"
     },
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PrivateNote": {
       "type": [
@@ -263,12 +238,12 @@
       ]
     },
     "RecurDataRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TxnTaxDetail": {
       "properties": {
         "TxnTaxCodeRef": {
-          "$ref": "ref_schema.json"
+          "$ref": "shared/ref_schema.json"
         },
         "TotalTax": {
           "format": "singer.decimal",
@@ -296,24 +271,7 @@
               "TaxLineDetail": {
                 "properties": {
                   "TaxRateRef": {
-                    "properties": {
-                      "value": {
-                        "type": [
-                          "null",
-                          "string"
-                        ]
-                      },
-                      "name": {
-                        "type": [
-                          "null",
-                          "string"
-                        ]
-                      }
-                    },
-                    "type": [
-                      "null",
-                      "object"
-                    ]
+                    "$ref": "shared/ref_schema.json"
                   },
                   "NetAmountTaxable": {
                     "format": "singer.decimal",

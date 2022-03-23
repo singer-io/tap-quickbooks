@@ -1,13 +1,13 @@
 {
   "properties": {
     "DefaultTaxCodeRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "SalesTermRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PaymentMethodRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ResaleNum": {
       "type": [
@@ -16,7 +16,7 @@
       ]
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "MiddleName": {
       "type": [
@@ -25,60 +25,7 @@
       ]
     },
     "BillAddr": {
-      "properties": {
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "CountrySubDivisionCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Country": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "PostalCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/address.json"
     },
     "PrimaryEmailAddr": {
       "properties": {
@@ -153,18 +100,7 @@
       ]
     },
     "ParentRef": {
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/ref_schema.json"
     },
     "PrintOnCheckName": {
       "type": [
@@ -277,60 +213,7 @@
       ]
     },
     "ShipAddr": {
-      "properties": {
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "CountrySubDivisionCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Country": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "PostalCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/address.json"
     },
     "Fax": {
       "properties": {
@@ -347,7 +230,7 @@
       ]
     },
     "ARAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "AlternatePhone": {
       "properties": {
@@ -431,6 +314,12 @@
       ]
     },
     "Title": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Source": {
       "type": [
         "null",
         "string"
