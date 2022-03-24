@@ -125,36 +125,7 @@
             ]
           },
           "LinkedTxn": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "items": {
-              "type": [
-                "null",
-                "object"
-              ],
-              "properties": {
-                "TxnType": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "TxnId": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "TxnLineId": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                }
-              }
-            }
+            "$ref": "shared/linked_txn.json"
           }
         },
         "type": [
@@ -189,36 +160,7 @@
       ]
     },
     "LinkedTxn": {
-      "items": {
-        "properties": {
-          "TxnId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnType": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnLineId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ]
-      },
-      "type": [
-        "null",
-        "array"
-      ]
+      "$ref": "shared/linked_txn.json"
     },
     "RecurDataRef": {
       "$ref": "shared/ref_schema.json"

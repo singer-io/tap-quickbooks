@@ -14,36 +14,7 @@
       "$ref": "shared/ref_schema.json"
     },
     "LinkedTxn": {
-      "type": [
-        "null",
-        "array"
-      ],
-      "items": {
-        "type": [
-          "null",
-          "object"
-        ],
-        "properties": {
-          "TxnType": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnLineId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        }
-      }
+      "$ref": "shared/linked_txn.json"
     },
     "ApplyTaxAfterDiscount": {
       "type": [

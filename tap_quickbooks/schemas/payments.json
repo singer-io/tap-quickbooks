@@ -103,36 +103,7 @@
             }
           },
           "LinkedTxn": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "items": {
-              "type": [
-                "null",
-                "object"
-              ],
-              "properties": {
-                "TxnType": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "TxnId": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "TxnLineId": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                }
-              }
-            }
+            "$ref": "shared/linked_txn.json"
           },
           "Amount": {
             "type": [
@@ -177,30 +148,7 @@
       "format": "singer.decimal"
     },
     "LinkedTxn": {
-      "type": [
-        "null",
-        "array"
-      ],
-      "items": {
-        "type": [
-          "null",
-          "object"
-        ],
-        "properties": {
-          "TxnType": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        }
-      }
+      "$ref": "shared/linked_txn.json"
     },
     "UnappliedAmt": {
       "type": [

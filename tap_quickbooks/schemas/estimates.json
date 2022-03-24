@@ -120,36 +120,7 @@
       "$ref": "shared/txn_tax_detail.json"
     },
     "LinkedTxn": {
-      "items": {
-        "properties": {
-          "TxnId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnType": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnLineId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ]
-      },
-      "type": [
-        "null",
-        "array"
-      ]
+      "$ref": "shared/linked_txn.json"
     },
     "CustomerMemo": {
       "properties": {

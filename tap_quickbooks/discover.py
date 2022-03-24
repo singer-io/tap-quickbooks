@@ -32,6 +32,9 @@ def _load_schemas():
     return schemas
 
 def _load_shared_schema_refs():
+    """
+        Load all the schemas from the 'shared/' folder to resolve schema refs
+    """
     shared_schemas_path = _get_abs_path('schemas/shared')
 
     shared_file_names = [f for f in os.listdir(shared_schemas_path)

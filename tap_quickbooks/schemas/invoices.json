@@ -159,30 +159,7 @@
       "items": {
         "properties": {
           "LinkedTxn": {
-            "items": {
-              "properties": {
-                "TxnType": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "TxnId": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                }
-              },
-              "type": [
-                "null",
-                "object"
-              ]
-            },
-            "type": [
-              "null",
-              "array"
-            ]
+            "$ref": "shared/linked_txn.json"
           },
           "DetailType": {
             "type": [
@@ -258,36 +235,7 @@
       ]
     },
     "LinkedTxn": {
-      "items": {
-        "properties": {
-          "TxnType": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnLineId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ]
-      },
-      "type": [
-        "null",
-        "array"
-      ]
+      "$ref": "shared/linked_txn.json"
     },
     "PrintStatus": {
       "type": [
