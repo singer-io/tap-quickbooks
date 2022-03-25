@@ -166,8 +166,7 @@
             "type": [
               "null",
               "integer"
-            ],
-            "format": "singer.decimal"
+            ]
           },
           "Id": {
             "type": [
@@ -182,7 +181,53 @@
             ]
           },
           "ItemBasedExpenseLineDetail": {
-            "$ref": "shared/item_based_line.json"
+            "properties": {
+              "TaxInclusiveAmt": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "ItemRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "CustomerRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "PriceLevelRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "ClassRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "TaxCodeRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "MarkupInfo": {
+                "type": ["null", "object"],
+                "properties": {
+                  "MarkUpIncomeAccountRef": {
+                    "$ref": "shared/ref_schema.json"
+                  },
+                  "Percent": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "PriceLevelRef": {
+                    "$ref": "shared/ref_schema.json"
+                  }
+                }
+              },
+              "BillableStatus": {
+                "type": ["null", "string"]
+              },
+              "Qty": {
+                "type": ["null", "integer"]
+              },
+              "UnitPrice": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              }
+            },
+            "type": ["null", "object"]
           },
           "Description": {
             "type": [

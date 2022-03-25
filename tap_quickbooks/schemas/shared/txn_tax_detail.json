@@ -1,7 +1,6 @@
 {
   "properties": {
     "TotalTax": {
-      "format": "singer.decimal",
       "type": ["null", "integer"]
     },
     "TxnTaxCodeRef": {
@@ -38,7 +37,6 @@
                 "type": ["null", "string"]
               },
               "TaxPercent": {
-                "format": "singer.decimal",
                 "type": ["null", "integer"]
               }
             },

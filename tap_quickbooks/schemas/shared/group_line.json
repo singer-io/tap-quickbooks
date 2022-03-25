@@ -14,8 +14,7 @@
             "$ref": "shared/sales_item_line.json"
           },
           "LineNum": {
-            "type": ["null", "string"],
-            "format": "singer.decimal"
+            "type": ["null", "integer"]
           },
           "Description": {
             "type": ["null", "string"]

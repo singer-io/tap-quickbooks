@@ -133,9 +133,8 @@
           "LineNum": {
             "type": [
               "null",
-              "string"
-            ],
-            "format": "singer.decimal"
+              "integer"
+            ]
           },
           "DescriptionLineDetail": {
             "$ref": "shared/description_line.json"

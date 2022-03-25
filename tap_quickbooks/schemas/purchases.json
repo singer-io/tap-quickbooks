@@ -77,7 +77,30 @@
       ]
     },
     "EntityRef": {
-      "$ref": "shared/ref_schema.json"
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "type": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
     },
     "TxnDate": {
       "type": [
@@ -116,7 +139,53 @@
         ],
         "properties": {
           "ItemBasedExpenseLineDetail": {
-            "$ref": "shared/item_based_line.json"
+            "properties": {
+              "TaxInclusiveAmt": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "ItemRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "CustomerRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "PriceLevelRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "ClassRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "TaxCodeRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "MarkupInfo": {
+                "type": ["null", "object"],
+                "properties": {
+                  "MarkUpIncomeAccountRef": {
+                    "$ref": "shared/ref_schema.json"
+                  },
+                  "Percent": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "PriceLevelRef": {
+                    "$ref": "shared/ref_schema.json"
+                  }
+                }
+              },
+              "BillableStatus": {
+                "type": ["null", "string"]
+              },
+              "Qty": {
+                "type": ["null", "integer"]
+              },
+              "UnitPrice": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              }
+            },
+            "type": ["null", "object"]
           },
           "AccountBasedExpenseLineDetail": {
             "$ref": "shared/account_based_line.json"
@@ -152,9 +221,8 @@
           "LineNum": {
             "type": [
               "null",
-              "string"
-            ],
-            "format": "singer.decimal"
+              "integer"
+            ]
           }
         }
       }

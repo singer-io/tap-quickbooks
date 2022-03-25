@@ -13,7 +13,6 @@
       "type": ["null", "boolean"]
     },
     "DiscountPercent": {
-      "format": "singer.decimal",
       "type": ["null", "integer"]
     }
   },

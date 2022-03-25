@@ -90,8 +90,7 @@
             "type": [
               "null",
               "integer"
-            ],
-            "format": "singer.decimal"
+            ]
           },
           "AccountBasedExpenseLineDetail": {
             "$ref": "shared/account_based_line.json"

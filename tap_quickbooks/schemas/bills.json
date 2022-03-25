@@ -79,8 +79,7 @@
             "type": [
               "null",
               "integer"
-            ],
-            "format": "singer.decimal"
+            ]
           },
           "DetailType": {
             "type": [
