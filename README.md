@@ -68,6 +68,7 @@ These values are all obtained from the oauth steps documented on [quickbook's do
    - `start_date` - the default value to use if no bookmark exists for an endpoint (rfc3339 date string)
    - `user_agent` (string, optional): Process and email for API logging purposes. Example: `tap-quickbooks <api_user_email@your_company.com>`
    - `sandbox` (string, optional): Whether to communication with quickbooks's sandbox or prod account for this application. If you're not sure leave out. Defaults to false.
+   - The `request_timeout` is an optional paramater to set timeout for requests. Default: 300 seconds
 
    And the other values mentioned in [the authentication section above](#authentication).
 
@@ -78,7 +79,8 @@ These values are all obtained from the oauth steps documented on [quickbook's do
 		"refresh_token": "<refresh_token>",
 		"client_secret": "<app_secret>",
 		"sandbox": "<true|false>",
-		"user_agent": "Stitch Tap (+support@stitchdata.com)"
+		"user_agent": "Stitch Tap (+support@stitchdata.com)",
+        	"request_timeout": 300
 	}
 	```
 
