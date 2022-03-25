@@ -2,7 +2,7 @@
   "properties": {
     "TotalTax": {
       "format": "singer.decimal",
-      "type": ["null", "string"]
+      "type": ["null", "integer"]
     },
     "TxnTaxCodeRef": {
       "$ref": "shared/ref_schema.json"
@@ -39,7 +39,7 @@
               },
               "TaxPercent": {
                 "format": "singer.decimal",
-                "type": ["null", "string"]
+                "type": ["null", "integer"]
               }
             },
             "type": ["null", "object"]

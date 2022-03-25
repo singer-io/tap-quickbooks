@@ -14,7 +14,7 @@
     },
     "DiscountPercent": {
       "format": "singer.decimal",
-      "type": ["null", "string"]
+      "type": ["null", "integer"]
     }
   },
   "type": ["null", "object"]

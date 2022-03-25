@@ -48,7 +48,7 @@
           "LineNum": {
             "type": [
               "null",
-              "string"
+              "integer"
             ],
             "format": "singer.decimal"
           },
