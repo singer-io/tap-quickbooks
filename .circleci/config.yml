@@ -40,7 +40,7 @@ jobs:
             aws s3 cp s3://com-stitchdata-dev-deployment-assets/environments/tap-tester/tap_tester_sandbox  dev_env.sh
             source dev_env.sh
             source /usr/local/share/virtualenvs/tap-tester/bin/activate
-            run-test --tap=tap-quickbooks tests/test_quickbooks_all_fields.py
+            run-test --tap=tap-quickbooks tests
 workflows:
   version: 2
   commit:
