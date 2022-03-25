@@ -69,6 +69,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'IncludeInAnnualTPAR', # AUSTRALIA locale field
             'TransactionLocationType', # FRANCE locale field
             'TxnTaxDetail', # INDIA, CANADA, UK, AUSTRALIA locale field
+            'GlobalTaxCalculation' # INDIA, CANADA, UK, AUSTRALIA locale field
         ],
         'invoices': [
             'patternProperties', # already added in the schema but not found in the API doc
@@ -137,7 +138,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'TaxCodeConfigType', 'Hidden'
         ],
         'refund_receipts': [
-            'TaxExemptionRef', 'HomeBalance'
+            'TaxExemptionRef', 'HomeBalance', 'FreeFormAddress'
         ],
         'time_activities': [
             'CostRate'
@@ -167,7 +168,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'FreeFormAddress', 'TaxExemptionRef', 'ShipFromAddr'
         ],
         'sales_receipts': [
-            'ShipFromAddr', 'HomeBalance'
+            'ShipFromAddr', 'HomeBalance', 'FreeFormAddress'
         ],
         'invoices': [
             'ShipFromAddr', 'Deposit', 'TaxExemptionRef', 'FreeFormAddress', 'BillEmailCc', 'HomeBalance', 'BillEmailBcc'
