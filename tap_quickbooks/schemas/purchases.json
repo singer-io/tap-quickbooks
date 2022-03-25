@@ -219,10 +219,8 @@
             "$ref": "shared/linked_txn.json"
           },
           "LineNum": {
-            "type": [
-              "null",
-              "integer"
-            ]
+            "format": "singer.decimal",
+            "type": ["null", "string"]
           }
         }
       }

@@ -153,7 +153,57 @@
       "$ref": "shared/ref_schema.json"
     },
     "TxnTaxDetail": {
-      "$ref": "shared/txn_tax_detail.json"
+      "properties": {
+        "TotalTax": {
+          "type": ["null", "integer"]
+        },
+        "TxnTaxCodeRef": {
+          "$ref": "shared/ref_schema.json"
+        },
+        "TaxLine": {
+          "items": {
+            "properties": {
+              "DetailType": {
+                "type": ["null", "string"]
+              },
+              "Amount": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "TaxLineDetail": {
+                "properties": {
+                  "TaxRateRef": {
+                    "$ref": "shared/ref_schema.json"
+                  },
+                  "NetAmountTaxable": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "PercentBased": {
+                    "type": ["null", "boolean"]
+                  },
+                  "TaxInclusiveAmount": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "OverrideDeltaAmount": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "TaxPercent": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  }
+                },
+                "type": ["null", "object"]
+              }
+            },
+            "type": ["null", "object"]
+          },
+          "type": ["null", "array"]
+        }
+      },
+      "type": ["null", "object"]
     },
     "TxnDate": {
       "format": "date-time",

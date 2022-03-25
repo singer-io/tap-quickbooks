@@ -11,10 +11,66 @@
       "items": {
         "properties": {
           "SalesItemLineDetail": {
-            "$ref": "shared/sales_item_line.json"
+            "properties": {
+              "ClassRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "DiscountAmt": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "DiscountRate": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "ItemAccountRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "ItemRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "MarkupInfo": {
+                "type": ["null", "object"],
+                "properties": {
+                  "MarkUpIncomeAccountRef": {
+                    "$ref": "shared/ref_schema.json"
+                  },
+                  "Percent": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "PriceLevelRef": {
+                    "$ref": "shared/ref_schema.json"
+                  }
+                }
+              },
+              "Qty": {
+                "type": ["null", "integer"]
+              },
+              "ServiceDate": {
+                "format": "date-time",
+                "type": ["null", "string"]
+              },
+              "TaxClassificationRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "TaxCodeRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "TaxInclusiveAmt": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "UnitPrice": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              }
+            },
+            "type": ["null", "object"]
           },
           "LineNum": {
-            "type": ["null", "integer"]
+            "format": "singer.decimal",
+            "type": ["null", "string"]
           },
           "Description": {
             "type": ["null", "string"]
