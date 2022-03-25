@@ -38,7 +38,8 @@
       "type": ["null", "string"]
     },
     "Qty": {
-      "type": ["null", "integer"]
+      "format": "singer.decimal",
+      "type": ["null", "string"]
     },
     "UnitPrice": {
       "format": "singer.decimal",

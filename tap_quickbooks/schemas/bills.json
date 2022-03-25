@@ -184,6 +184,12 @@
     },
     "TxnTaxDetail": {
       "$ref": "shared/txn_tax_detail.json"
+    },
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   },
   "type": [

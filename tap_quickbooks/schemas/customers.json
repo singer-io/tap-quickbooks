@@ -253,9 +253,17 @@
       ]
     },
     "CustomerTypeRef": {
+      "properties": {
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
       "type": [
         "null",
-        "string"
+        "object"
       ]
     },
     "GSTIN": {
@@ -310,7 +318,7 @@
     "TaxExemptionReasonId": {
       "type": [
         "null",
-        "string"
+        "integer"
       ]
     },
     "Title": {
