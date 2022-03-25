@@ -3,8 +3,246 @@ from base import TestQuickbooksBase
 
 class TestQuickbooksAllFields(TestQuickbooksBase):
 
-    # fields which are deprecated or data is not generated
-    fields_to_remove = {}
+    # remove fields that are replicated when you have account for that specific reqion
+    locale_fields = {
+        'transfers': [
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'journal_entries': [
+            'GlobalTaxCalculation', # AUSTRALIA locale field
+            'TransactionLocationType', # FRANCE locale field
+            'JournalCodeRef' # FRANCE locale field
+        ],
+        'refund_receipts': [
+            'patternProperties', # already added in the schema but not found in the API doc
+            'GlobalTaxCalculation', # AUSTRALIA, UK, CANADA, INDIA locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'purchases': [
+            'IncludeInAnnualTPAR', # AUSTRALIA locale field
+            'patternProperties', # already added in the schema but not found in the API doc
+            'GlobalTaxCalculation', # AUSTRALIA, UK, CANADA, INDIA locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'deposits': [
+            'GlobalTaxCalculation', # AUSTRALIA, UK, INDIA, CANADA locale field
+            'TransactionLocationType', # FRANCE locale field
+            'TxnTaxDetail', # UK, AUSTRALIA, INDIA, CANADA locale fields
+        ],
+        'vendors': [
+            'GSTRegistrationType', # INDIA locale field
+            'TaxReportingBasis', # FRANCE locale field
+            'VendorPaymentBankDetail', # AUSTRALIA locale field
+            'patternProperties', # already added in the schema but not found in the API doc
+            'HasTPAR', # AUSTRALIA locale field
+            'APAccountRef', # FRANCE locale field
+            'BusinessNumber', # INDIA locale field
+            'GSTIN', # INDIA locale field
+            'T4AEligible', # CANADA locale field
+            'T5018Eligible', # CANADA locale field
+        ],
+        'items': [
+            'ServiceType', # INDIA locale field
+            'patternProperties', # already added in the schema but not found in the API doc
+            'ReverseChargeRate', # INDIA locale field
+            'AbatementRate', # INDIA locale field
+            'ItemCategoryType', # FRANCE locale field
+            'UQCId', # INDIA locale field
+            'UQCDisplayText', # INDIA locale field
+        ],
+        'customers': [
+            'GSTRegistrationType', # INDIA locale field
+            'ARAccountRef', # FRANCE locale field
+            'BusinessNumber', # INDIA locale field
+            'PrimaryTaxIdentifier', # INDIA, CANADA, UK, AUSTRALIA locale field
+            'GSTIN', # INDIA locale field
+            'SecondaryTaxIdentifier', # INDIA, UK locale field
+        ],
+        'bill_payments': [
+            'APAccountRef', # FRANCE locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'tax_rates': [
+            'OriginalTaxRate' # CANADA locale field
+        ],
+        'bills': [
+            'IncludeInAnnualTPAR', # AUSTRALIA locale field
+            'TransactionLocationType', # FRANCE locale field
+            'TxnTaxDetail', # INDIA, CANADA, UK, AUSTRALIA locale field
+        ],
+        'invoices': [
+            'patternProperties', # already added in the schema but not found in the API doc
+            'GlobalTaxCalculation', # AUSTRALIA locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'sales_receipts': [
+            'patternProperties', # already added in the schema but not found in the API doc
+            'GlobalTaxCalculation', # AUSTRALIA locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'tax_agencies': [
+            'LastFileDate' # INDIA, CANADA, UK, AUSTRALIA, FRANCE locale field
+        ],
+        'credit_memos': [
+            'patternProperties', # already added in the schema but not found in the API doc
+            'InvoiceRef', # INDIA locale field
+            'GlobalTaxCalculation', # AUSTRALIA locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'accounts': [
+            'TxnLocationType', # FRANCE locale field
+            'TaxCodeRef', # INDIA, CANADA, UK, AUSTRALIA locale field
+            'AccountAlias' # FRANCE locale field
+        ],
+        'payments': [
+            'ARAccountRef', # FRANCE locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'purchase_orders': [
+            'GlobalTaxCalculation', # AUSTRALIA, UK, INDIA, CANADA locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'estimates': [
+            'patternProperties', # already added in the schema but not found in the API doc
+            'GlobalTaxCalculation', # AUSTRALIA, UK, INDIA, CANADA locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'vendor_credits': [
+            'IncludeInAnnualTPAR', # AUSTRALIA locale field
+            'GlobalTaxCalculation', # AUSTRALIA, UK, INDIA, CANADA locale field
+            'TransactionLocationType', # FRANCE locale field
+        ],
+        'time_activities': [
+            'patternProperties', # already added in the schema but not found in the API doc
+            'TransactionLocationType', # FRANCE locale field
+        ]
+    }
+
+    # remove the fields that are replicated when added 'minorversion' param in the API request
+    # CARD: https://jira.talendforge.org/browse/TDL-18325
+    fields_replicated_with_minorVersion = {
+        'customers': [
+            'IsProject', 'Source', 'TaxExemptionReasonId'
+        ],
+        'purchase_orders': [
+            'EmailStatus', 'POEmail'
+        ],
+        'employees': [
+            'V4IDPseudonym', 'CostRate'
+        ],
+        'tax_agencies': [
+            'TaxAgencyConfig'
+        ],
+        'tax_codes': [
+            'TaxCodeConfigType', 'Hidden'
+        ],
+        'refund_receipts': [
+            'TaxExemptionRef', 'HomeBalance'
+        ],
+        'time_activities': [
+            'CostRate'
+        ],
+        'bills': [
+            'HomeBalance'
+        ],
+        'vendors': [
+            'Source', 'BillRate', 'CostRate'
+        ],
+        'journal_entries': [
+            'HomeTotalAmt', 'TotalAmt'
+        ],
+        'vendor_credits': [
+            'Balance', 'LinkedTxn'
+        ],
+        'purchases': [
+            'LinkedTxn'
+        ],
+        'credit_memos': [
+            'TaxExemptionRef', 'HomeBalance'
+        ],
+        'items': [
+            'PrefVendorRef', 'ClassRef', 'Sku', 'TaxClassificationRef'
+        ],
+        'estimates': [
+            'FreeFormAddress', 'TaxExemptionRef', 'ShipFromAddr'
+        ],
+        'sales_receipts': [
+            'ShipFromAddr', 'HomeBalance'
+        ],
+        'invoices': [
+            'ShipFromAddr', 'Deposit', 'TaxExemptionRef', 'FreeFormAddress', 'BillEmailCc', 'HomeBalance', 'BillEmailBcc'
+        ],
+        'deposits': [
+            'HomeTotalAmt'
+        ]
+    }
+
+    # fields for which data is not generated
+    fields_to_remove = {
+        'items': [
+            'PurchaseTaxCodeRef', 'SalesTaxCodeRef', 'Source', 'SalesTaxIncluded', 'PurchaseTaxIncluded'
+        ],
+        'purchase_orders': [
+            'ShipTo', 'RecurDataRef', 'DueDate', 'SalesTermRef', 'ClassRef', 'TxnTaxDetail'
+        ],
+        'deposits': [
+            'RecurDataRef', 'TxnSource',
+        ],
+        'journal_entries': [
+            'RecurDataRef', 'TaxRateRef'
+        ],
+        'bills': [
+            'RecurDataRef'
+        ],
+        'tax_rates': [
+            'EffectiveTaxRate'
+        ],
+        'refund_receipts': [
+            'RecurDataRef', 'CheckPayment', 'PaymentType', 'ShipAddr'
+        ],
+        'terms': [
+            'DiscountDayOfMonth'
+        ],
+        'vendor_credits': [
+            'RecurDataRef'
+        ],
+        'tax_agencies': [
+            'TaxRegistrationNumber'
+        ],
+        'estimates': [
+            'RecurDataRef', 'DueDate', 'SalesTermRef'
+        ],
+        'vendors': [
+            'OtherContactInfo'
+        ],
+        'payments': [
+            'CreditCardPayment', 'TaxExemptionRef', 'TxnSource'
+        ],
+        'sales_receipts': [
+            'RecurDataRef', 'TxnSource'
+        ],
+        'bill_payments': [
+            'ProcessBillPayment', 'PrivateNote'
+        ],
+        'customers': [
+            'OpenBalanceDate'
+        ],
+        'purchases': [
+            'RecurDataRef', 'TxnTaxDetail', 'TxnSource'
+        ],
+        'credit_memos': [
+            'RecurDataRef', 'PaymentMethodRef', 'SalesTermRef'
+        ],
+        'invoices': [
+            'InvoiceLink', 'RecurDataRef', 'TxnSource'
+        ],
+        'employees': [
+            'Organization'
+        ],
+        'transfers': [
+            'RecurDataRef'
+        ]
+    }
 
     def name(self):
         return "tap_tester_quickbooks_combined_test"
@@ -81,7 +319,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
                 self.assertTrue(expected_automatic_keys.issubset(expected_all_keys), msg=f'{expected_automatic_keys-expected_all_keys} is not in "expected_all_keys"')
 
                 # remove some fields as data cannot be generated / retrieved
-                fields = self.fields_to_remove.get(stream) or []
+                fields = self.fields_to_remove.get(stream, []) + self.locale_fields.get(stream, []) + self.fields_replicated_with_minorVersion.get(stream, [])
                 for field in fields:
                     expected_all_keys.remove(field)
 

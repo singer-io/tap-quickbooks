@@ -254,20 +254,7 @@
             "string"
           ]
         },
-        "Telephone": {
-          "properties": {
-            "FreeFormNumber": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          },
-          "type": [
-            "null",
-            "object"
-          ]
-        }
+        "Telephone": {}
       },
       "type": [
         "null",
