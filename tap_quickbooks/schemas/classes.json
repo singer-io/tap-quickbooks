@@ -1,7 +1,7 @@
 {
   "properties": {
     "ParentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "SyncToken": {
       "type": [

@@ -1,7 +1,7 @@
 {
   "properties": {
     "IncomeAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PurchaseDesc": {
       "type": [
@@ -10,7 +10,7 @@
       ]
     },
     "ExpenseAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "InvStartDate": {
       "format": "date-time",
@@ -68,7 +68,7 @@
       ]
     },
     "AssetAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "domain": {
       "type": [
@@ -103,7 +103,7 @@
       ]
     },
     "ParentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "MetaData": {
       "properties": {
@@ -125,6 +125,102 @@
       "type": [
         "null",
         "object"
+      ]
+    },
+    "AbatementRate": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ClassRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "ItemCategoryType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Level": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "PurchaseTaxCodeRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "PrefVendorRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "PurchaseTaxIncluded": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "ReorderPoint": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ReverseChargeRate": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "SalesTaxCodeRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "SalesTaxIncluded": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "ServiceType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Sku": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "SubItem": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "TaxClassificationRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "UQCDisplayText": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "UQCId": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Source": {
+      "type": [
+        "null",
+        "string"
       ]
     },
     "patternProperties": {".+": {}}

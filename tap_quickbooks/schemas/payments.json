@@ -5,24 +5,13 @@
   ],
   "properties": {
     "DepositToAccountRef": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "value": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "shared/ref_schema.json"
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ARAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Line": {
       "type": [
@@ -114,30 +103,7 @@
             }
           },
           "LinkedTxn": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "items": {
-              "type": [
-                "null",
-                "object"
-              ],
-              "properties": {
-                "TxnType": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "TxnId": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                }
-              }
-            }
+            "$ref": "shared/linked_txn.json"
           },
           "Amount": {
             "type": [
@@ -182,30 +148,7 @@
       "format": "singer.decimal"
     },
     "LinkedTxn": {
-      "type": [
-        "null",
-        "array"
-      ],
-      "items": {
-        "type": [
-          "null",
-          "object"
-        ],
-        "properties": {
-          "TxnType": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        }
-      }
+      "$ref": "shared/linked_txn.json"
     },
     "UnappliedAmt": {
       "type": [
@@ -255,23 +198,125 @@
       ]
     },
     "PaymentMethodRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "CustomerRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "PaymentRefNum": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "CreditCardPayment": {
       "type": [
         "null",
         "object"
       ],
       "properties": {
-        "value": {
+        "CreditChargeResponse": {
           "type": [
             "null",
-            "string"
-          ]
+            "object"
+          ],
+          "properties": {
+            "Status": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "AuthCode": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "CCTransId": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "TxnAuthorizationTime": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "date-time"
+            }
+          }
+        },
+        "CreditChargeInfo": {
+          "type": [
+            "null",
+            "object"
+          ],
+          "properties": {
+            "CcExpiryMonth": {
+              "type": [
+                "null",
+                "integer"
+              ]
+            },
+            "ProcessPayment": {
+              "type": [
+                "null",
+                "boolean"
+              ]
+            },
+            "PostalCode": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "Amount": {
+              "type": [
+                "null",
+                "string"
+              ],
+              "format": "singer.decimal"
+            },
+            "NameOnAcct": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "CcExpiryYear": {
+              "type": [
+                "null",
+                "integer"
+              ]
+            },
+            "Type": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "BillAddrStreet": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
         }
       }
     },
-    "CustomerRef": {
-      "$ref": "ref_schema.json"
+    "TaxExemptionRef": {
+      "$ref": "shared/ref_schema.json"
     },
-    "PaymentRefNum": {
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TxnSource": {
       "type": [
         "null",
         "string"

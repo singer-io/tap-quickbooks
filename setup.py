@@ -29,7 +29,10 @@ setup(name='tap-quickbooks',
       ''',
       packages=['tap_quickbooks'],
       package_data = {
-          "tap_quickbooks": ["tap_quickbooks/schemas/*.json"]
+          "tap_quickbooks": [
+              "schemas/*.json",
+              "schemas/shared/*.json"
+          ]
       },
       include_package_data=True,
 )

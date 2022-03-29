@@ -1,0 +1,54 @@
+{
+  "properties": {
+    "TotalTax": {
+      "format": "singer.decimal",
+      "type": ["null", "string"]
+    },
+    "TxnTaxCodeRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TaxLine": {
+      "items": {
+        "properties": {
+          "DetailType": {
+            "type": ["null", "string"]
+          },
+          "Amount": {
+            "format": "singer.decimal",
+            "type": ["null", "string"]
+          },
+          "TaxLineDetail": {
+            "properties": {
+              "TaxRateRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "NetAmountTaxable": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "PercentBased": {
+                "type": ["null", "boolean"]
+              },
+              "TaxInclusiveAmount": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "OverrideDeltaAmount": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "TaxPercent": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              }
+            },
+            "type": ["null", "object"]
+          }
+        },
+        "type": ["null", "object"]
+      },
+      "type": ["null", "array"]
+    }
+  },
+  "type": ["null", "object"]
+}

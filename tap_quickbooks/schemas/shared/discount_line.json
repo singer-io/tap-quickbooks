@@ -1,0 +1,21 @@
+{
+  "properties": {
+    "ClassRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TaxCodeRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "DiscountAccountRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "PercentBased": {
+      "type": ["null", "boolean"]
+    },
+    "DiscountPercent": {
+      "format": "singer.decimal",
+      "type": ["null", "string"]
+    }
+  },
+  "type": ["null", "object"]
+}
