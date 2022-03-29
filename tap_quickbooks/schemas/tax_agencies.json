@@ -63,6 +63,19 @@
         "null",
         "boolean"
       ]
+    },
+    "LastFileDate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "TaxAgencyConfig": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   },
   "type": [

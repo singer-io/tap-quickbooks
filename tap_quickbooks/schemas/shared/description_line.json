@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "TaxCodeRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "ServiceDate": {
+      "format": "date-time",
+      "type": ["null", "string"]
+    }
+  },
+  "type": ["null", "object"]
+}

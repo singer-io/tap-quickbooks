@@ -56,13 +56,13 @@
       ]
     },
     "VendorRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "APAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PrivateNote": {
       "type": [
@@ -93,68 +93,10 @@
             ]
           },
           "AccountBasedExpenseLineDetail": {
-            "properties": {
-              "CustomerRef": {
-                "$ref": "ref_schema.json"
-              },
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "AccountRef": {
-                "$ref": "ref_schema.json"
-              },
-              "BillableStatus": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
+            "$ref": "shared/account_based_line.json"
           },
           "ItemBasedExpenseLineDetail": {
-            "properties": {
-              "ItemRef": {
-                "$ref": "ref_schema.json"
-              },
-              "CustomerRef": {
-                "$ref": "ref_schema.json"
-              },
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
-              },
-              "BillableStatus": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "Qty": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              },
-              "UnitPrice": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
+            "$ref": "shared/item_based_line.json"
           },
           "Id": {
             "type": [
@@ -180,6 +122,9 @@
               "null",
               "string"
             ]
+          },
+          "LinkedTxn": {
+            "$ref": "shared/linked_txn.json"
           }
         },
         "type": [
@@ -193,9 +138,33 @@
       ]
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "DocNumber": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "IncludeInAnnualTPAR": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "LinkedTxn": {
+      "$ref": "shared/linked_txn.json"
+    },
+    "RecurDataRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TransactionLocationType": {
       "type": [
         "null",
         "string"

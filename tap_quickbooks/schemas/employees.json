@@ -103,78 +103,107 @@
         "null",
         "object"
       ]
+    },
+    "PrimaryAddr": {
+      "$ref": "shared/address.json"
+    },
+    "PrimaryEmailAddr": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "Address": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "Title": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "MiddleName": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ReleasedDate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "Mobile": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "FreeFormNumber": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      }
+    },
+    "Gender": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "BillRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "Suffix": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "EmployeeNumber": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Organization": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "SSN": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "V4IDPseudonym": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "CostRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
     }
-  },
-  "PrimaryAddr": {
-    "type": [
-      "null",
-      "object"
-    ],
-    "properties": {}
-  },
-  "PrimaryEmailAddr": {
-    "type": [
-      "null",
-      "object"
-    ],
-    "properties": {}
-  },
-  "Title": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "MiddleName": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "ReleasedDate": {
-    "type": [
-      "null",
-      "string"
-    ],
-    "format": "date-time"
-  },
-  "Mobile": {
-    "type": [
-      "null",
-      "object"
-    ],
-    "properties": {}
-  },
-  "Gender": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "BillRate": {
-    "type": [
-      "null",
-      "string"
-    ],
-    "format": "singer.decimal"
-  },
-  "Suffix": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "EmployeeNumber": {
-    "type": [
-      "null",
-      "string"
-    ]
-  },
-  "Organization": {
-    "type": [
-      "null",
-      "boolean"
-    ]
   },
   "type": [
     "null",

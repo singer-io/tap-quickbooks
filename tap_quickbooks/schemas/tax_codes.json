@@ -11,7 +11,37 @@
         "null",
         "object"
       ],
-      "properties": {}
+      "properties": {
+        "TaxRateDetail": {
+          "items": {
+            "properties": {
+              "TaxOrder": {
+                "type": [
+                  "null",
+                  "integer"
+                ]
+              },
+              "TaxTypeApplicable": {
+                "type": [
+                  "null",
+                  "string"
+                ]
+              },
+              "TaxRateRef": {
+                "$ref": "shared/ref_schema.json"
+              }
+            },
+            "type": [
+              "null",
+              "object"
+            ]
+          },
+          "type": [
+            "null",
+            "array"
+          ]
+        }
+      }
     },
     "Hidden": {
       "type": [
@@ -79,7 +109,7 @@
                 ]
               },
               "TaxRateRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               }
             },
             "type": [
@@ -118,6 +148,12 @@
       "type": [
         "null",
         "object"
+      ]
+    },
+    "TaxCodeConfigType": {
+      "type": [
+        "null",
+        "string"
       ]
     }
   },

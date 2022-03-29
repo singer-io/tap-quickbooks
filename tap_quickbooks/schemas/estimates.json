@@ -15,54 +15,7 @@
       ]
     },
     "BillAddr": {
-      "properties": {
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line2": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line4": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line3": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/address.json"
     },
     "TxnStatus": {
       "type": [
@@ -125,10 +78,10 @@
       ]
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "CustomerRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "domain": {
       "type": [
@@ -149,6 +102,13 @@
             "null",
             "string"
           ]
+        },
+        "DeliveryTime": {
+          "format": "date-time",
+          "type": [
+            "null",
+            "string"
+          ]
         }
       },
       "type": [
@@ -160,124 +120,57 @@
       "properties": {
         "TotalTax": {
           "format": "singer.decimal",
-          "type": [
-            "null",
-            "string"
-          ]
+          "type": ["null", "string"]
+        },
+        "TxnTaxCodeRef": {
+          "$ref": "shared/ref_schema.json"
         },
         "TaxLine": {
           "items": {
             "properties": {
+              "DetailType": {
+                "type": ["null", "string"]
+              },
               "Amount": {
                 "format": "singer.decimal",
-                "type": [
-                  "null",
-                  "string"
-                ]
+                "type": ["null", "string"]
               },
               "TaxLineDetail": {
                 "properties": {
-                  "PercentBased": {
-                    "type": [
-                      "null",
-                      "boolean"
-                    ]
-                  },
-                  "TaxPercent": {
-                    "type": [
-                      "null",
-                      "integer"
-                    ]
+                  "TaxRateRef": {
+                    "$ref": "shared/ref_schema.json"
                   },
                   "NetAmountTaxable": {
                     "format": "singer.decimal",
-                    "type": [
-                      "null",
-                      "string"
-                    ]
+                    "type": ["null", "string"]
                   },
-                  "TaxRateRef": {
-                    "properties": {
-                      "value": {
-                        "type": [
-                          "null",
-                          "string"
-                        ]
-                      }
-                    },
-                    "type": [
-                      "null",
-                      "object"
-                    ]
+                  "PercentBased": {
+                    "type": ["null", "boolean"]
+                  },
+                  "TaxInclusiveAmount": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "OverrideDeltaAmount": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "TaxPercent": {
+                    "type": ["null", "integer"]
                   }
                 },
-                "type": [
-                  "null",
-                  "object"
-                ]
-              },
-              "DetailType": {
-                "type": [
-                  "null",
-                  "string"
-                ]
+                "type": ["null", "object"]
               }
             },
-            "type": [
-              "null",
-              "object"
-            ]
+            "type": ["null", "object"]
           },
-          "type": [
-            "null",
-            "array"
-          ]
-        },
-        "TxnTaxCodeRef": {
-          "properties": {
-            "value": {
-              "type": [
-                "null",
-                "string"
-              ]
-            }
-          },
-          "type": [
-            "null",
-            "object"
-          ]
+          "type": ["null", "array"]
         }
       },
-      "type": [
-        "null",
-        "object"
-      ]
+      "type": ["null", "object"]
     },
     "LinkedTxn": {
-      "items": {
-        "properties": {
-          "TxnId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "TxnType": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        },
-        "type": [
-          "null",
-          "object"
-        ]
-      },
-      "type": [
-        "null",
-        "array"
-      ]
+      "$ref": "shared/linked_txn.json"
     },
     "CustomerMemo": {
       "properties": {
@@ -329,42 +222,74 @@
           },
           "SalesItemLineDetail": {
             "properties": {
+              "ClassRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "DiscountAmt": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "DiscountRate": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "ItemAccountRef": {
+                "$ref": "shared/ref_schema.json"
+              },
               "ItemRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
+              },
+              "MarkupInfo": {
+                "type": ["null", "object"],
+                "properties": {
+                  "MarkUpIncomeAccountRef": {
+                    "$ref": "shared/ref_schema.json"
+                  },
+                  "Percent": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "PriceLevelRef": {
+                    "$ref": "shared/ref_schema.json"
+                  }
+                }
               },
               "Qty": {
                 "format": "singer.decimal",
-                "type": [
-                  "null",
-                  "string"
-                ]
+                "type": ["null", "string"]
+              },
+              "ServiceDate": {
+                "format": "date-time",
+                "type": ["null", "string"]
+              },
+              "TaxClassificationRef": {
+                "$ref": "shared/ref_schema.json"
               },
               "TaxCodeRef": {
-                "properties": {
-                  "value": {
-                    "type": [
-                      "null",
-                      "string"
-                    ]
-                  }
-                },
-                "type": [
-                  "null",
-                  "object"
-                ]
+                "$ref": "shared/ref_schema.json"
+              },
+              "TaxInclusiveAmt": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
               },
               "UnitPrice": {
                 "format": "singer.decimal",
-                "type": [
-                  "null",
-                  "string"
-                ]
+                "type": ["null", "string"]
               }
             },
-            "type": [
-              "null",
-              "object"
-            ]
+            "type": ["null", "object"]
+          },
+          "DiscountLineDetail": {
+            "$ref": "shared/discount_line.json"
+          },
+          "SubtotalLineDetail": {
+            "$ref": "shared/subtotal_line.json"
+          },
+          "GroupLineDetail": {
+            "$ref": "shared/group_line.json"
+          },
+          "DescriptionLineDetail": {
+            "$ref": "shared/description_line.json"
           }
         },
         "type": [
@@ -391,7 +316,7 @@
     },
     "CustomField": {
       "items": {
-          "$ref": "custom_field.json"
+          "$ref": "shared/custom_field.json"
       },
       "type": [
         "null",
@@ -413,53 +338,85 @@
       ]
     },
     "ShipAddr": {
-      "properties": {
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "CountrySubDivisionCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "PostalCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
+      "$ref": "shared/address.json"
+    },
+    "AcceptedBy": {
       "type": [
         "null",
-        "object"
+        "string"
+      ]
+    },
+    "AcceptedDate": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ClassRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "DepartmentRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "DueDate": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ExpirationDate": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "PrivateNote": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "RecurDataRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "SalesTermRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "ShipDate": {
+      "format": "date-time",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ShipFromAddr": {
+      "$ref": "shared/address.json"
+    },
+    "ShipMethodRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TaxExemptionRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "FreeFormAddress": {
+      "type": [
+        "null",
+        "boolean"
       ]
     },
     "patternProperties": {".+": {}}

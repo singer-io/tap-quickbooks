@@ -7,7 +7,7 @@
       ]
     },
     "CustomerRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Taxable": {
       "type": [
@@ -50,7 +50,7 @@
       ]
     },
     "ItemRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Id": {
       "type": [
@@ -78,7 +78,7 @@
       ]
     },
     "EmployeeRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "BillableStatus": {
       "type": [
@@ -97,6 +97,57 @@
         "null",
         "integer"
       ]
+    },
+    "BreakHours": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "BreakMinutes": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "ClassRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "DepartmentRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "EndTime": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "StartTime": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "PayrollItemRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "VendorRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "CostRate": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
     },
     "patternProperties": {".+": {}}
   },

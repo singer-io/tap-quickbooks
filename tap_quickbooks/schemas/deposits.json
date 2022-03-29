@@ -1,15 +1,15 @@
 {
   "properties": {
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "CashBack": {
       "properties": {
         "AccountRef": {
-          "$ref": "ref_schema.json"
+          "$ref": "shared/ref_schema.json"
         },
         "Amount": {
           "format": "singer.decimal",
@@ -73,13 +73,13 @@
           "DepositLineDetail": {
             "properties": {
               "PaymentMethodRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "AccountRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "ClassRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "CheckNum": {
                 "type": [
@@ -88,7 +88,7 @@
                 ]
               },
               "TaxCodeRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "TaxApplicableOn": {
                 "type": [
@@ -103,7 +103,7 @@
                 ]
               },
               "Entity": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               }
             },
             "type": [
@@ -112,36 +112,10 @@
             ]
           },
           "LinkedTxn": {
-            "items": {
-              "properties": {
-                "TxnLineId": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "TxnId": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                },
-                "TxnType": {
-                  "type": [
-                    "null",
-                    "string"
-                  ]
-                }
-              },
-              "type": [
-                "null",
-                "object"
-              ]
-            },
-            "type": [
-              "null",
-              "array"
-            ]
+            "$ref": "shared/linked_txn.json"
+          },
+          "CustomField": {
+            "$ref": "shared/custom_field.json"
           }
         },
         "type": [
@@ -177,7 +151,7 @@
       ]
     },
     "DepositToAccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Id": {
       "type": [
@@ -217,6 +191,37 @@
         "null",
         "string"
       ]
+    },
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "HomeTotalAmt": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "singer.decimal"
+    },
+    "RecurDataRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TxnSource": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TxnTaxDetail": {
+      "$ref": "shared/txn_tax_detail.json"
     }
   },
   "type": [

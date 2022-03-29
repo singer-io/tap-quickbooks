@@ -1,0 +1,43 @@
+{
+  "properties": {
+    "AccountRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "BillableStatus": {
+      "type": ["null", "string"]
+    },
+    "ClassRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "CustomerRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "MarkupInfo": {
+      "type": ["null", "object"],
+      "properties": {
+        "MarkUpIncomeAccountRef": {
+          "$ref": "shared/ref_schema.json"
+        },
+        "Percent": {
+          "format": "singer.decimal",
+          "type": ["null", "string"]
+        },
+        "PriceLevelRef": {
+          "$ref": "shared/ref_schema.json"
+        }
+      }
+    },
+    "TaxAmount": {
+      "format": "singer.decimal",
+      "type": ["null", "string"]
+    },
+    "TaxCodeRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TaxInclusiveAmt": {
+      "format": "singer.decimal",
+      "type": ["null", "string"]
+    }
+  },
+  "type": ["null", "object"]
+}

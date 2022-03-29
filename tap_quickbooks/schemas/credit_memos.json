@@ -1,7 +1,7 @@
 {
   "properties": {
     "ClassRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "BillEmail": {
       "properties": {
@@ -50,7 +50,7 @@
       ]
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "PrintStatus": {
       "type": [
@@ -87,53 +87,10 @@
             ]
           },
           "SalesItemLineDetail": {
-            "properties": {
-              "ItemRef": {
-                "$ref": "ref_schema.json"
-              },
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "UnitPrice": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
-              },
-              "ItemAccountRef": {
-                "$ref": "ref_schema.json"
-              },
-              "Qty": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
+            "$ref": "shared/sales_item_line.json"
           },
           "DiscountLineDetail": {
-            "properties": {
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
-              },
-              "DiscountAccountRef": {
-                "$ref": "ref_schema.json"
-              }
-            },
-            "type": [
-              "null",
-              "object"
-            ]
+            "$ref": "shared/discount_line.json"
           },
           "LineNum": {
             "type": [
@@ -146,6 +103,15 @@
               "null",
               "string"
             ]
+          },
+          "SubtotalLineDetail": {
+            "$ref": "shared/subtotal_line.json"
+          },
+          "GroupLineDetail": {
+            "$ref": "shared/group_line.json"
+          },
+          "DescriptionLineDetail": {
+            "$ref": "shared/description_line.json"
           }
         },
         "type": [
@@ -178,74 +144,66 @@
       ]
     },
     "SalesTermRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ShipAddr": {
-      "properties": {
-        "PostalCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "CountrySubDivisionCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/address.json"
     },
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "TxnTaxDetail": {
       "properties": {
         "TotalTax": {
-          "type": [
-            "null",
-            "integer"
-          ]
+          "type": ["null", "integer"]
+        },
+        "TxnTaxCodeRef": {
+          "$ref": "shared/ref_schema.json"
+        },
+        "TaxLine": {
+          "items": {
+            "properties": {
+              "DetailType": {
+                "type": ["null", "string"]
+              },
+              "Amount": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
+              "TaxLineDetail": {
+                "properties": {
+                  "TaxRateRef": {
+                    "$ref": "shared/ref_schema.json"
+                  },
+                  "NetAmountTaxable": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "PercentBased": {
+                    "type": ["null", "boolean"]
+                  },
+                  "TaxInclusiveAmount": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "OverrideDeltaAmount": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "TaxPercent": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  }
+                },
+                "type": ["null", "object"]
+              }
+            },
+            "type": ["null", "object"]
+          },
+          "type": ["null", "array"]
         }
       },
-      "type": [
-        "null",
-        "object"
-      ]
+      "type": ["null", "object"]
     },
     "TxnDate": {
       "format": "date-time",
@@ -256,7 +214,7 @@
     },
     "CustomField": {
       "items": {
-          "$ref": "custom_field.json"
+          "$ref": "shared/custom_field.json"
       },
       "type": [
         "null",
@@ -270,57 +228,10 @@
       ]
     },
     "BillAddr": {
-      "properties": {
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line3": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line2": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line4": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      },
-      "type": [
-        "null",
-        "object"
-      ]
+      "$ref": "shared/address.json"
     },
     "CustomerRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "RemainingCredit": {
       "type": [
@@ -362,6 +273,43 @@
       "type": [
         "null",
         "object"
+      ]
+    },
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "HomeBalance": {
+      "format": "singer.decimal",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "InvoiceRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "PaymentMethodRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "PrivateNote": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "RecurDataRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TaxExemptionRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
       ]
     },
     "patternProperties": {".+": {}}

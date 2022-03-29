@@ -17,7 +17,9 @@ def _get_abs_path(path):
 def _load_schemas():
     schemas = {}
 
-    for filename in os.listdir(_get_abs_path("schemas")):
+    schema_path = _get_abs_path('schemas')
+    files = [f for f in os.listdir(schema_path) if os.path.isfile(os.path.join(schema_path, f))]
+    for filename in files:
         path = _get_abs_path("schemas") + "/" + filename
         file_raw = filename.replace(".json", "")
         with open(path) as file:
@@ -29,6 +31,21 @@ def _load_schemas():
 
     return schemas
 
+def _load_shared_schema_refs():
+    """
+        Load all the schemas from the 'shared/' folder to resolve schema refs
+    """
+    shared_schemas_path = _get_abs_path('schemas/shared')
+
+    shared_file_names = [f for f in os.listdir(shared_schemas_path)
+                         if os.path.isfile(os.path.join(shared_schemas_path, f))]
+
+    shared_schema_refs = {}
+    for shared_file in shared_file_names:
+        with open(os.path.join(shared_schemas_path, shared_file)) as data_file:
+            shared_schema_refs['shared/' + shared_file] = json.load(data_file)
+
+    return shared_schema_refs
 
 def do_discover():
     raw_schemas = _load_schemas()
@@ -47,14 +64,8 @@ def do_discover():
         ))
         # Set the replication_key MetaData to automatic as well
         mdata = metadata.write(mdata, ('properties', stream.replication_keys[0]), 'inclusion', 'automatic')
-        custom_field = singer.utils.load_json(
-            os.path.normpath(
-                os.path.join(_get_abs_path("schemas/custom_field.json"))))
-        refs = {"custom_field.json": custom_field}
-        ref_schema = singer.utils.load_json(
-            os.path.normpath(
-                os.path.join(_get_abs_path("schemas/ref_schema.json"))))
-        refs.update({"ref_schema.json": ref_schema})
+        # load all refs
+        refs = _load_shared_schema_refs()
         catalog_entry = {
             "stream": stream_name,
             "tap_stream_id": stream_name,

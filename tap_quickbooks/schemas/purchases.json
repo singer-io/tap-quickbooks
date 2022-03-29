@@ -39,57 +39,10 @@
       }
     },
     "RemitToAddr": {
-      "type": [
-        "null",
-        "object"
-      ],
-      "properties": {
-        "PostalCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Lat": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "CountrySubDivisionCode": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Line1": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Long": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "Id": {
-          "type": [
-            "null",
-            "string"
-          ]
-        },
-        "City": {
-          "type": [
-            "null",
-            "string"
-          ]
-        }
-      }
+      "$ref": "shared/address.json"
     },
     "CurrencyRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "ExchangeRate": {
       "type": [
@@ -112,10 +65,10 @@
       ]
     },
     "AccountRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "DepartmentRef": {
-      "$ref": "ref_schema.json"
+      "$ref": "shared/ref_schema.json"
     },
     "Id": {
       "type": [
@@ -186,69 +139,56 @@
         ],
         "properties": {
           "ItemBasedExpenseLineDetail": {
-            "type": [
-              "null",
-              "object"
-            ],
             "properties": {
+              "TaxInclusiveAmt": {
+                "format": "singer.decimal",
+                "type": ["null", "string"]
+              },
               "ItemRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
               },
               "CustomerRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
+              },
+              "PriceLevelRef": {
+                "$ref": "shared/ref_schema.json"
               },
               "ClassRef": {
-                "$ref": "ref_schema.json"
+                "$ref": "shared/ref_schema.json"
+              },
+              "TaxCodeRef": {
+                "$ref": "shared/ref_schema.json"
+              },
+              "MarkupInfo": {
+                "type": ["null", "object"],
+                "properties": {
+                  "MarkUpIncomeAccountRef": {
+                    "$ref": "shared/ref_schema.json"
+                  },
+                  "Percent": {
+                    "format": "singer.decimal",
+                    "type": ["null", "string"]
+                  },
+                  "PriceLevelRef": {
+                    "$ref": "shared/ref_schema.json"
+                  }
+                }
+              },
+              "BillableStatus": {
+                "type": ["null", "string"]
               },
               "Qty": {
-                "type": [
-                  "null",
-                  "integer"
-                ]
-              },
-              "BillableStatus": {
-                "type": [
-                  "null",
-                  "string"
-                ]
+                "type": ["null", "integer"]
               },
               "UnitPrice": {
-                "type": [
-                  "null",
-                  "string"
-                ],
-                "format": "singer.decimal"
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
+                "format": "singer.decimal",
+                "type": ["null", "string"]
               }
-            }
+            },
+            "type": ["null", "object"]
           },
           "AccountBasedExpenseLineDetail": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "properties": {
-              "AccountRef": {
-                "$ref": "ref_schema.json"
-              },
-              "CustomerRef": {
-                "$ref": "ref_schema.json"
-              },
-              "BillableStatus": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "ClassRef": {
-                "$ref": "ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "$ref": "ref_schema.json"
-              }
-            }
+            "$ref": "shared/account_based_line.json"
           },
           "Amount": {
             "type": [
@@ -274,6 +214,13 @@
               "null",
               "string"
             ]
+          },
+          "LinkedTxn": {
+            "$ref": "shared/linked_txn.json"
+          },
+          "LineNum": {
+            "format": "singer.decimal",
+            "type": ["null", "string"]
           }
         }
       }
@@ -361,6 +308,42 @@
         "null",
         "string"
       ]
+    },
+    "GlobalTaxCalculation": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "IncludeInAnnualTPAR": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "LinkedTxn": {
+      "$ref": "shared/linked_txn.json"
+    },
+    "PaymentMethodRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "RecurDataRef": {
+      "$ref": "shared/ref_schema.json"
+    },
+    "TransactionLocationType": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TxnSource": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "TxnTaxDetail": {
+      "$ref": "shared/txn_tax_detail.json"
     },
     "patternProperties": {".+": {}}
   }
