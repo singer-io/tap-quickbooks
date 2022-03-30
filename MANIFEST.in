@@ -1,2 +1,3 @@
 include LICENSE
 include tap_quickbooks/schemas/*.json
+include tap_quickbooks/schemas/shared/*.json
