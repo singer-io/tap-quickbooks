@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.1.2
+
+   * Updated manifest file to fix issues created in 1.1.1 deployment [#53](https://github.com/singer-io/tap-quickbooks/pull/53)
 ## 1.1.1
    
    * Updated Schemas with missing fields [#50](https://github.com/singer-io/tap-quickbooks/pull/50)
