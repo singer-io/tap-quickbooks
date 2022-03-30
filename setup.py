@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='tap-quickbooks',
-      version='1.1.1',
+      version='1.1.2',
       description='Singer.io tap for extracting data from the Quickbooks API',
       author='Stitch',
       url='http://singer.io',
