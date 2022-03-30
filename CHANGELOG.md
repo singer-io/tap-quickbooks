@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.1.1
+   
+   * Updated Schemas with missing fields [#50](https://github.com/singer-io/tap-quickbooks/pull/50)
+   * Request Timeout [#48](https://github.com/singer-io/tap-quickbooks/pull/48)
+
 ## 1.1.0
 
    * Add ProfitAndLoss report stream [#37] (https://github.com/singer-io/tap-quickbooks/pull/37)
