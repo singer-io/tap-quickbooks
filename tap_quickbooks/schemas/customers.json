@@ -3,6 +3,26 @@
     "DefaultTaxCodeRef": {
       "$ref": "shared/ref_schema.json"
     },
+    "CustomerTypeRef": {
+      "properties": {
+        "name": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "type": [
+        "null",
+        "object"
+      ]
+    },
     "SalesTermRef": {
       "$ref": "shared/ref_schema.json"
     },
