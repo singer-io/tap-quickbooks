@@ -24,6 +24,9 @@ def do_sync(client, config, state, catalog):
         )
 
         LOGGER.info("Syncing stream: %s", stream_id)
+        # Set currently syncing stream
+        state = singer.set_currently_syncing(state, stream_id)
+        singer.write_state(state)
 
         with Transformer() as transformer:
             for rec in stream_object.sync():
@@ -32,3 +35,7 @@ def do_sync(client, config, state, catalog):
                     transformer.transform(rec,
                                           stream.schema.to_dict(),
                                           metadata.to_map(stream.metadata)))
+
+    # Remove currently syncing after successful sync
+    state = singer.set_currently_syncing(state, None)
+    singer.write_state(state)
