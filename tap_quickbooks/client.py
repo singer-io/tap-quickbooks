@@ -73,10 +73,12 @@ def get_exception_for_error_code(error_code):
     """Function to retrieve exceptions based on error_code"""
 
     exception = ERROR_CODE_EXCEPTION_MAPPING.get(error_code, {}).get('exception')
-    # If the error code is not from the listed error codes then return Quickbooks5XXException or QuickbooksError respectively
+    # If the error code is not from the listed error codes then return Quickbooks5XXException, Quickbooks4XXException or QuickbooksError respectively
     if not exception:
         if error_code >= 500:
             return Quickbooks5XXException
+        if error_code >= 400:
+            return Quickbooks4XXException
         return QuickbooksError
     return exception
 

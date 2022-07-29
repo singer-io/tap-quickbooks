@@ -21,6 +21,8 @@ class TestExceptionHandling(unittest.TestCase):
     
     @parameterized.expand([
         ['400_error',[400,{'Fault': {'Error':[{'Message':'Bad request','code':'400','Detail':'Bad request for the URL'}]}},QuickbooksBadRequestError],'HTTP-error-code: 400, Error: Message: Bad request, Quickbooks Error code: 400, Detail: Bad request for the URL'],
+        ['400_multiple_error',[400,{'Fault': {'Error':[{'Message':'Bad request 1','code':'400','Detail':'Bad request 1 for the URL'}, {'Message':'Bad request 2','code':'400','Detail':'Bad request 2 for the URL'}]}},QuickbooksBadRequestError],\
+            'HTTP-error-code: 400, Error: [{\'Message\': \'Bad request 1\', \'code\': \'400\', \'Detail\': \'Bad request 1 for the URL\'}, {\'Message\': \'Bad request 2\', \'code\': \'400\', \'Detail\': \'Bad request 2 for the URL\'}]'],
         ['401_error',[401,{'fault': {'error':[{'Message':'Not Authorized','code':'401','Detail':'Not aurthorized to access'}]}},QuickbooksAuthenticationError],'HTTP-error-code: 401, Error: Message: Not Authorized, Quickbooks Error code: 401, Detail: Not aurthorized to access'],
         ['403_error',[403,{'Fault': {'Error':[{'Message':'Forbidden','code':'403','Detail':'Forbidden for the URL'}]}},QuickbooksForbiddenError],'HTTP-error-code: 403, Error: Message: Forbidden, Quickbooks Error code: 403, Detail: Forbidden for the URL'],
         ['404_error',[404,{'Fault': {'Error':[{'Message':'Not found','code':'404','Detail':'Not found for the URL'}]}},QuickbooksNotFoundError],'HTTP-error-code: 404, Error: Message: Not found, Quickbooks Error code: 404, Detail: Not found for the URL'],
