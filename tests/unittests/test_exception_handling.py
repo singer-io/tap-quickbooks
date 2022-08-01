@@ -6,15 +6,18 @@ from tap_quickbooks.client import Quickbooks5XXException, QuickbooksClient,Quick
         QuickbooksInternalServerError,QuickbooksServiceUnavailableError
 
 class MockResponse:
-    def __init__(self,status_code,json):
+    def __init__(self,status_code,json,raise_error):
         self.status_code = status_code
         self.txt = json
+        self.raise_error = raise_error
 
     def json(self):
+        if self.raise_error:
+            raise Exception
         return self.txt
 
-def get_response(status_code,json={}):
-    return MockResponse(status_code,json)
+def get_response(status_code,json={},raise_error: bool = False):
+    return MockResponse(status_code,json,raise_error)
 
 class TestExceptionHandling(unittest.TestCase):
     config = {'refresh_token':'token','client_id':'id','client_secret':'secret','user_agent':'agent','realm_id':'realm_id','sandbox':True}
@@ -66,3 +69,21 @@ class TestExceptionHandling(unittest.TestCase):
         with self.assertRaises(test_data[1]) as e:
             client_obj._make_request('GET','endpoint')
         self.assertEqual(str(e.exception),exp)
+
+    @mock.patch('time.sleep')
+    @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
+    @mock.patch('requests_oauthlib.OAuth2Session.request')
+    def test_custom_error_message(self,mock_request,mock_get,mock_sleep):
+        """
+            Test cases to verify we get the custom error message when we get any error during 'response.json()'
+        """
+        mock_request.return_value = get_response(400,{},True)
+
+        client_obj = QuickbooksClient('path',self.config)
+
+        with self.assertRaises(QuickbooksBadRequestError) as e:
+            client_obj._make_request("GET",'endpoint',headers={'key':'value'})
+
+        expected_msg = "HTTP-error-code: 400, Error: The request can't be fulfilled due to bad syntax."
+
+        self.assertEqual(str(e.exception),expected_msg)
