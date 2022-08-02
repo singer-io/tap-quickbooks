@@ -27,7 +27,6 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
         'deposits': [
             'GlobalTaxCalculation', # AUSTRALIA, UK, INDIA, CANADA locale field
             'TransactionLocationType', # FRANCE locale field
-            'TxnTaxDetail', # UK, AUSTRALIA, INDIA, CANADA locale fields
         ],
         'vendors': [
             'GSTRegistrationType', # INDIA locale field
@@ -122,7 +121,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
     # fields for which data is not generated
     fields_to_remove = {
         'items': [
-            'PurchaseTaxCodeRef', 'SalesTaxCodeRef', 'Source', 'SalesTaxIncluded', 'PurchaseTaxIncluded'
+            'PurchaseTaxCodeRef', 'SalesTaxCodeRef', 'SalesTaxIncluded', 'PurchaseTaxIncluded'
         ],
         'purchase_orders': [
             'ShipTo', 'RecurDataRef', 'DueDate', 'SalesTermRef', 'ClassRef', 'TxnTaxDetail'
