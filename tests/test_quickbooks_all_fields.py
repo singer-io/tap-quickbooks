@@ -119,65 +119,6 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
         ]
     }
 
-    # remove the fields that are replicated when added 'minorversion' param in the API request
-    # CARD: https://jira.talendforge.org/browse/TDL-18325
-    fields_replicated_with_minorVersion = {
-        'customers': [
-            'IsProject', 'Source', 'TaxExemptionReasonId'
-        ],
-        'purchase_orders': [
-            'EmailStatus', 'POEmail'
-        ],
-        'employees': [
-            'V4IDPseudonym', 'CostRate'
-        ],
-        'tax_agencies': [
-            'TaxAgencyConfig'
-        ],
-        'tax_codes': [
-            'TaxCodeConfigType', 'Hidden'
-        ],
-        'refund_receipts': [
-            'TaxExemptionRef', 'HomeBalance', 'FreeFormAddress'
-        ],
-        'time_activities': [
-            'CostRate'
-        ],
-        'bills': [
-            'HomeBalance'
-        ],
-        'vendors': [
-            'Source', 'BillRate', 'CostRate'
-        ],
-        'journal_entries': [
-            'HomeTotalAmt', 'TotalAmt'
-        ],
-        'vendor_credits': [
-            'Balance', 'LinkedTxn'
-        ],
-        'purchases': [
-            'LinkedTxn'
-        ],
-        'credit_memos': [
-            'TaxExemptionRef', 'HomeBalance'
-        ],
-        'items': [
-            'PrefVendorRef', 'ClassRef', 'Sku', 'TaxClassificationRef'
-        ],
-        'estimates': [
-            'FreeFormAddress', 'TaxExemptionRef', 'ShipFromAddr'
-        ],
-        'sales_receipts': [
-            'ShipFromAddr', 'HomeBalance', 'FreeFormAddress'
-        ],
-        'invoices': [
-            'ShipFromAddr', 'Deposit', 'TaxExemptionRef', 'FreeFormAddress', 'BillEmailCc', 'HomeBalance', 'BillEmailBcc'
-        ],
-        'deposits': [
-            'HomeTotalAmt'
-        ]
-    }
-
     # fields for which data is not generated
     fields_to_remove = {
         'items': [
@@ -320,7 +261,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
                 self.assertTrue(expected_automatic_keys.issubset(expected_all_keys), msg=f'{expected_automatic_keys-expected_all_keys} is not in "expected_all_keys"')
 
                 # remove some fields as data cannot be generated / retrieved
-                fields = self.fields_to_remove.get(stream, []) + self.locale_fields.get(stream, []) + self.fields_replicated_with_minorVersion.get(stream, [])
+                fields = self.fields_to_remove.get(stream, []) + self.locale_fields.get(stream, [])
                 for field in fields:
                     expected_all_keys.remove(field)
 
