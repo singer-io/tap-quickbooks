@@ -33,7 +33,8 @@
       }
     },
     "Qty": {
-      "type": ["null", "integer"]
+      "type": ["null", "string"],
+      "format": "singer.decimal"
     },
     "ServiceDate": {
       "format": "date-time",
@@ -50,7 +51,8 @@
       "type": ["null", "string"]
     },
     "UnitPrice": {
-      "type": ["null", "integer"]
+      "type": ["null", "string"],
+      "format": "singer.decimal"
     }
   },
   "type": ["null", "object"]

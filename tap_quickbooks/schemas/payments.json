@@ -151,9 +151,10 @@
       "$ref": "shared/linked_txn.json"
     },
     "UnappliedAmt": {
+      "format": "singer.decimal",
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "domain": {

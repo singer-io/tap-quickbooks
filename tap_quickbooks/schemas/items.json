@@ -77,15 +77,17 @@
       ]
     },
     "QtyOnHand": {
+      "format": "singer.decimal",
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "UnitPrice": {
+      "format": "singer.decimal",
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "SyncToken": {
