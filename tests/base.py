@@ -3,6 +3,8 @@ import unittest
 import time
 from datetime import datetime as dt
 from datetime import timedelta
+import dateutil.parser
+import pytz
 
 import tap_tester.menagerie   as menagerie
 import tap_tester.connections as connections
@@ -257,3 +259,12 @@ class TestQuickbooksBase(unittest.TestCase):
 
     def is_report_stream(self, stream):
         return stream in ["profit_loss_report"]
+
+    def convert_state_to_utc(self, date_str):
+        """
+        Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to a string
+        formatted utc datetime, in order to compare against the json formatted datetime values
+        """
+        date_object = dateutil.parser.parse(date_str)
+        date_object_utc = date_object.astimezone(tz=pytz.UTC)
+        return dt.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")

@@ -18,16 +18,6 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
             'budgets'
         })
 
-    def convert_state_to_utc(self, date_str):
-        """
-        Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to
-        a string formatted utc datetime,
-        in order to compare aginast json formatted datetime values
-        """
-        date_object = dateutil.parser.parse(date_str)
-        date_object_utc = date_object.astimezone(tz=pytz.UTC)
-        return datetime.datetime.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
-
     def calculated_states_by_stream(self, current_state):
         """
         Look at the bookmarks from a previous sync and set a new bookmark
