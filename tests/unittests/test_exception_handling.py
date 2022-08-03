@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 from parameterized import parameterized
 from tap_quickbooks.client import Quickbooks5XXException, QuickbooksClient,QuickbooksBadRequestError,\
-    QuickbooksAuthenticationError,QuickbooksForbiddenError,QuickbooksNotFoundError,\
+    QuickbooksAuthenticationError, QuickbooksError, QuickbooksForbiddenError,QuickbooksNotFoundError,\
         QuickbooksInternalServerError,QuickbooksServiceUnavailableError
 
 class MockResponse:
@@ -48,6 +48,7 @@ class TestExceptionHandling(unittest.TestCase):
         self.assertEqual(str(e.exception),exp)
 
     @parameterized.expand([
+        ['205_error',[205,QuickbooksError],"HTTP-error-code: 205, Error: Unknown Error"],
         ['400_error',[400,QuickbooksBadRequestError],"HTTP-error-code: 400, Error: The request can't be fulfilled due to bad syntax."],
         ['401_error',[401,QuickbooksAuthenticationError],"HTTP-error-code: 401, Error: Authentication or authorization failed. Usually, this means the token in use won't work for API calls since it's either expired or revoked."],
         ['403_error',[403,QuickbooksForbiddenError],"HTTP-error-code: 403, Error: The URL exists, but it's restricted. External developers can't use or consume resources from this URL."],
