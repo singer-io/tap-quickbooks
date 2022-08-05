@@ -181,9 +181,10 @@
             "$ref": "shared/discount_line.json"
           },
           "LineNum": {
+            "format": "singer.decimal",
             "type": [
               "null",
-              "integer"
+              "string"
             ]
           },
           "Description": {

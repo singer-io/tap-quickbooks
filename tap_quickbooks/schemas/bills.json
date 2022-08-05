@@ -76,9 +76,10 @@
             ]
           },
           "LineNum": {
+            "format": "singer.decimal",
             "type": [
               "null",
-              "integer"
+              "string"
             ]
           },
           "DetailType": {

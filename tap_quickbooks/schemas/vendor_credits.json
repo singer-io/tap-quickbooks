@@ -87,9 +87,10 @@
       "items": {
         "properties": {
           "LineNum": {
+            "format": "singer.decimal",
             "type": [
               "null",
-              "integer"
+              "string"
             ]
           },
           "AccountBasedExpenseLineDetail": {
