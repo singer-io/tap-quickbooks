@@ -1,9 +1,10 @@
 {
   "properties": {
     "HourlyRate": {
+      "format": "singer.decimal",
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "CustomerRef": {
