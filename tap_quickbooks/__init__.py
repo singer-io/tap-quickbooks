@@ -34,6 +34,7 @@ def main():
 
         LOGGER.info("Starting sync mode")
         do_sync(client, config, state, catalog)
+        LOGGER.info("Finished sync mode")
 
 if __name__ == "__main__":
     main()
