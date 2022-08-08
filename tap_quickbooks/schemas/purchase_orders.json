@@ -163,10 +163,9 @@
             "format": "singer.decimal"
           },
           "LineNum": {
-            "format": "singer.decimal",
             "type": [
               "null",
-              "string"
+              "integer"
             ]
           },
           "Id": {

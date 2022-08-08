@@ -45,8 +45,7 @@
                 }
               },
               "Qty": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
+                "type": ["null", "integer"]
               },
               "ServiceDate": {
                 "format": "date-time",
