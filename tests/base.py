@@ -35,6 +35,11 @@ class TestQuickbooksBase(unittest.TestCase):
         "%Y-%m-%dT%H:%M:%S%z"
     }
 
+    def name(self):
+        # Quickbooks uses the token chaining to get the existing token which requires all tests to have same name
+        # So do not overwrite the test name below
+        return "tap_tester_quickbooks_combined_test"
+
     def setUp(self):
         missing_envs = [x for x in [
             'TAP_QUICKBOOKS_OAUTH_CLIENT_ID',

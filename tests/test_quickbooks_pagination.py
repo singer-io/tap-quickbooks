@@ -8,7 +8,9 @@ page_size_key = 'max_results'
 
 class TestQuickbooksPagination(TestQuickbooksBase):
     def name(self):
-        return "tap_tester_quickbooks_combined_test"
+        # Quickbooks uses the token chaining to get the existing token which requires all tests to have same name
+        # So do not overwrite the test name below
+        return super().name()
 
     def expected_streams(self):
         """
