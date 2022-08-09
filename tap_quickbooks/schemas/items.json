@@ -77,10 +77,9 @@
       ]
     },
     "QtyOnHand": {
-      "format": "singer.decimal",
       "type": [
         "null",
-        "string"
+        "integer"
       ]
     },
     "UnitPrice": {
