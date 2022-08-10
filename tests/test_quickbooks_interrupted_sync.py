@@ -41,7 +41,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         self.start_date = "2021-01-01T00:00:00Z"
         start_date_datetime = dt.strptime(self.start_date, "%Y-%m-%dT%H:%M:%SZ")
 
-        conn_id = self.ensure_connection()
+        conn_id = self.ensure_connection(original=False)
 
         expected_streams = {"accounts", "bill_payments", "payments"}
 
