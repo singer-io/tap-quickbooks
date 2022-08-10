@@ -19,6 +19,18 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         # So do not overwrite the test name below
         return super().name()
 
+    def get_properties(self, original=True):
+        if original:
+            return {
+                'start_date' : '2016-06-02T00:00:00Z',
+                'sandbox': 'true'
+            }
+        else:
+            return {
+                'start_date' : self.start_date,
+                'sandbox': 'true'
+            }
+
     def test_run(self):
         """
         Scenario: A sync job is interrupted. The state is saved with `currently_syncing`.
