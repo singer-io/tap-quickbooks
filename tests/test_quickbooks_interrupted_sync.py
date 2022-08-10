@@ -6,8 +6,8 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
     def assertIsDateFormat(self, value, str_format):
         """
-            Assertion Method that verifies a string value is a formatted datetime with
-            the specified format.
+        Assertion Method that verifies a string value is a formatted datetime with
+        the specified format.
         """
         try:
             dt.strptime(value, str_format)
@@ -16,8 +16,8 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
     def name(self):
         """
-            Quickbooks uses the token chaining to get the existing token which requires
-            all tests to have same name So do not overwrite the test name below
+        Quickbooks uses the token chaining to get the existing token which requires
+        all tests to have same name So do not overwrite the test name below
         """
         return super().name()
 
