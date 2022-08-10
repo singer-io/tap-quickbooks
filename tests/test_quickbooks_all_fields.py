@@ -246,8 +246,10 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
     }
 
     def name(self):
-        # Quickbooks uses the token chaining to get the existing token which requires all tests to have same name
-        # So do not overwrite the test name below
+        """
+            Quickbooks uses the token chaining to get the existing token which requires
+            all tests to have same name So do not overwrite the test name below
+        """
         return super().name()
 
     def test_run(self):
