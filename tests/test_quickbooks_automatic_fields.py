@@ -54,7 +54,7 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         # Select only the expected streams tables
         expected_streams = self.expected_streams()
         catalog_entries = [ce for ce in found_catalogs if ce['tap_stream_id'] in expected_streams]
-        self.select_all_streams_and_fields(conn_id, catalog_entries, select_all_fields=False)
+        self.select_all_streams_and_fields(conn_id, catalog_entries, False)
 
         # Verify our selection worked as expected
         catalogs_selection = menagerie.get_catalogs(conn_id)
@@ -89,9 +89,16 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         # Assert the records for each stream
         for stream in self.expected_streams():
             with self.subTest(stream=stream):
-                data = synced_records.get(stream)
-                record_messages_keys = [set(row['data'].keys()) for row in data['messages']]
+                expected_primary_keys = self.expected_primary_keys()[stream]
                 expected_keys = self.expected_automatic_fields().get(stream)
+
+                data = synced_records.get(stream,{})
+                record_messages_keys = [set(row.get('data').keys()) for row in data.get('messages',{})]
+
+                primary_keys_list = [tuple(message.get('data', {}).get(expected_pk) for expected_pk in expected_primary_keys)
+                                    for message in data.get('messages', [])
+                                    if message.get('action') == 'upsert']
+                unique_primary_keys_list = set(primary_keys_list)
 
                 expected_count = self.minimum_record_count_by_stream().get(stream)
                 record_count = sync_record_count.get(stream, 0)
@@ -114,4 +121,9 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
                 # Verify the number or records exceeds the max_results (api limit)
                 pagination_threshold = int(self.get_properties().get(page_size_key))
                 self.assertGreater(record_count, pagination_threshold,
-                                   msg="Record count not large enough to gaurantee pagination.")
+                                   msg="Record count not large enough to guarantee pagination.")
+
+                # Verify that all replicated records have unique primary key values.
+                self.assertEqual(len(primary_keys_list),
+                                len(unique_primary_keys_list),
+                                msg="Replicated record does not have unique primary key values.")

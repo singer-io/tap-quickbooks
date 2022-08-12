@@ -160,3 +160,11 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
                     custom_field_stream_count += 1
                     
         self.assertEqual(custom_field_stream_count,6)
+
+        actual_fields = []
+        for md_entry in metadata:
+            if md_entry['breadcrumb'] != []:
+                actual_fields.append(md_entry['breadcrumb'][1])
+
+        # Verify there is no duplicate metadata entries
+        self.assertEqual(len(actual_fields), len(set(actual_fields)), msg = "duplicates in the metadata entries retrieved")

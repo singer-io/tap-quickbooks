@@ -93,6 +93,21 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
                 start_date_2 = self.get_properties(original=False)['start_date']
                 start_date_2_epoch = self.dt_to_ts(start_date_2)
 
+                expected_primary_keys = self.expected_primary_keys()[stream]
+
+                primary_keys_list_1 = [tuple(message.get('data').get(expected_pk) for expected_pk in expected_primary_keys)
+                                       for message in first_sync_records.get(stream, {}).get('messages', {})
+                                       if message.get('action') == 'upsert']
+                primary_keys_list_2 = [tuple(message.get('data').get(expected_pk) for expected_pk in expected_primary_keys)
+                                       for message in second_sync_records.get(stream, {}).get('messages', {})
+                                       if message.get('action') == 'upsert']
+                primary_keys_sync_1 = set(primary_keys_list_1)
+                primary_keys_sync_2 = set(primary_keys_list_2)
+
+                # Verify by primary key the records replicated in the 2nd sync are part of the 1st sync
+                self.assertTrue(primary_keys_sync_2.issubset(primary_keys_sync_1),
+                                msg="Records in the 2nd sync are not a subset of the 1st sync")
+
                 # Verify by stream that our first sync meets or exceeds the default record count
                 self.assertLessEqual(expected_first_sync_count, first_sync_count)
 
