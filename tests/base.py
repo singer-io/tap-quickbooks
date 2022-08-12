@@ -60,12 +60,17 @@ class TestQuickbooksBase(unittest.TestCase):
     def tap_name():
         return "tap-quickbooks"
 
-    def get_properties(self):
-        return {
-            'start_date' : '2016-06-02T00:00:00Z',
-            'sandbox': 'true'
-        }
-
+    def get_properties(self, original=True):
+        if original:
+            return {
+                'start_date' : '2016-06-02T00:00:00Z',
+                'sandbox': 'true'
+            }
+        else:
+            return {
+                'start_date' : self.start_date,
+                'sandbox': 'true'
+            }
 
     def get_credentials(self):
         return {

@@ -14,25 +14,6 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         except ValueError as err:
             raise AssertionError(f"Value: {value} does not conform to expected format: {str_format}") from err
 
-    def name(self):
-        """
-        Quickbooks uses the token chaining to get the existing token which requires
-        all tests to have same name So do not overwrite the test name below
-        """
-        return super().name()
-
-    def get_properties(self, original=True):
-        if original:
-            return {
-                'start_date' : '2016-06-02T00:00:00Z',
-                'sandbox': 'true'
-            }
-        else:
-            return {
-                'start_date' : self.start_date,
-                'sandbox': 'true'
-            }
-
     def test_run(self):
         """
         Scenario: A sync job is interrupted. The state is saved with `currently_syncing`.
@@ -93,7 +74,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         #   payments: remaining to sync
         state = {
             "currently_syncing": "bill_payments",
-            "bookmarks": { "accounts": {"LastUpdatedTime": "2021-08-10T01:10:04Z"}}
+            "bookmarks": { "accounts": {"LastUpdatedTime": "2021-08-10T01:10:04-07:00"}}
         }
 
         # Set state for 2nd sync
@@ -151,20 +132,15 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
                     if stream == state['currently_syncing']:
 
-                        # Check if the interrupted stream has a bookmark written for it
-                        if state["bookmarks"].get(stream):
-                            interrupted_stream_bookmark = self.convert_state_to_utc(state['bookmarks'].get(stream).get('LastUpdatedTime'))
-                            interrupted_bookmark_datetime = dt.strptime(interrupted_stream_bookmark, "%Y-%m-%dT%H:%M:%SZ")
-                        else:
-                            # Assign the start date to the interrupted stream
-                            interrupted_bookmark_datetime = start_date_datetime
+                        # Assign the start date to the interrupted stream
+                        interrupted_stream_datetime = start_date_datetime
 
                         # - Verify resuming sync only replicates records with replication key values greater or
                         #       equal to the state for streams that were replicated during the interrupted sync.
                         # - Verify the interrupted sync replicates the expected record set all interrupted records are in full records
                         for record in interrupted_records:
                             rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
-                            self.assertGreaterEqual(rec_time, interrupted_bookmark_datetime)
+                            self.assertGreaterEqual(rec_time, interrupted_stream_datetime)
 
                             self.assertIn(record, full_records, msg='Incremental table record in interrupted sync not found in full sync')
 
@@ -172,7 +148,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                         full_records_after_interrupted_bookmark = 0
                         for record in full_records:
                             rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
-                            if rec_time >= interrupted_bookmark_datetime:
+                            if rec_time >= interrupted_stream_datetime:
                                 full_records_after_interrupted_bookmark += 1
 
                         self.assertEqual(full_records_after_interrupted_bookmark, interrupted_record_count, \
@@ -197,12 +173,6 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                             self.assertGreaterEqual(rec_time, synced_stream_datetime)
 
                             self.assertIn(record, full_records, msg='Unexpected record replicated in resuming sync.')
-
-                        # Verify we replicated all the records from 1st sync for the streams
-                        #       that are left to sync (ie. streams without bookmark in the state)
-                        if stream not in state["bookmarks"].keys():
-                            for record in full_records:
-                                self.assertIn(record, interrupted_records, msg='Record missing from resuming sync.' )
 
                 elif expected_replication_method == self.FULL_TABLE:
 

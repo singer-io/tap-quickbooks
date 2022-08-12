@@ -8,12 +8,6 @@ from base import TestQuickbooksBase
 page_size_key = 'max_results'
 
 class TestQuickbooksAutomaticFields(TestQuickbooksBase):
-    def name(self):
-        """
-        Quickbooks uses the token chaining to get the existing token which requires
-        all tests to have same name So do not overwrite the test name below
-        """
-        return super().name()
 
     @staticmethod
     def get_selected_fields_from_metadata(metadata):
