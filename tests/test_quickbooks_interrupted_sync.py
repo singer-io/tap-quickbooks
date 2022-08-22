@@ -123,64 +123,53 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                 # Final bookmark after interrupted sync
                 final_stream_bookmark = final_state['bookmarks'][stream]['LastUpdatedTime']
 
-                if expected_replication_method == self.INCREMENTAL:
+                # NOTE: All streams are INCREMENTAL streams for this Tap.
 
-                    # Verify final bookmark saved the match formatting standards for resuming sync
-                    self.assertIsNotNone(final_stream_bookmark)
-                    self.assertIsInstance(final_stream_bookmark, str)
-                    self.assertIsDateFormat(final_stream_bookmark, "%Y-%m-%dT%H:%M:%S%z") # Bookmark is being saved with timezone
+                # Verify final bookmark saved the match formatting standards for resuming sync
+                self.assertIsNotNone(final_stream_bookmark)
+                self.assertIsInstance(final_stream_bookmark, str)
+                self.assertIsDateFormat(final_stream_bookmark, "%Y-%m-%dT%H:%M:%S%z") # Bookmark is being saved with timezone
 
-                    if stream == state['currently_syncing']:
+                if stream == state['currently_syncing']:
 
-                        # Assign the start date to the interrupted stream
-                        interrupted_stream_datetime = start_date_datetime
+                    # Assign the start date to the interrupted stream
+                    interrupted_stream_datetime = start_date_datetime
 
-                        # - Verify resuming sync only replicates records with replication key values greater or
-                        #       equal to the state for streams that were replicated during the interrupted sync.
-                        # - Verify the interrupted sync replicates the expected record set all interrupted records are in full records
-                        for record in interrupted_records:
-                            rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
-                            self.assertGreaterEqual(rec_time, interrupted_stream_datetime)
+                    # - Verify resuming sync only replicates records with replication key values greater or
+                    #       equal to the state for streams that were replicated during the interrupted sync.
+                    # - Verify the interrupted sync replicates the expected record set all interrupted records are in full records
+                    for record in interrupted_records:
+                        rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
+                        self.assertGreaterEqual(rec_time, interrupted_stream_datetime)
 
-                            self.assertIn(record, full_records, msg='Incremental table record in interrupted sync not found in full sync')
+                        self.assertIn(record, full_records, msg='Incremental table record in interrupted sync not found in full sync')
 
-                        # Record count for all streams of interrupted sync match expectations
-                        full_records_after_interrupted_bookmark = 0
-                        for record in full_records:
-                            rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
-                            if rec_time >= interrupted_stream_datetime:
-                                full_records_after_interrupted_bookmark += 1
+                    # Record count for all streams of interrupted sync match expectations
+                    full_records_after_interrupted_bookmark = 0
+                    for record in full_records:
+                        rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
+                        if rec_time >= interrupted_stream_datetime:
+                            full_records_after_interrupted_bookmark += 1
 
-                        self.assertEqual(full_records_after_interrupted_bookmark, interrupted_record_count, \
-                                         msg='Expected {} records in each sync'.format(full_records_after_interrupted_bookmark))
+                    self.assertEqual(full_records_after_interrupted_bookmark, interrupted_record_count, \
+                                        msg='Expected {} records in each sync'.format(full_records_after_interrupted_bookmark))
 
+                else:
+                    # Get the date to start 2nd sync for non-interrupted streams
+                    synced_stream_bookmark = state['bookmarks'].get(stream, {}).get('LastUpdatedTime')
+                    if synced_stream_bookmark:
+                        synced_stream_datetime = dt.strptime(self.convert_state_to_utc(synced_stream_bookmark), "%Y-%m-%dT%H:%M:%SZ")
                     else:
-                        # Get the date to start 2nd sync for non-interrupted streams
-                        synced_stream_bookmark = state['bookmarks'].get(stream, {}).get('LastUpdatedTime')
-                        if synced_stream_bookmark:
-                            synced_stream_datetime = dt.strptime(self.convert_state_to_utc(synced_stream_bookmark), "%Y-%m-%dT%H:%M:%SZ")
-                        else:
-                            synced_stream_datetime = start_date_datetime
+                        synced_stream_datetime = start_date_datetime
 
-                        # Verify we replicated some records for the non-interrupted streams
-                        self.assertGreater(interrupted_record_count, 0)
+                    # Verify we replicated some records for the non-interrupted streams
+                    self.assertGreater(interrupted_record_count, 0)
 
-                        # - Verify resuming sync only replicates records with replication key values greater or equal to
-                        #       the state for streams that were replicated during the interrupted sync.
-                        # - Verify resuming sync replicates all records that were found in the full sync (non-interupted)
-                        for record in interrupted_records:
-                            rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
-                            self.assertGreaterEqual(rec_time, synced_stream_datetime)
+                    # - Verify resuming sync only replicates records with replication key values greater or equal to
+                    #       the state for streams that were replicated during the interrupted sync.
+                    # - Verify resuming sync replicates all records that were found in the full sync (non-interupted)
+                    for record in interrupted_records:
+                        rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
+                        self.assertGreaterEqual(rec_time, synced_stream_datetime)
 
-                            self.assertIn(record, full_records, msg='Unexpected record replicated in resuming sync.')
-
-                elif expected_replication_method == self.FULL_TABLE:
-
-                    # Verify full table streams do not save bookmarked values after a successful sync
-                    self.assertNotIn(stream, full_sync_state['bookmarks'].keys())
-                    self.assertNotIn(stream, final_state['bookmarks'].keys())
-
-                    # Verify first and the second sync have the same records
-                    self.assertEqual(full_record_count, interrupted_record_count)
-                    for rec in interrupted_records:
-                        self.assertIn(rec, full_records, msg='full table record in interrupted sync not found in full sync')
+                        self.assertIn(record, full_records, msg='Unexpected record replicated in resuming sync.')
