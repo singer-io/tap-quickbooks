@@ -11,11 +11,12 @@ def do_sync(client, config, state, catalog):
     for stream in selected_streams:
         stream_id = stream.tap_stream_id
         stream_schema = stream.schema
-        stream_object = STREAM_OBJECTS.get(stream_id)(client, config, state)
+        stream_object = STREAM_OBJECTS.get(stream_id)
 
         if stream_object is None:
             raise Exception("Attempted to sync unknown stream {}".format(stream_id))
 
+        stream_object = stream_object(client, config, state)
         singer.write_schema(
             stream_id,
             stream_schema.to_dict(),

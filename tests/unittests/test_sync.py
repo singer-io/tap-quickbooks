@@ -70,6 +70,22 @@ class TestSyncCov(unittest.TestCase):
         self.assertEqual(mock_write_state.mock_calls,expected_calls)
         self.assertEqual(mock_write_state.call_count,2)
 
+    @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
+    @mock.patch('singer.write_record')
+    @mock.patch('singer.write_state')
+    @mock.patch('tap_quickbooks.client.QuickbooksClient.__init__', return_value = None)
+    def test_sync_unknown_stream(self,mock_init,mock_write_state,mock_write_rcord,mock_get):
+        """Test we raise an error for unknown stream"""
+
+        client = QuickbooksClient('path',{})
+        mock_get.return_value = get_data('test')
+
+        mock_catalog = MockCatalog(['test'])
+        with self.assertRaises(Exception) as e:
+            do_sync(client,{},{},mock_catalog)
+
+        self.assertEqual(str(e.exception), "Attempted to sync unknown stream test")
+
     @parameterized.expand([ # test_name, [state, config, write_state_call_count]
         ['start_date_unused',[{'bookmarks':{"profit_loss_report": {"LastUpdatedTime": "2022-07-21T00:00:00+00:00"}}},{},2]],
         ['start_date_used',[{},{'start_date':'2022-07-21T00:00:00Z'},2]],
