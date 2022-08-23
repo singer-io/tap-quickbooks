@@ -13,9 +13,12 @@ def do_sync(client, config, state, catalog):
         stream_schema = stream.schema
         stream_object = STREAM_OBJECTS.get(stream_id)
 
+        # For the unknown stream we are getting `'NoneType' object is not callable`, as we cannot initialize None type.
+        # Thus, raise error if the stream is not found in STREAM_OBJECTS
         if stream_object is None:
             raise Exception("Attempted to sync unknown stream {}".format(stream_id))
 
+        # Initialize the stream object
         stream_object = stream_object(client, config, state)
         singer.write_schema(
             stream_id,

@@ -3,6 +3,7 @@ from unittest import mock
 from parameterized import parameterized
 from tap_quickbooks.client import QuickbooksClient
 from tap_quickbooks.sync import do_sync
+from singer import utils
 
 class Schema:
     """Mocked Schema"""
@@ -96,11 +97,14 @@ class TestSyncCov(unittest.TestCase):
     @mock.patch('tap_quickbooks.streams.ReportStream.parse_report_columns')
     @mock.patch('tap_quickbooks.streams.ReportStream.parse_report_rows')
     @mock.patch('tap_quickbooks.streams.ReportStream.day_wise_reports')
+    @mock.patch('singer.utils.now')
     @mock.patch('tap_quickbooks.client.QuickbooksClient.__init__',return_value = None)
-    def test_sync_report_stream(self,test_name,test_data,mock_init,mock_day_wise_report,mock_report_rows,mock_report_columns,mock_write_state,mock_write_record,mock_get):
+    def test_sync_report_stream(self,test_name,test_data,mock_init,mock_now,mock_day_wise_report,mock_report_rows,mock_report_columns,mock_write_state,mock_write_record,mock_get):
         """Test sync call for the Report stream"""
 
         client = QuickbooksClient('path',{})
+        now_time = utils.strptime_with_tz('2022-07-22 15:32:13.000000+00:00')
+        mock_now.return_value = now_time
 
         config = test_data[1]
         mock_catalog = MockCatalog(['profit_loss_report'])
