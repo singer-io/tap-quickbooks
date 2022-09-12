@@ -16,9 +16,7 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         returns a single record of the current budget state and will never exceed
         our pagination size (max_results) for this test.
         """
-        return self.expected_check_streams().difference({
-            'budgets'
-        })
+        return self.expected_check_streams().difference({'budgets'})
 
     def get_properties(self):
         return {

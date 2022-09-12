@@ -14,9 +14,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         return "tap_tester_quickbooks_combined_test"
 
     def expected_streams(self):
-        return self.expected_check_streams().difference({
-            'budgets'
-        })
+        return self.expected_check_streams().difference({'budgets'})
 
     def convert_state_to_utc(self, date_str):
         """

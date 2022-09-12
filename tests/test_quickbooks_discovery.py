@@ -85,16 +85,10 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
                 # verify that if there is a replication key we are doing INCREMENTAL otherwise FULL
                 actual_replication_method = stream_properties[0].get(
                     "metadata", {self.REPLICATION_METHOD: None}).get(self.REPLICATION_METHOD)
-                if stream_properties[0].get(
-                        "metadata", {self.REPLICATION_KEYS: []}).get(self.REPLICATION_KEYS, []):
 
-                    self.assertTrue(actual_replication_method == self.INCREMENTAL,
-                                    msg="Expected INCREMENTAL replication "
-                                        "since there is a replication key")
-                else:
-                    self.assertTrue(actual_replication_method == self.FULL,
-                                    msg="Expected FULL replication "
-                                        "since there is no replication key")
+                self.assertTrue(actual_replication_method == self.INCREMENTAL,
+                                msg="Expected INCREMENTAL replication "
+                                    "since there is a replication key")
 
                 # verify the actual replication matches our expected replication method
                 self.assertEqual(

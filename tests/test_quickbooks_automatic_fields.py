@@ -29,15 +29,6 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
             page_size_key: '10'
         }
 
-    def expected_streams(self):
-        """
-        All streams are under test with the exception of 'budgets' which
-        has a workaround to skip the invalid assertion. See if block in
-        test_run for details
-        """
-        return self.expected_check_streams()
-
-
     def test_run(self):
         conn_id = self.ensure_connection()
 
@@ -52,7 +43,7 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         self.assertGreater(len(found_catalogs), 0, msg="unable to locate schemas for connection {}".format(conn_id))
 
         # Select only the expected streams tables
-        expected_streams = self.expected_streams()
+        expected_streams = self.expected_check_streams()
         catalog_entries = [ce for ce in found_catalogs if ce['tap_stream_id'] in expected_streams]
         self.select_all_streams_and_fields(conn_id, catalog_entries, False)
 
@@ -83,11 +74,11 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
 
         # Get records that reached the target
         sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+            self, conn_id, self.expected_check_streams(), self.expected_primary_keys())
         synced_records = runner.get_records_from_target_output()
 
         # Assert the records for each stream
-        for stream in self.expected_streams():
+        for stream in self.expected_check_streams():
             with self.subTest(stream=stream):
                 expected_primary_keys = self.expected_primary_keys()[stream]
                 expected_keys = self.expected_automatic_fields().get(stream)
