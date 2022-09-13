@@ -10,6 +10,8 @@ from base import TestQuickbooksBase
 
 
 class TestQuickbooksBookmarks(TestQuickbooksBase):
+    """Test case to verify the Tap is writing bookmark as expectation"""
+
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 

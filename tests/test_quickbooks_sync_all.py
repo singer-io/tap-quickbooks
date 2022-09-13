@@ -6,6 +6,8 @@ import re
 from base import TestQuickbooksBase
 
 class TestQuickbooksSyncAll(TestQuickbooksBase):
+    """Test case to verify the working of the Tap"""
+
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 

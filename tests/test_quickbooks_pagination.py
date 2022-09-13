@@ -7,6 +7,8 @@ from base import TestQuickbooksBase
 page_size_key = 'max_results'
 
 class TestQuickbooksPagination(TestQuickbooksBase):
+    """Test case to verify the pagination is working as expected"""
+
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 

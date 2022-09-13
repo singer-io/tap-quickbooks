@@ -6,6 +6,8 @@ import re
 from base import TestQuickbooksBase
 
 class TestQuickbooksDiscovery(TestQuickbooksBase):
+    """Test case to verify the Tap is creating the catalog file as expected"""
+
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
