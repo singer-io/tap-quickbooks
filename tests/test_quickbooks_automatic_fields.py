@@ -76,11 +76,11 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
 
         # Get records that reached the target
         sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_check_streams(), self.expected_primary_keys())
+            self, conn_id, expected_streams, self.expected_primary_keys())
         synced_records = runner.get_records_from_target_output()
 
         # Assert the records for each stream
-        for stream in self.expected_check_streams():
+        for stream in expected_streams:
             with self.subTest(stream=stream):
                 expected_primary_keys = self.expected_primary_keys()[stream]
                 expected_keys = self.expected_automatic_fields().get(stream)
