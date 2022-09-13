@@ -59,8 +59,6 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         # Run a sync job using orchestrator
         sync_job_name = runner.run_sync_mode(self, conn_id)
         synced_records_full_sync = runner.get_records_from_target_output()
-        record_count_by_stream_full_sync = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
 
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
@@ -109,14 +107,9 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         # Stream level assertions
         for stream in expected_streams:
             with self.subTest(stream=stream):
-
-                # Gather expectations
-                expected_replication_method = self.expected_replication_method()[stream]
-                expected_replication_key = next(iter(self.expected_replication_keys()[stream]))
                 
                 # Gather actual results
                 full_records = [message['data'] for message in synced_records_full_sync.get(stream, {}).get('messages', [])]
-                full_record_count = record_count_by_stream_full_sync.get(stream, 0)
                 interrupted_records = [message['data'] for message in synced_records_interrupted_sync.get(stream, {}).get('messages', [])]
                 interrupted_record_count = record_count_by_stream_interrupted_sync.get(stream, 0)
 
