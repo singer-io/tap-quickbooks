@@ -6,6 +6,7 @@ from tap_quickbooks.client import Quickbooks5XXException, QuickbooksClient, Quic
     QuickbooksInternalServerError, QuickbooksServiceUnavailableError
 
 class MockResponse:
+    """Mock class for the response object"""
     def __init__(self, status_code, json, raise_error):
         self.status_code = status_code
         self.txt = json
@@ -71,7 +72,7 @@ class TestExceptionHandling(unittest.TestCase):
 
         # Verify we raise expected error
         with self.assertRaises(test_data[2]) as e:
-            client_obj._make_request('GET', 'endpoint')
+            client_obj._make_request(method='GET', endpoint='endpoint')
 
         # Verify the error message
         self.assertEqual(str(e.exception), exp)
@@ -110,7 +111,7 @@ class TestExceptionHandling(unittest.TestCase):
 
         # Verify we raise expected error
         with self.assertRaises(test_data[1]) as e:
-            client_obj._make_request('GET', 'endpoint')
+            client_obj._make_request(method='GET', endpoint='endpoint')
 
         # Verify the error message
         self.assertEqual(str(e.exception), exp)
@@ -119,9 +120,7 @@ class TestExceptionHandling(unittest.TestCase):
     @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
     @mock.patch('requests_oauthlib.OAuth2Session.request')
     def test_custom_error_message(self, mock_request, mock_get, mock_sleep):
-        """
-            Test cases to verify we get the custom error message when we get any error during 'response.json()'
-        """
+        """Test cases to verify we get the custom error message when we get any error during 'response.json()'"""
 
         # Mock request and raise 400 error
         mock_request.return_value = get_response(400, {}, True)
@@ -131,7 +130,7 @@ class TestExceptionHandling(unittest.TestCase):
         # Verify we raise expected error
         with self.assertRaises(QuickbooksBadRequestError) as e:
             client_obj._make_request(
-                "GET", 'endpoint', headers={'key': 'value'})
+                method="GET", endpoint='endpoint', headers={'key': 'value'})
 
         expected_msg = "HTTP-error-code: 400, Error: The request can't be fulfilled due to bad syntax."
 
