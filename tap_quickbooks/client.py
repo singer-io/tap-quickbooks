@@ -15,30 +15,39 @@ SANDBOX_ENDPOINT_BASE = "https://sandbox-quickbooks.api.intuit.com"
 TOKEN_REFRESH_URL = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
 
 class QuickbooksError(Exception):
+    """Base class for Quickbooks exceptions"""
     pass
 
 class Quickbooks5XXException(Exception):
+    """Base class for 5XX errors"""
     pass
 
 class Quickbooks4XXException(Exception):
+    """Base class for 4XX errors"""
     pass
 
 class QuickbooksAuthenticationError(Quickbooks4XXException):
+    """Exception class for 401 error"""
     pass
 
 class QuickbooksBadRequestError(Quickbooks4XXException):
+    """Exception class for 400 error"""
     pass
 
 class QuickbooksForbiddenError(Quickbooks4XXException):
+    """Exception class for 403 error"""
     pass
 
 class QuickbooksNotFoundError(Quickbooks4XXException):
+    """Exception class for 404 error"""
     pass
 
 class QuickbooksInternalServerError(Quickbooks5XXException):
+    """Exception class for 500 error"""
     pass
 
 class QuickbooksServiceUnavailableError(Quickbooks5XXException):
+    """Exception class for 503 error"""
     pass
 
 # Documentation: https://developer.intuit.com/app/developer/qbo/docs/develop/troubleshooting/error-codes
@@ -95,7 +104,7 @@ def raise_for_error(response):
     if response_json.get('Fault', response_json.get('fault')):
 
         errors = response_json.get('Fault', {}).get('Error', response_json.get('fault', {}).get('error'))
-        # Prepare the message with detail if there is a single error
+        # Prepare the message with detail if there is single error
         if len(errors) == 1:
             errors = errors[0]
             msg = errors.get('Message', errors.get('message'))
