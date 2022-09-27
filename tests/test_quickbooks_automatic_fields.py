@@ -8,6 +8,8 @@ from base import TestQuickbooksBase
 page_size_key = 'max_results'
 
 class TestQuickbooksAutomaticFields(TestQuickbooksBase):
+    """Test case to verify we are replicating automatic fields data when all the fields are not selected"""
+
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
@@ -29,15 +31,6 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
             page_size_key: '10'
         }
 
-    def expected_streams(self):
-        """
-        All streams are under test with the exception of 'budgets' which
-        has a workaround to skip the invalid assertion. See if block in
-        test_run for details
-        """
-        return self.expected_check_streams()
-
-
     def test_run(self):
         conn_id = self.ensure_connection()
 
@@ -52,9 +45,9 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         self.assertGreater(len(found_catalogs), 0, msg="unable to locate schemas for connection {}".format(conn_id))
 
         # Select only the expected streams tables
-        expected_streams = self.expected_streams()
+        expected_streams = self.expected_check_streams()
         catalog_entries = [ce for ce in found_catalogs if ce['tap_stream_id'] in expected_streams]
-        self.select_all_streams_and_fields(conn_id, catalog_entries, select_all_fields=False)
+        self.select_all_streams_and_fields(conn_id, catalog_entries, False)
 
         # Verify our selection worked as expected
         catalogs_selection = menagerie.get_catalogs(conn_id)
@@ -83,15 +76,22 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
 
         # Get records that reached the target
         sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+            self, conn_id, expected_streams, self.expected_primary_keys())
         synced_records = runner.get_records_from_target_output()
 
         # Assert the records for each stream
-        for stream in self.expected_streams():
+        for stream in expected_streams:
             with self.subTest(stream=stream):
-                data = synced_records.get(stream)
-                record_messages_keys = [set(row['data'].keys()) for row in data['messages']]
+                expected_primary_keys = self.expected_primary_keys()[stream]
                 expected_keys = self.expected_automatic_fields().get(stream)
+
+                data = synced_records.get(stream,{})
+                record_messages_keys = [set(row.get('data').keys()) for row in data.get('messages',{})]
+
+                primary_keys_list = [tuple(message.get('data', {}).get(expected_pk) for expected_pk in expected_primary_keys)
+                                    for message in data.get('messages', [])
+                                    if message.get('action') == 'upsert']
+                unique_primary_keys_list = set(primary_keys_list)
 
                 expected_count = self.minimum_record_count_by_stream().get(stream)
                 record_count = sync_record_count.get(stream, 0)
@@ -114,4 +114,9 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
                 # Verify the number or records exceeds the max_results (api limit)
                 pagination_threshold = int(self.get_properties().get(page_size_key))
                 self.assertGreater(record_count, pagination_threshold,
-                                   msg="Record count not large enough to gaurantee pagination.")
+                                   msg="Record count not large enough to guarantee pagination.")
+
+                # Verify that all replicated records have unique primary key values.
+                self.assertEqual(len(primary_keys_list),
+                                len(unique_primary_keys_list),
+                                msg="Replicated record does not have unique primary key values.")
