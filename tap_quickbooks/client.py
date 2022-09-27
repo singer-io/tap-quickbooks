@@ -16,39 +16,30 @@ TOKEN_REFRESH_URL = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
 
 class QuickbooksError(Exception):
     """Base class for Quickbooks exceptions"""
-    pass
 
 class Quickbooks5XXException(Exception):
     """Base class for 5XX errors"""
-    pass
 
 class Quickbooks4XXException(Exception):
     """Base class for 4XX errors"""
-    pass
 
 class QuickbooksAuthenticationError(Quickbooks4XXException):
     """Exception class for 401 error"""
-    pass
 
 class QuickbooksBadRequestError(Quickbooks4XXException):
     """Exception class for 400 error"""
-    pass
 
 class QuickbooksForbiddenError(Quickbooks4XXException):
     """Exception class for 403 error"""
-    pass
 
 class QuickbooksNotFoundError(Quickbooks4XXException):
     """Exception class for 404 error"""
-    pass
 
 class QuickbooksInternalServerError(Quickbooks5XXException):
     """Exception class for 500 error"""
-    pass
 
 class QuickbooksServiceUnavailableError(Quickbooks5XXException):
     """Exception class for 503 error"""
-    pass
 
 # Documentation: https://developer.intuit.com/app/developer/qbo/docs/develop/troubleshooting/error-codes
 ERROR_CODE_EXCEPTION_MAPPING = {
@@ -148,10 +139,13 @@ class QuickbooksClient():
                                      auto_refresh_url=TOKEN_REFRESH_URL,
                                      auto_refresh_kwargs=extra,
                                      token_updater=self._write_config)
+        # Latest minorversion is '65' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
+        self.minor_version = 65
         try:
-            # Make an authenticated request after creating the object to any endpoint
-            self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo"})
-        except (QuickbooksForbiddenError, QuickbooksAuthenticationError) as e:
+            # Make an authenticated request after creating the object to any endpoint with minorversion=65 as some additional
+            # fields are received while making requests with minor versions.
+            self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo", "minorversion": self.minor_version})
+        except Exception as e:
             LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
             raise e
 

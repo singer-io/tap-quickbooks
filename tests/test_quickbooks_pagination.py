@@ -7,6 +7,8 @@ from base import TestQuickbooksBase
 page_size_key = 'max_results'
 
 class TestQuickbooksPagination(TestQuickbooksBase):
+    """Test case to verify the pagination is working as expected"""
+
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
@@ -16,9 +18,7 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         returns a single record of the current budget state and will never exceed
         our pagination size (max_results) for this test.
         """
-        return self.expected_check_streams().difference({
-            'budgets'
-        })
+        return self.expected_check_streams().difference({'budgets'})
 
     def get_properties(self):
         return {
@@ -56,10 +56,10 @@ class TestQuickbooksPagination(TestQuickbooksBase):
         # Examine target file
         sync_records = runner.get_records_from_target_output()
         sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+            self, conn_id, expected_streams, self.expected_primary_keys())
 
         # Test by stream
-        for stream in self.expected_streams():
+        for stream in expected_streams:
             if stream == "deleted_objects": # Deleted Objects stream does not have Pagination support
                 continue
             with self.subTest(stream=stream):

@@ -20,9 +20,7 @@ class TestQuickbooksBase(unittest.TestCase):
     PRIMARY_KEYS = "table-key-properties"
     FOREIGN_KEYS = "table-foreign-key-properties"
     REPLICATION_METHOD = "forced-replication-method"
-    API_LIMIT = "max-row-limit"
     INCREMENTAL = "INCREMENTAL"
-    FULL = "FULL_TABLE"
     START_DATE_FORMAT = "%Y-%m-%dT00:00:00Z" # %H:%M:%SZ
     # list of streams which supports custom field
     custom_command_streams = ['invoices','estimates','credit_memos','refund_receipts','sales_receipts','purchase_orders']
