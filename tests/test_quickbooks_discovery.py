@@ -6,12 +6,15 @@ import re
 from base import TestQuickbooksBase
 
 class TestQuickbooksDiscovery(TestQuickbooksBase):
+    """Test case to verify the Tap is creating the catalog file as expected"""
+
     def name(self):
         return "tap_tester_quickbooks_combined_test"
 
     def test_run(self):
         conn_id = self.ensure_connection()
 
+        expected_streams = self.expected_check_streams()
         #run in check mode
         check_job_name = runner.run_check_mode(self, conn_id)
 
@@ -22,16 +25,16 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
         found_catalogs = menagerie.get_catalogs(conn_id)
         self.assertGreater(len(found_catalogs), 0, msg="unable to locate schemas for connection {}".format(conn_id))
         self.assertEqual(len(found_catalogs),
-                         len(self.expected_check_streams()),
+                         len(expected_streams),
                          msg="Expected {} streams, actual was {} for connection {},"
                          " actual {}".format(
-                             len(self.expected_check_streams()),
+                             len(expected_streams),
                              len(found_catalogs),
                              found_catalogs,
                              conn_id))
 
         found_catalog_names = set(map(lambda c: c['tap_stream_id'], found_catalogs))
-        self.assertEqual(set(self.expected_check_streams()),
+        self.assertEqual(set(expected_streams),
                          set(found_catalog_names),
                          msg="Expected streams don't match actual streams")
 
@@ -40,7 +43,7 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
         self.assertTrue(all([re.fullmatch(r"[a-z_]+", name) for name in found_catalog_names]),
                         msg="One or more streams don't follow standard naming")
 
-        diff = self.expected_check_streams().symmetric_difference(found_catalog_names)
+        diff = expected_streams.symmetric_difference(found_catalog_names)
         self.assertEqual(len(diff), 0, msg="discovered schemas do not match: {}".format(diff))
         print("discovered schemas are OK")
 
@@ -85,16 +88,10 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
                 # verify that if there is a replication key we are doing INCREMENTAL otherwise FULL
                 actual_replication_method = stream_properties[0].get(
                     "metadata", {self.REPLICATION_METHOD: None}).get(self.REPLICATION_METHOD)
-                if stream_properties[0].get(
-                        "metadata", {self.REPLICATION_KEYS: []}).get(self.REPLICATION_KEYS, []):
 
-                    self.assertTrue(actual_replication_method == self.INCREMENTAL,
-                                    msg="Expected INCREMENTAL replication "
-                                        "since there is a replication key")
-                else:
-                    self.assertTrue(actual_replication_method == self.FULL,
-                                    msg="Expected FULL replication "
-                                        "since there is no replication key")
+                self.assertTrue(actual_replication_method == self.INCREMENTAL,
+                                msg="Expected INCREMENTAL replication "
+                                    "since there is a replication key")
 
                 # verify the actual replication matches our expected replication method
                 self.assertEqual(
@@ -160,3 +157,11 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
                     custom_field_stream_count += 1
                     
         self.assertEqual(custom_field_stream_count,6)
+
+        actual_fields = []
+        for md_entry in metadata:
+            if md_entry['breadcrumb'] != []:
+                actual_fields.append(md_entry['breadcrumb'][1])
+
+        # Verify there is no duplicate metadata entries
+        self.assertEqual(len(actual_fields), len(set(actual_fields)), msg = "duplicates in the metadata entries retrieved")
