@@ -3,8 +3,8 @@ import json
 
 from singer import metadata
 from singer.catalog import Catalog
-from .streams import STREAM_OBJECTS
 import singer
+from .streams import STREAM_OBJECTS
 
 LOGGER = singer.get_logger()
 
@@ -26,7 +26,7 @@ def _load_schemas():
             try:
                 schemas[file_raw] = json.load(file)
             except:
-                LOGGER.info('Failed to load file {}'.format(file_raw))
+                LOGGER.info('Failed to load file %s', file_raw)
                 raise
 
     return schemas
@@ -61,7 +61,8 @@ def do_discover():
                 key_properties=stream.key_properties,
                 valid_replication_keys=stream.replication_keys,
                 replication_method=stream.replication_method,
-        ))
+            )
+        )
         # Set the replication_key MetaData to automatic as well
         mdata = metadata.write(mdata, ('properties', stream.replication_keys[0]), 'inclusion', 'automatic')
         # load all refs

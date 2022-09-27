@@ -1,9 +1,10 @@
-import tap_quickbooks.query_builder as query_builder
+from datetime import timedelta
 
 import singer
 from singer import utils
-from singer.utils import strptime_to_utc, strftime
-from datetime import timedelta
+from singer.utils import strptime_to_utc
+
+import tap_quickbooks.query_builder as query_builder
 
 DATE_WINDOW_SIZE = 29
 
@@ -14,6 +15,8 @@ class Stream:
     # replication keys is LastUpdatedTime, nested under metadata
     replication_keys = ['MetaData']
     additional_where = None
+    stream_name = None
+    table_name = None
 
     def __init__(self, client, config, state):
         self.client = client
@@ -30,7 +33,7 @@ class Stream:
         while True:
             query = query_builder.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
 
-            resp = self.client.get(self.endpoint, params={"query": query}).get('QueryResponse',{})
+            resp = self.client.get(self.endpoint, params={"query": query,"minorversion": self.client.minor_version}).get('QueryResponse',{})
 
             results = resp.get(self.table_name, [])
             for rec in results:
@@ -225,10 +228,10 @@ class ReportStream(Stream):
         start_dttm = strptime_to_utc(start_dttm_str)
         end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
         now_dttm = utils.now()
-        
-        # Fetch records for minimum 30 days 
+
+        # Fetch records for minimum 30 days
         # if bookmark from state file is used and it's less than 30 days away
-        # Fetch records for start_date to current date 
+        # Fetch records for start_date to current date
         # if start_date is used and it'sless than 30 days away
         if end_dttm > now_dttm:
             end_dttm = now_dttm
@@ -254,7 +257,7 @@ class ReportStream(Stream):
             self.parse_report_rows(resp.get('Rows', {})) # parse report rows from response's metadata
 
             reports = self.day_wise_reports() # get reports for every days from parsed metadata
-            if reports:
+            if reports: # pylint: disable=using-constant-test
                 for report in reports:
                     yield report
                 self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', strptime_to_utc(report.get('ReportDate')).isoformat())
@@ -377,14 +380,14 @@ class DeletedObjects(Stream):
         # Get change tracking for all the entities in single call
         resp = self.client.get(self.endpoint, params=params).get('CDCResponse',[{}])[0].get('QueryResponse', [{}])
 
-        # Calculate number of objects found in response 
+        # Calculate number of objects found in response
         total_objects = 0
         for entities in resp:
             for entity, values in entities.items():
                 if isinstance(values, list):
                     total_objects += len(values)
 
-        # Change tracking API return maximum 1000 object changes. 
+        # Change tracking API return maximum 1000 object changes.
         # So if objects are not less than 1000 then make individual call for every entity
         # Reference: https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/change-data-capture
 
@@ -407,7 +410,7 @@ class DeletedObjects(Stream):
 
     def parse_data_and_write(self, response):
         '''
-            Parse change tracking response and return every deleted entity 
+            Parse change tracking response and return every deleted entity
         '''
         for entities in response:
             for entity, values in entities.items():

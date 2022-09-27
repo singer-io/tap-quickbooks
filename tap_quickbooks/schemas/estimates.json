@@ -136,30 +136,7 @@
                 "type": ["null", "string"]
               },
               "TaxLineDetail": {
-                "properties": {
-                  "TaxRateRef": {
-                    "$ref": "shared/ref_schema.json"
-                  },
-                  "NetAmountTaxable": {
-                    "format": "singer.decimal",
-                    "type": ["null", "string"]
-                  },
-                  "PercentBased": {
-                    "type": ["null", "boolean"]
-                  },
-                  "TaxInclusiveAmount": {
-                    "format": "singer.decimal",
-                    "type": ["null", "string"]
-                  },
-                  "OverrideDeltaAmount": {
-                    "format": "singer.decimal",
-                    "type": ["null", "string"]
-                  },
-                  "TaxPercent": {
-                    "type": ["null", "integer"]
-                  }
-                },
-                "type": ["null", "object"]
+                "$ref": "shared/txn_tax_detail.json"
               }
             },
             "type": ["null", "object"]
@@ -221,63 +198,7 @@
             ]
           },
           "SalesItemLineDetail": {
-            "properties": {
-              "ClassRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "DiscountAmt": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              },
-              "DiscountRate": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              },
-              "ItemAccountRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "ItemRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "MarkupInfo": {
-                "type": ["null", "object"],
-                "properties": {
-                  "MarkUpIncomeAccountRef": {
-                    "$ref": "shared/ref_schema.json"
-                  },
-                  "Percent": {
-                    "format": "singer.decimal",
-                    "type": ["null", "string"]
-                  },
-                  "PriceLevelRef": {
-                    "$ref": "shared/ref_schema.json"
-                  }
-                }
-              },
-              "Qty": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              },
-              "ServiceDate": {
-                "format": "date-time",
-                "type": ["null", "string"]
-              },
-              "TaxClassificationRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "TaxInclusiveAmt": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              },
-              "UnitPrice": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              }
-            },
-            "type": ["null", "object"]
+            "$ref": "shared/sales_item_line.json"
           },
           "DiscountLineDetail": {
             "$ref": "shared/discount_line.json"

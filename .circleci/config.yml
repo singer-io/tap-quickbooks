@@ -17,17 +17,17 @@ jobs:
           command: |
             source /usr/local/share/virtualenvs/tap-tester/bin/activate
             stitch-validate-json tap_quickbooks/schemas/*.json
-      #- run:
-      #    name: 'pylint'
-      #    command: |
-      #      source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
-      #      # TODO: Adjust the pylint disables
-      #      #pylint tap_quickbooks --disable 'broad-except,chained-comparison,empty-docstring,fixme,invalid-name,line-too-long,missing-class-docstring,missing-function-docstring,missing-module-docstring,no-else-raise,no-else-return,too-few-public-methods,too-many-arguments,too-many-branches,too-many-lines,too-many-locals,ungrouped-imports,wrong-spelling-in-comment,wrong-spelling-in-docstring,bad-whitespace'
+      - run:
+         name: 'pylint'
+         command: |
+            source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
+            # TODO: Adjust the pylint disables
+            pylint tap_quickbooks --disable 'broad-except,chained-comparison,empty-docstring,fixme,invalid-name,line-too-long,missing-class-docstring,missing-function-docstring,missing-module-docstring,no-else-raise,no-else-return,too-few-public-methods,too-many-arguments,too-many-branches,too-many-lines,too-many-locals,ungrouped-imports,wrong-spelling-in-comment,wrong-spelling-in-docstring,bad-whitespace,undefined-loop-variable'
       - run:
           name: 'Unit Tests'
           command: |
             source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
-            pip install nose coverage
+            pip install nose coverage parameterized
             nosetests --with-coverage --cover-erase --cover-package=tap_quickbooks --cover-html-dir=htmlcov tests/unittests
             coverage html
       - store_test_results:

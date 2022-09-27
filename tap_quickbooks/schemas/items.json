@@ -83,9 +83,10 @@
       ]
     },
     "UnitPrice": {
+      "format": "singer.decimal",
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "SyncToken": {
