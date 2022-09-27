@@ -65,9 +65,13 @@ These values are all obtained from the oauth steps documented on [quickbook's do
     $ pip install -e .
     ```
 1. Create your tap's `config.json` file.  The tap config file for this tap should include these entries:
-   - `start_date` - the default value to use if no bookmark exists for an endpoint (rfc3339 date string)
-   - `user_agent` (string, optional): Process and email for API logging purposes. Example: `tap-quickbooks <api_user_email@your_company.com>`
-   - `sandbox` (string, optional): Whether to communication with quickbooks's sandbox or prod account for this application. If you're not sure leave out. Defaults to false.
+   - `start_date` - The default value to use if no bookmark exists for an endpoint (rfc3339 date string)
+   - `user_agent` (string): Process and email for API logging purposes. Example: `tap-quickbooks <api_user_email@your_company.com>`
+   - `realm_id` (string): The realm id of the company to fetch the data from.
+   - `client_secret` (string): Credentials of the client app.
+   - `client_id` (string): Id of the client app.
+   - `refresh_token` (string): Token to get a new Access token if it expires.
+   - `sandbox` (string, optional): Whether to communicate with quickbooks's sandbox or prod account for this application. If you're not sure leave out. Defaults to false.
    - The `request_timeout` is an optional paramater to set timeout for requests. Default: 300 seconds
 
    And the other values mentioned in [the authentication section above](#authentication).
@@ -78,9 +82,10 @@ These values are all obtained from the oauth steps documented on [quickbook's do
 		"start_date": "2020-08-21T00:00:00Z",
 		"refresh_token": "<refresh_token>",
 		"client_secret": "<app_secret>",
+		"realm_id": "0123456789",
 		"sandbox": "<true|false>",
 		"user_agent": "Stitch Tap (+support@stitchdata.com)",
-        	"request_timeout": 300
+		"request_timeout": 300
 	}
 	```
 
