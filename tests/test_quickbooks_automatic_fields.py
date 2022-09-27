@@ -8,10 +8,6 @@ from base import TestQuickbooksBase
 page_size_key = 'max_results'
 
 class TestQuickbooksAutomaticFields(TestQuickbooksBase):
-    """Test case to verify we are replicating automatic fields data when all the fields are not selected"""
-
-    def name(self):
-        return "tap_tester_quickbooks_combined_test"
 
     @staticmethod
     def get_selected_fields_from_metadata(metadata):

@@ -5,10 +5,6 @@ import tap_tester.runner      as runner
 from base import TestQuickbooksBase
 
 class TestQuickbooksStartDate(TestQuickbooksBase):
-    """Test case to verify the Tap respected the start date provided in the config"""
-
-    def name(self):
-        return "tap_tester_quickbooks_combined_test"
 
     def expected_streams(self):
         """All streams are under test"""

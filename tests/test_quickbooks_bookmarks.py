@@ -10,23 +10,9 @@ from base import TestQuickbooksBase
 
 
 class TestQuickbooksBookmarks(TestQuickbooksBase):
-    """Test case to verify the Tap is writing bookmark as expectation"""
-
-    def name(self):
-        return "tap_tester_quickbooks_combined_test"
 
     def expected_streams(self):
         return self.expected_check_streams().difference({'budgets'})
-
-    def convert_state_to_utc(self, date_str):
-        """
-        Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to
-        a string formatted utc datetime,
-        in order to compare aginast json formatted datetime values
-        """
-        date_object = dateutil.parser.parse(date_str)
-        date_object_utc = date_object.astimezone(tz=pytz.UTC)
-        return datetime.datetime.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
 
     def calculated_states_by_stream(self, current_state):
         """

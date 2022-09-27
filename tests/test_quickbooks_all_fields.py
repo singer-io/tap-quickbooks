@@ -186,9 +186,6 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
         ]
     }
 
-    def name(self):
-        return "tap_tester_quickbooks_combined_test"
-
     def test_run(self):
         """
         Testing that all fields mentioned in the catalog are synced from the tap
