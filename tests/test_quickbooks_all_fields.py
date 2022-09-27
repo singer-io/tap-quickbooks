@@ -2,6 +2,7 @@ from tap_tester import runner, menagerie
 from base import TestQuickbooksBase
 
 class TestQuickbooksAllFields(TestQuickbooksBase):
+    """Test case to verify we are replicating all fields data from the Tap"""
 
     # remove fields that are replicated when you have account for that specific reqion
     locale_fields = {
