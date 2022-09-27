@@ -55,11 +55,17 @@ class TestSyncCov(unittest.TestCase):
     @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
     @mock.patch('singer.write_record')
     @mock.patch('singer.write_state')
-    @mock.patch('tap_quickbooks.client.QuickbooksClient.__init__', return_value=None)
-    def test_sync_accounts(self, mock_init, mock_write_state, mock_write_rcord, mock_get):
+    def test_sync_accounts(self, mock_write_state, mock_write_rcord, mock_get):
         """Test sync call for the Account stream"""
 
-        client = QuickbooksClient('path', {})
+        config = {
+            'client_id': 'test_client_id',
+            'refresh_token': 'test_refresh_token',
+            'client_secret': 'test_client_secret',
+            'user_agent': 'test_user_agent',
+            'realm_id': 'test_realm_id'
+        }
+        client = QuickbooksClient('path', config)
         mock_get.return_value = get_data('accounts')
 
         mock_catalog = MockCatalog(['accounts'])
