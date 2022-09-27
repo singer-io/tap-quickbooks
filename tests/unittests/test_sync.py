@@ -73,13 +73,17 @@ class TestSyncCov(unittest.TestCase):
 
         expected_calls = [
             mock.call(
-                {"bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}}),
+                {"currently_syncing": None, "bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}}),
             mock.call(
-                {"bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}})
+                {"currently_syncing": None, "bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}}),
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}}),
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}})
         ]
 
         self.assertEqual(mock_write_state.mock_calls, expected_calls)
-        self.assertEqual(mock_write_state.call_count, 2)
+        self.assertEqual(mock_write_state.call_count, 4)
 
     @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
     @mock.patch('singer.write_record')
@@ -100,8 +104,8 @@ class TestSyncCov(unittest.TestCase):
 
     @parameterized.expand([  # test_name, [state, config, write_state_call_count]
         ['start_date_unused', [{'bookmarks': {"profit_loss_report": {
-            "LastUpdatedTime": "2022-07-21T00:00:00+00:00"}}}, {}, 2]],
-        ['start_date_used', [{}, {'start_date': '2022-07-21T00:00:00Z'}, 2]],
+            "LastUpdatedTime": "2022-07-21T00:00:00+00:00"}}}, {}, 4]],
+        ['start_date_used', [{}, {'start_date': '2022-07-21T00:00:00Z'}, 4]],
     ])
     @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
     @mock.patch('singer.write_record')
@@ -125,18 +129,22 @@ class TestSyncCov(unittest.TestCase):
         do_sync(client=client, config=config, state=test_data[0], catalog=mock_catalog)
 
         expected_calls = [
-            mock.call({"bookmarks": {"profit_loss_report": {
-                      "LastUpdatedTime": "2022-06-21T00:00:00+00:00"}}}),
-            mock.call({"bookmarks": {"profit_loss_report": {
-                      "LastUpdatedTime": "2022-06-21T00:00:00+00:00"}}})
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"profit_loss_report": {"LastUpdatedTime": "2022-06-21T00:00:00+00:00"}}}),
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"profit_loss_report": {"LastUpdatedTime": "2022-06-21T00:00:00+00:00"}}}),
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"profit_loss_report": {"LastUpdatedTime": "2022-06-21T00:00:00+00:00"}}}),
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"profit_loss_report": {"LastUpdatedTime": "2022-06-21T00:00:00+00:00"}}})
         ]
 
         self.assertEqual(mock_write_state.mock_calls, expected_calls)
         self.assertEqual(mock_write_state.call_count, test_data[2])
 
     @parameterized.expand([  # test_name, data_count, write_state_count, client_get_count
-        ['having_less_than_1000_data', 100, 1, 1],
-        ['having_more_than_1000_data', 1001, 1, 25],
+        ['having_less_than_1000_data', 100, 3, 1],
+        ['having_more_than_1000_data', 1001, 3, 25],
     ])
     @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
     @mock.patch('singer.write_record')
@@ -157,8 +165,12 @@ class TestSyncCov(unittest.TestCase):
         do_sync(client=client, config=config, state={}, catalog=mock_catalog)
 
         expected_calls = [
-            mock.call({"bookmarks": {"deleted_objects": {
-                      "LastUpdatedTime": "2022-06-21T00:00:00Z"}}}),
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"deleted_objects": {"LastUpdatedTime": "2022-06-21T00:00:00Z"}}}),
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"deleted_objects": {"LastUpdatedTime": "2022-06-21T00:00:00Z"}}}),
+            mock.call(
+                {"currently_syncing": None, "bookmarks": {"deleted_objects": {"LastUpdatedTime": "2022-06-21T00:00:00Z"}}}),
         ]
 
         self.assertEqual(mock_write_state.mock_calls, expected_calls)
