@@ -10,23 +10,9 @@ from base import TestQuickbooksBase
 
 
 class TestQuickbooksBookmarks(TestQuickbooksBase):
-    def name(self):
-        return "tap_tester_quickbooks_combined_test"
 
     def expected_streams(self):
-        return self.expected_check_streams().difference({
-            'budgets'
-        })
-
-    def convert_state_to_utc(self, date_str):
-        """
-        Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to
-        a string formatted utc datetime,
-        in order to compare aginast json formatted datetime values
-        """
-        date_object = dateutil.parser.parse(date_str)
-        date_object_utc = date_object.astimezone(tz=pytz.UTC)
-        return datetime.datetime.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
+        return self.expected_check_streams().difference({'budgets'})
 
     def calculated_states_by_stream(self, current_state):
         """
@@ -73,7 +59,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         sync_job_name = runner.run_sync_mode(self, conn_id)
         first_sync_records = runner.get_records_from_target_output()
         first_sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+            self, conn_id, expected_streams, self.expected_primary_keys())
         first_sync_bookmarks = menagerie.get_state(conn_id)
 
         # Verify tap and target exit codes
@@ -90,7 +76,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         sync_job_name = runner.run_sync_mode(self, conn_id)
         second_sync_records = runner.get_records_from_target_output()
         second_sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+            self, conn_id, expected_streams, self.expected_primary_keys())
         second_sync_bookmarks = menagerie.get_state(conn_id)
 
         # Verify tap and target exit codes
@@ -98,7 +84,7 @@ class TestQuickbooksBookmarks(TestQuickbooksBase):
         menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
 
         # Test by stream
-        for stream in self.expected_streams():
+        for stream in expected_streams:
             with self.subTest(stream=stream):
                 # record counts
                 first_sync_count = first_sync_record_count.get(stream, 0)

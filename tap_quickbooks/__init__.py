@@ -11,12 +11,11 @@ LOGGER = singer.get_logger()
 
 @utils.handle_top_exception(LOGGER)
 def main():
-    required_config_keys = ['start_date']
+    required_config_keys = ['start_date', 'user_agent', 'realm_id', 'client_id', 'client_secret', 'refresh_token']
     args = singer.parse_args(required_config_keys)
 
     config = args.config
     client = QuickbooksClient(args.config_path, config)
-    catalog = args.catalog or Catalog([])
     state = args.state
 
     if args.properties and not args.catalog:
@@ -26,9 +25,16 @@ def main():
         LOGGER.info("Starting discovery mode")
         catalog = do_discover()
         write_catalog(catalog)
+        LOGGER.info("Finished discovery mode")
     else:
+        if args.catalog:
+            catalog = args.catalog
+        else:
+            catalog = do_discover()
+
         LOGGER.info("Starting sync mode")
         do_sync(client, config, state, catalog)
+        LOGGER.info("Finished sync mode")
 
 if __name__ == "__main__":
     main()

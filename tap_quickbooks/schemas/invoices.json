@@ -175,83 +175,10 @@
             ]
           },
           "SalesItemLineDetail": {
-            "properties": {
-              "ClassRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "DiscountAmt": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              },
-              "DiscountRate": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              },
-              "ItemAccountRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "ItemRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "MarkupInfo": {
-                "type": ["null", "object"],
-                "properties": {
-                  "MarkUpIncomeAccountRef": {
-                    "$ref": "shared/ref_schema.json"
-                  },
-                  "Percent": {
-                    "format": "singer.decimal",
-                    "type": ["null", "string"]
-                  },
-                  "PriceLevelRef": {
-                    "$ref": "shared/ref_schema.json"
-                  }
-                }
-              },
-              "Qty": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              },
-              "ServiceDate": {
-                "format": "date-time",
-                "type": ["null", "string"]
-              },
-              "TaxClassificationRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "TaxInclusiveAmt": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              },
-              "UnitPrice": {
-                "format": "singer.decimal",
-                "type": ["null", "string"]
-              }
-            },
-            "type": ["null", "object"]
+            "$ref": "shared/sales_item_line.json"
           },
           "DiscountLineDetail": {
-            "properties": {
-              "ClassRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "TaxCodeRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "DiscountAccountRef": {
-                "$ref": "shared/ref_schema.json"
-              },
-              "PercentBased": {
-                "type": ["null", "boolean"]
-              },
-              "DiscountPercent": {
-                "type": ["null", "integer"]
-              }
-            },
-            "type": ["null", "object"]
+            "$ref": "shared/discount_line.json"
           },
           "LineNum": {
             "type": [

@@ -14,16 +14,103 @@ PROD_ENDPOINT_BASE = "https://quickbooks.api.intuit.com"
 SANDBOX_ENDPOINT_BASE = "https://sandbox-quickbooks.api.intuit.com"
 TOKEN_REFRESH_URL = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
 
-
-class QuickbooksAuthenticationError(Exception):
-    pass
+class QuickbooksError(Exception):
+    """Base class for Quickbooks exceptions"""
 
 class Quickbooks5XXException(Exception):
-    pass
+    """Base class for 5XX errors"""
 
 class Quickbooks4XXException(Exception):
-    pass
+    """Base class for 4XX errors"""
 
+class QuickbooksAuthenticationError(Quickbooks4XXException):
+    """Exception class for 401 error"""
+
+class QuickbooksBadRequestError(Quickbooks4XXException):
+    """Exception class for 400 error"""
+
+class QuickbooksForbiddenError(Quickbooks4XXException):
+    """Exception class for 403 error"""
+
+class QuickbooksNotFoundError(Quickbooks4XXException):
+    """Exception class for 404 error"""
+
+class QuickbooksInternalServerError(Quickbooks5XXException):
+    """Exception class for 500 error"""
+
+class QuickbooksServiceUnavailableError(Quickbooks5XXException):
+    """Exception class for 503 error"""
+
+# Documentation: https://developer.intuit.com/app/developer/qbo/docs/develop/troubleshooting/error-codes
+ERROR_CODE_EXCEPTION_MAPPING = {
+    400: {
+        "exception": QuickbooksBadRequestError,
+        "message": "The request can't be fulfilled due to bad syntax."
+    },
+    401: {
+        "exception": QuickbooksAuthenticationError,
+        "message": "Authentication or authorization failed. Usually, this means the token in use won't work for API calls since it's either expired or revoked."
+    },
+    403: {
+        "exception": QuickbooksForbiddenError,
+        "message": "The URL exists, but it's restricted. External developers can't use or consume resources from this URL."
+    },
+    404: {
+        "exception": QuickbooksNotFoundError,
+        "message": "Couldn't find the requested resource or URL, or it doesn't exist."
+    },
+    500: {
+        "exception": QuickbooksInternalServerError,
+        "message": "A server error occurred while processing the request."
+    },
+    503: {
+        "exception": QuickbooksServiceUnavailableError,
+        "message": "The service is temporarily unavailable at the Server side.",
+    }
+}
+
+def get_exception_for_error_code(error_code):
+    """Function to retrieve exceptions based on error_code"""
+
+    exception = ERROR_CODE_EXCEPTION_MAPPING.get(error_code, {}).get('exception')
+    # If the error code is not from the listed error codes then return Quickbooks5XXException, Quickbooks4XXException or QuickbooksError respectively
+    if not exception:
+        if error_code >= 500:
+            return Quickbooks5XXException
+        if error_code >= 400:
+            return Quickbooks4XXException
+        return QuickbooksError
+    return exception
+
+def raise_for_error(response):
+    """Function to raise an error by extracting the message from the error response"""
+
+    error_code = response.status_code
+
+    try:
+        response_json = response.json()
+    except Exception:
+        response_json = {}
+
+    if response_json.get('Fault', response_json.get('fault')):
+
+        errors = response_json.get('Fault', {}).get('Error', response_json.get('fault', {}).get('error'))
+        # Prepare the message with detail if there is single error
+        if len(errors) == 1:
+            errors = errors[0]
+            msg = errors.get('Message', errors.get('message'))
+            detail = errors.get('Detail', errors.get('detail'))
+            internal_error_code = errors.get('code')
+            error_message  = 'Message: {}, Quickbooks Error code: {}, Detail: {}'.format(msg, internal_error_code, detail)
+        else:
+            error_message = errors
+    else:
+        error_message = ERROR_CODE_EXCEPTION_MAPPING.get(error_code, {}).get('message', 'Unknown Error')
+
+    message = 'HTTP-error-code: {}, Error: {}'.format(error_code, error_message)
+    ex = get_exception_for_error_code(error_code)
+
+    raise ex(message) from None
 
 class QuickbooksClient():
     def __init__(self, config_path, config):
@@ -52,12 +139,15 @@ class QuickbooksClient():
                                      auto_refresh_url=TOKEN_REFRESH_URL,
                                      auto_refresh_kwargs=extra,
                                      token_updater=self._write_config)
+        # Latest minorversion is '65' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
+        self.minor_version = 65
         try:
-            # Make an authenticated request after creating the object to any endpoint
-            self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo"})
+            # Make an authenticated request after creating the object to any endpoint with minorversion=65 as some additional
+            # fields are received while making requests with minor versions.
+            self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo", "minorversion": self.minor_version})
         except Exception as e:
             LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
-            raise QuickbooksAuthenticationError(e)
+            raise e
 
     def _write_config(self, token):
         LOGGER.info("Credentials Refreshed")
@@ -71,12 +161,11 @@ class QuickbooksClient():
         with open(self.config_path, 'w') as file:
             json.dump(config, file, indent=2)
 
-    # Backoff th request for 5 times when Timeout error occurs
+    # Backoff the request for 5 times when Timeout error occurs
     @backoff.on_exception(backoff.expo, Timeout, max_tries=5, factor=2)
     @backoff.on_exception(backoff.constant,
                           (Quickbooks5XXException,
                            Quickbooks4XXException,
-                           QuickbooksAuthenticationError,
                            requests.ConnectionError),
                           max_tries=3,
                           interval=10)
@@ -116,12 +205,8 @@ class QuickbooksClient():
         response = self.session.request(method, full_url, headers=headers, params=params, data=data, timeout = request_timeout)
 
         # TODO: Check error status, rate limit, etc.
-        if response.status_code >= 500:
-            raise Quickbooks5XXException(response.text)
-        elif response.status_code in (401, 403):
-            raise QuickbooksAuthenticationError(response.text)
-        elif response.status_code >= 400:
-            raise Quickbooks4XXException(response.text)
+        if response.status_code != 200:
+            raise_for_error(response)
 
         return response.json()
 

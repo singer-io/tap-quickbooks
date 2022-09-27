@@ -6,12 +6,11 @@ import re
 from base import TestQuickbooksBase
 
 class TestQuickbooksSyncAll(TestQuickbooksBase):
-    def name(self):
-        return "tap_tester_quickbooks_combined_test"
 
     def test_run(self):
         conn_id = self.ensure_connection()
 
+        expected_streams = self.expected_streams()
         # Run in check mode
         check_job_name = runner.run_check_mode(self, conn_id)
 
@@ -34,10 +33,10 @@ class TestQuickbooksSyncAll(TestQuickbooksBase):
 
         # Verify actual rows were synced
         sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+            self, conn_id, expected_streams, self.expected_primary_keys())
 
         # Examine target output
-        for stream in self.expected_streams():
+        for stream in expected_streams:
             with self.subTest(stream=stream):
                 # Each stream should have 1 or more records returned
                 self.assertGreaterEqual(sync_record_count[stream], 1)

@@ -11,11 +11,15 @@ def do_sync(client, config, state, catalog):
     for stream in selected_streams:
         stream_id = stream.tap_stream_id
         stream_schema = stream.schema
-        stream_object = STREAM_OBJECTS.get(stream_id)(client, config, state)
+        stream_object = STREAM_OBJECTS.get(stream_id)
 
+        # For the unknown stream we are getting `'NoneType' object is not callable`, as we cannot initialize None type.
+        # Thus, raise error if the stream is not found in STREAM_OBJECTS
         if stream_object is None:
             raise Exception("Attempted to sync unknown stream {}".format(stream_id))
 
+        # Initialize the stream object
+        stream_object = stream_object(client, config, state)
         singer.write_schema(
             stream_id,
             stream_schema.to_dict(),
@@ -24,6 +28,9 @@ def do_sync(client, config, state, catalog):
         )
 
         LOGGER.info("Syncing stream: %s", stream_id)
+        # Set currently syncing stream
+        state = singer.set_currently_syncing(state, stream_id)
+        singer.write_state(state)
 
         with Transformer() as transformer:
             for rec in stream_object.sync():
@@ -32,3 +39,7 @@ def do_sync(client, config, state, catalog):
                     transformer.transform(rec,
                                           stream.schema.to_dict(),
                                           metadata.to_map(stream.metadata)))
+
+    # Remove currently syncing after successful sync
+    state = singer.set_currently_syncing(state, None)
+    singer.write_state(state)
