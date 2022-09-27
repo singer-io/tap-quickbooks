@@ -89,6 +89,7 @@ class TestQuickbooksBase(unittest.TestCase):
             "classes",
             "credit_memos",
             "customers",
+            "customer_types",
             "departments",
             "deposits",
             "employees",
