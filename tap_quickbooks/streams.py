@@ -30,7 +30,7 @@ class Stream:
         while True:
             query = query_builder.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
 
-            resp = self.client.get(self.endpoint, params={"query": query}).get('QueryResponse',{})
+            resp = self.client.get(self.endpoint, params={"query": query,"minorversion": self.client.minor_version}).get('QueryResponse',{})
 
             results = resp.get(self.table_name, [])
             for rec in results:
