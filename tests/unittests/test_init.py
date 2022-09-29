@@ -7,13 +7,14 @@ from parameterized import parameterized
 class Parse_Args:
     """Mocked parse args"""
 
-    def __init__(self, discover=False, state=None, catalog=None, properties=None, config_path=None) -> None:
+    def __init__(self, discover=False, state=None, catalog=None, properties=None, config_path=None, dev=None) -> None:
         self.discover = discover
         self.state = state
         self.config = {}
         self.catalog = catalog
         self.properties = properties
         self.config_path = config_path
+        self.dev = dev
 
 class TestQuickbooksInit(unittest.TestCase):
 

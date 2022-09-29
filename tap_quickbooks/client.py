@@ -147,6 +147,10 @@ class QuickbooksClient():
             raise e
 
     def create_session(self, dev_mode, token, extra):
+        """
+        If dev mode is enabled then session is created with the existing tokens.
+        Else session is created with refreshed tokens.
+        """
         if dev_mode:
             self.access_token = self.config.get('access_token')
             self.expires_at = strptime_to_utc(self.config.get('expires_at')) \
