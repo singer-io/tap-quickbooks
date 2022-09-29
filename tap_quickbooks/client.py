@@ -1,8 +1,9 @@
-import json
 import backoff
+from datetime import timedelta
+import json
 import requests
 import singer
-
+from singer.utils import strptime_to_utc, now, strftime
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import Timeout
 
@@ -113,7 +114,7 @@ def raise_for_error(response):
     raise ex(message) from None
 
 class QuickbooksClient():
-    def __init__(self, config_path, config):
+    def __init__(self, config_path, config, dev_mode = False):
         token = {
             'refresh_token': config['refresh_token'],
             'token_type': 'Bearer',
@@ -134,11 +135,8 @@ class QuickbooksClient():
         self.realm_id = config['realm_id']
         self.config_path = config_path
         self.config = config
-        self.session = OAuth2Session(config['client_id'],
-                                     token=token,
-                                     auto_refresh_url=TOKEN_REFRESH_URL,
-                                     auto_refresh_kwargs=extra,
-                                     token_updater=self._write_config)
+        self.dev_mode = dev_mode
+        self.create_session(token, extra)
         # Latest minorversion is '65' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
         self.minor_version = 65
         try:
@@ -149,6 +147,34 @@ class QuickbooksClient():
             LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
             raise e
 
+    def create_session(self, token, extra):
+        if self.dev_mode:
+            self.access_token = self.config.get('access_token')
+            self.expires_at = strptime_to_utc(self.config.get('expires_at')) \
+                if self.config.get("expires_at") else None
+
+            if not self.access_token:
+                raise Exception("Access token config property is missing")
+
+            if not self.expires_at:
+                raise Exception(
+                    "Expiry of access token config property is missing")
+
+            if self.expires_at < now():
+                raise Exception(
+                    "Access Token in config is expired, unable to authenticate in dev mode")
+
+            # Using the existing access_token for dev mode
+            token['access_token'] = self.access_token
+            token['expires_in'] = (self.expires_at - now()).seconds
+            self.session = OAuth2Session(self.config['client_id'],
+                                         token=token)
+        else:
+            self.session = OAuth2Session(self.config['client_id'],
+                                         token=token,
+                                         auto_refresh_url=TOKEN_REFRESH_URL,
+                                         auto_refresh_kwargs=extra,
+                                         token_updater=self._write_config)
     def _write_config(self, token):
         LOGGER.info("Credentials Refreshed")
 
@@ -157,7 +183,9 @@ class QuickbooksClient():
             config = json.load(file)
 
         config['refresh_token'] = token['refresh_token']
-
+        config['access_token'] = token['access_token']
+        # pad by 10 seconds for clock drift
+        config['expires_at'] = strftime(now() + timedelta(seconds=token['expires_in'] - 10))
         with open(self.config_path, 'w') as file:
             json.dump(config, file, indent=2)
 
