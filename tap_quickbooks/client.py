@@ -135,8 +135,7 @@ class QuickbooksClient():
         self.realm_id = config['realm_id']
         self.config_path = config_path
         self.config = config
-        self.dev_mode = dev_mode
-        self.create_session(token, extra)
+        self.create_session(dev_mode, token, extra)
         # Latest minorversion is '65' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
         self.minor_version = 65
         try:
@@ -147,8 +146,8 @@ class QuickbooksClient():
             LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
             raise e
 
-    def create_session(self, token, extra):
-        if self.dev_mode:
+    def create_session(self, dev_mode, token, extra):
+        if dev_mode:
             self.access_token = self.config.get('access_token')
             self.expires_at = strptime_to_utc(self.config.get('expires_at')) \
                 if self.config.get("expires_at") else None
