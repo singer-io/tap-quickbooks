@@ -1,6 +1,6 @@
-import backoff
-from datetime import timedelta
 import json
+from datetime import timedelta
+import backoff
 import requests
 import singer
 from singer.utils import strptime_to_utc, now, strftime
