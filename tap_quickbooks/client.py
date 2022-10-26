@@ -139,8 +139,7 @@ class QuickbooksClient():
         # Latest minorversion is '65' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
         self.minor_version = 65
         try:
-            # Make an authenticated request after creating the object to any endpoint with minorversion=65 as some additional
-            # fields are received while making requests with minor versions.
+            # Make an authenticated request to any endpoint with minorversion=65 to validate the client object
             self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo", "minorversion": self.minor_version})
         except Exception as e:
             LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
@@ -192,7 +191,6 @@ class QuickbooksClient():
         with open(self.config_path, 'w') as file:
             json.dump(config, file, indent=2)
 
-    # Backoff the request for 5 times when Timeout error occurs
     @backoff.on_exception(backoff.expo, Timeout, max_tries=5, factor=2)
     @backoff.on_exception(backoff.constant,
                           (Quickbooks5XXException,
