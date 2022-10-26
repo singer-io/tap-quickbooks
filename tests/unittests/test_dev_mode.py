@@ -47,16 +47,6 @@ class Test_ClientDevMode(unittest.TestCase):
         self.assertEquals(mock_write_config.call_count, 0)
 
     @patch("requests_oauthlib.OAuth2Session.request", return_value=MagicMock(status_code=200))
-    def test_client_dev_mode_expired_access_token(self, mock_request):
-        """Exception should be raised on passing expired token"""
-
-        self.mock_config["expires_at"] = "2020-01-01T01:01:01.000000Z"
-        params = {"config_path": self.tmp_config_filename, "config": self.mock_config, "dev_mode": True}
-
-        with self.assertRaises(Exception):
-            QuickbooksClient(**params)
-
-    @patch("requests_oauthlib.OAuth2Session.request", return_value=MagicMock(status_code=200))
     def test_client_dev_mode_missing_access_token(self, mock_request):
         """Exception should be raised if missing access token"""
 

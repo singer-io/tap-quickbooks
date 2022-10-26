@@ -152,25 +152,19 @@ class QuickbooksClient():
         """
         if dev_mode:
             self.access_token = self.config.get('access_token')
-            self.expires_at = strptime_to_utc(self.config.get('expires_at')) \
-                if self.config.get("expires_at") else None
 
             if not self.access_token:
                 raise Exception("Access token config property is missing")
 
-            if not self.expires_at:
-                raise Exception(
-                    "Expiry of access token config property is missing")
+            dev_mode_token = {
+                "refresh_token": self.config.get('refresh_token'),
+                # Using the existing access_token for dev mode
+                "access_token": self.access_token,
+                'token_type': 'Bearer'
+            }
 
-            if self.expires_at < now():
-                raise Exception(
-                    "Access Token in config is expired, unable to authenticate in dev mode")
-
-            # Using the existing access_token for dev mode
-            token['access_token'] = self.access_token
-            token['expires_in'] = (self.expires_at - now()).seconds
             self.session = OAuth2Session(self.config['client_id'],
-                                         token=token)
+                                         token=dev_mode_token)
         else:
             self.session = OAuth2Session(self.config['client_id'],
                                          token=token,
@@ -186,8 +180,6 @@ class QuickbooksClient():
 
         config['refresh_token'] = token['refresh_token']
         config['access_token'] = token['access_token']
-        # pad by 10 seconds for clock drift
-        config['expires_at'] = strftime(now() + timedelta(seconds=token['expires_in'] - 10))
         with open(self.config_path, 'w') as file:
             json.dump(config, file, indent=2)
 
