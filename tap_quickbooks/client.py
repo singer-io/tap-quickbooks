@@ -1,9 +1,7 @@
 import json
-from datetime import timedelta
 import backoff
 import requests
 import singer
-from singer.utils import strptime_to_utc, now, strftime
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import Timeout
 
