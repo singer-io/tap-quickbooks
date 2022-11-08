@@ -70,10 +70,9 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         #   bill_payments: currently syncing
         #   accounts: synced records successfully
         #   payments: remaining to sync
-        state = {
-            "currently_syncing": "bill_payments",
-            "bookmarks": { "accounts": {"LastUpdatedTime": "2021-08-10T01:10:04-07:00"}}
-        }
+        state = {"currently_syncing": "bill_payments",
+                 "bookmarks": { "accounts": {"LastUpdatedTime": "2021-08-10T01:10:04-07:00"},
+                              "bill_payments": {"LastUpdatedTime": "2017-02-22T01:10:04-07:00"}}}
 
         # Set state for 2nd sync
         menagerie.set_state(conn_id, state)
@@ -126,7 +125,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                 if stream == state['currently_syncing']:
 
                     # Assign the start date to the interrupted stream
-                    interrupted_stream_datetime = start_date_datetime
+                    interrupted_stream_datetime = state['bookmarks'][state['currently_syncing']]['LastUpdatedTime']
 
                     # - Verify resuming sync only replicates records with replication key values greater or
                     #       equal to the state for streams that were replicated during the interrupted sync.
