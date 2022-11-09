@@ -1,6 +1,7 @@
 from datetime import datetime as dt
 from tap_tester import runner, connections, menagerie
 from base import TestQuickbooksBase
+from singer.utils import strptime_to_utc
 
 class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
@@ -125,7 +126,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                 if stream == state['currently_syncing']:
 
                     # Assign the start date to the interrupted stream
-                    interrupted_stream_datetime = dt.strptime(state['bookmarks'][stream]['LastUpdatedTime'], "%Y-%m-%dT%H:%M:%SZ")
+                    interrupted_stream_datetime = strptime_to_utc(state['bookmarks'][stream]['LastUpdatedTime'])
 
                     # - Verify resuming sync only replicates records with replication key values greater or
                     #       equal to the state for streams that were replicated during the interrupted sync.
