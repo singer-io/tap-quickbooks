@@ -36,7 +36,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         - Verify the yet-to-be-synced streams are replicated following the interrupted stream in the resuming sync.
         """
 
-        self.start_date = "2021-01-01T00:00:00Z"
+        self.start_date = "2020-01-01T00:00:00Z"
         start_date_datetime = dt.strptime(self.start_date, "%Y-%m-%dT%H:%M:%SZ")
 
         conn_id = self.ensure_connection(original=False)
@@ -75,7 +75,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         #   payments: remaining to sync
         state = {"currently_syncing": "bill_payments",
                  "bookmarks": { "accounts": {"LastUpdatedTime": "2021-08-10T01:10:04-07:00"},
-                              "bill_payments": {"LastUpdatedTime": "2017-02-22T01:10:04-07:00"}}}
+                              "bill_payments": {"LastUpdatedTime": "2020-02-22T01:10:04-07:00"}}}
 
         # Set state for 2nd sync
         menagerie.set_state(conn_id, state)
@@ -127,26 +127,14 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
                 if stream == state['currently_syncing']:
 
-                    # Assign the start date to the interrupted stream
+                    # get the bookmarked value from state for the currently syncing stream
                     interrupted_stream_datetime = strptime_to_utc(state['bookmarks'][stream]['LastUpdatedTime']).replace(tzinfo=None)
-                    LOGGER.info(f"interrupt - tzinfo - {interrupted_stream_datetime.tzinfo}")
-                    print(f"interrupt - tzinfo - {interrupted_stream_datetime.tzinfo}")
-
-                    LOGGER.info(f"interrupted_stream_datetime before - {interrupted_stream_datetime}")
-                    LOGGER.info(f"interrupted_stream_datetime after- {interrupted_stream_datetime.replace(tzinfo=None)}")
-                    print(f"interrupted_stream_datetime - {interrupted_stream_datetime.replace(tzinfo=None)}")
 
                     # - Verify resuming sync only replicates records with replication key values greater or
                     #       equal to the state for streams that were replicated during the interrupted sync.
                     # - Verify the interrupted sync replicates the expected record set all interrupted records are in full records
                     for record in interrupted_records:
                         rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
-                        LOGGER.info(f"rec_time - tzinfo - {rec_time.tzinfo}")
-                        print(f"rec_time - tzinfo - {rec_time.tzinfo}")
-
-                        LOGGER.info(f"rec_time before - {rec_time}")
-                        LOGGER.info(f"rec_time after- {rec_time.replace(tzinfo=None)}")
-                        print(f"rec_time - {rec_time.replace(tzinfo=None)}")
 
                         self.assertGreaterEqual(rec_time, interrupted_stream_datetime)
 
