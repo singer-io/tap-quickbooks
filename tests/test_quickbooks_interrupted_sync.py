@@ -2,7 +2,9 @@ from datetime import datetime as dt
 from tap_tester import runner, connections, menagerie
 from base import TestQuickbooksBase
 from singer.utils import strptime_to_utc
+import singer
 
+LOGGER = singer.get_logger()
 class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
     def assertIsDateFormat(self, value, str_format):
@@ -127,12 +129,17 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
                     # Assign the start date to the interrupted stream
                     interrupted_stream_datetime = strptime_to_utc(state['bookmarks'][stream]['LastUpdatedTime'])
+                    LOGGER.info(f"interrupt - tzinfo - {interrupted_stream_datetime.tzinfo}")
+                    print(f"interrupt - tzinfo - {interrupted_stream_datetime.tzinfo}")
 
                     # - Verify resuming sync only replicates records with replication key values greater or
                     #       equal to the state for streams that were replicated during the interrupted sync.
                     # - Verify the interrupted sync replicates the expected record set all interrupted records are in full records
                     for record in interrupted_records:
                         rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
+                        LOGGER.info(f"rec_time - tzinfo - {rec_time.tzinfo}")
+                        print(f"rec_time - tzinfo - {rec_time.tzinfo}")
+
                         self.assertGreaterEqual(rec_time, interrupted_stream_datetime)
 
                         self.assertIn(record, full_records, msg='Incremental table record in interrupted sync not found in full sync')
