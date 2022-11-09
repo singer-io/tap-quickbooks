@@ -132,6 +132,10 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                     LOGGER.info(f"interrupt - tzinfo - {interrupted_stream_datetime.tzinfo}")
                     print(f"interrupt - tzinfo - {interrupted_stream_datetime.tzinfo}")
 
+                    LOGGER.info(f"interrupted_stream_datetime before - {interrupted_stream_datetime}")
+                    LOGGER.info(f"interrupted_stream_datetime after- {interrupted_stream_datetime.replace(tzinfo=None)}")
+                    print(f"interrupted_stream_datetime - {interrupted_stream_datetime.replace(tzinfo=None)}")
+
                     # - Verify resuming sync only replicates records with replication key values greater or
                     #       equal to the state for streams that were replicated during the interrupted sync.
                     # - Verify the interrupted sync replicates the expected record set all interrupted records are in full records
@@ -139,6 +143,10 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                         rec_time = dt.strptime(record.get('MetaData').get('LastUpdatedTime'), "%Y-%m-%dT%H:%M:%S.%fZ")
                         LOGGER.info(f"rec_time - tzinfo - {rec_time.tzinfo}")
                         print(f"rec_time - tzinfo - {rec_time.tzinfo}")
+
+                        LOGGER.info(f"rec_time before - {interrupted_stream_datetime}")
+                        LOGGER.info(f"rec_time after- {rec_time.replace(tzinfo=None)}")
+                        print(f"rec_time - {rec_time.replace(tzinfo=None)}")
 
                         self.assertGreaterEqual(rec_time, interrupted_stream_datetime)
 
