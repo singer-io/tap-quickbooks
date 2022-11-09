@@ -128,7 +128,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                 if stream == state['currently_syncing']:
 
                     # Assign the start date to the interrupted stream
-                    interrupted_stream_datetime = strptime_to_utc(state['bookmarks'][stream]['LastUpdatedTime'])
+                    interrupted_stream_datetime = strptime_to_utc(state['bookmarks'][stream]['LastUpdatedTime']).replace(tzinfo=None)
                     LOGGER.info(f"interrupt - tzinfo - {interrupted_stream_datetime.tzinfo}")
                     print(f"interrupt - tzinfo - {interrupted_stream_datetime.tzinfo}")
 
@@ -144,7 +144,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                         LOGGER.info(f"rec_time - tzinfo - {rec_time.tzinfo}")
                         print(f"rec_time - tzinfo - {rec_time.tzinfo}")
 
-                        LOGGER.info(f"rec_time before - {interrupted_stream_datetime}")
+                        LOGGER.info(f"rec_time before - {rec_time}")
                         LOGGER.info(f"rec_time after- {rec_time.replace(tzinfo=None)}")
                         print(f"rec_time - {rec_time.replace(tzinfo=None)}")
 
