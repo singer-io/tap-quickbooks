@@ -125,7 +125,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
                 if stream == state['currently_syncing']:
 
                     # Assign the start date to the interrupted stream
-                    interrupted_stream_datetime = state['bookmarks'][state['currently_syncing']]['LastUpdatedTime']
+                    interrupted_stream_datetime = dt.strptime(state['bookmarks'][stream]['LastUpdatedTime'], "%Y-%m-%dT%H:%M:%SZ")
 
                     # - Verify resuming sync only replicates records with replication key values greater or
                     #       equal to the state for streams that were replicated during the interrupted sync.
