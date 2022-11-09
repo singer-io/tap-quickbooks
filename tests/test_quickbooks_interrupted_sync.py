@@ -1,6 +1,7 @@
 from datetime import datetime as dt
 from tap_tester import runner, connections, menagerie
 from base import TestQuickbooksBase
+from singer.utils import strptime_to_utc
 
 class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
@@ -33,7 +34,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         - Verify the yet-to-be-synced streams are replicated following the interrupted stream in the resuming sync.
         """
 
-        self.start_date = "2021-01-01T00:00:00Z"
+        self.start_date = "2020-01-01T00:00:00Z"
         start_date_datetime = dt.strptime(self.start_date, "%Y-%m-%dT%H:%M:%SZ")
 
         conn_id = self.ensure_connection(original=False)
@@ -70,10 +71,9 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
         #   bill_payments: currently syncing
         #   accounts: synced records successfully
         #   payments: remaining to sync
-        state = {
-            "currently_syncing": "bill_payments",
-            "bookmarks": { "accounts": {"LastUpdatedTime": "2021-08-10T01:10:04-07:00"}}
-        }
+        state = {"currently_syncing": "bill_payments",
+                 "bookmarks": { "accounts": {"LastUpdatedTime": "2021-08-10T01:10:04-07:00"},
+                              "bill_payments": {"LastUpdatedTime": "2020-02-22T01:10:04-07:00"}}}
 
         # Set state for 2nd sync
         menagerie.set_state(conn_id, state)
@@ -125,8 +125,8 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
                 if stream == state['currently_syncing']:
 
-                    # Assign the start date to the interrupted stream
-                    interrupted_stream_datetime = start_date_datetime
+                    # get the bookmarked value from state for the currently syncing stream
+                    interrupted_stream_datetime = strptime_to_utc(state['bookmarks'][stream]['LastUpdatedTime']).replace(tzinfo=None)
 
                     # - Verify resuming sync only replicates records with replication key values greater or
                     #       equal to the state for streams that were replicated during the interrupted sync.
