@@ -4,6 +4,7 @@ import tap_tester.runner      as runner
 import re
 
 from base import TestQuickbooksBase
+from tap_tester.logger import LOGGER
 
 page_size_key = 'max_results'
 
@@ -52,7 +53,7 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
 
             # Verify the expected stream tables are selected
             selected = catalog_entry.get('annotated-schema').get('selected')
-            print("Validating selection on {}: {}".format(cat['stream_name'], selected))
+            LOGGER.info(f"Validating selection on {cat['stream_name']}: {selected}")
             if cat['stream_name'] not in expected_streams:
                 self.assertFalse(selected, msg="Stream selected, but not testable.")
                 continue # Skip remaining assertions if we aren't selecting this stream

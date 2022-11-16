@@ -4,6 +4,7 @@ import tap_tester.runner      as runner
 import re
 
 from base import TestQuickbooksBase
+from tap_tester.logger import LOGGER
 
 class TestQuickbooksDiscovery(TestQuickbooksBase):
 
@@ -41,7 +42,7 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
 
         diff = expected_streams.symmetric_difference(found_catalog_names)
         self.assertEqual(len(diff), 0, msg="discovered schemas do not match: {}".format(diff))
-        print("discovered schemas are OK")
+        LOGGER.info("discovered schemas are OK")
 
         custom_field_stream_count = 0
         for stream in self.expected_streams():
