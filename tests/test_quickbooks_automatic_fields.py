@@ -113,11 +113,6 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
                     # so we can verify auto fields works, but only for 1 page of data
                     continue
 
-                # Verify the number or records exceeds the max_results (api limit)
-                pagination_threshold = int(self.get_properties().get(page_size_key))
-                self.assertGreater(record_count, pagination_threshold,
-                                   msg="Record count not large enough to guarantee pagination.")
-
                 # Verify that all replicated records have unique primary key values.
                 self.assertEqual(len(primary_keys_list),
                                 len(unique_primary_keys_list),
