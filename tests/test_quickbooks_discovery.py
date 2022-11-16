@@ -9,6 +9,22 @@ from tap_tester.logger import LOGGER
 class TestQuickbooksDiscovery(TestQuickbooksBase):
 
     def test_run(self):
+        """
+        Testing that discovery creates the appropriate catalog with valid metadata.
+        • Verify number of actual streams discovered match expected
+        • Verify the stream names discovered were what we expect
+        • Verify stream names follow naming convention
+          streams should only have lowercase alphas and underscores
+        • Verify there is only 1 top level breadcrumb
+        • Verify there are no duplicate/conflicting metadata entries.
+        • Verify primary key(s) match expectations.
+        • Verify replication key(s) match expectations.
+        • Verify the actual replication matches our expected replication method.
+        • Verify that if there is a replication key we are doing INCREMENTAL otherwise FULL.
+        • Verify that primary keys and replication keys have inclusion of automatic
+        • Verify that all fields have inclusion of available metadata.
+        • Verify all streams have inclusion of automatic
+        """
         conn_id = self.ensure_connection()
 
         expected_streams = self.expected_check_streams()

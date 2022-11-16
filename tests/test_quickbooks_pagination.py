@@ -25,6 +25,7 @@ class TestQuickbooksPagination(TestQuickbooksBase):
 
 
     def test_run(self):
+        """Executing run_test with different page_size values for different streams"""
         conn_id = self.ensure_connection()
 
         # Run in check mode

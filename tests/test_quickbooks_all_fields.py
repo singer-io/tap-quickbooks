@@ -4,7 +4,7 @@ from base import TestQuickbooksBase
 class TestQuickbooksAllFields(TestQuickbooksBase):
     """Test case to verify we are replicating all fields data from the Tap"""
 
-    # remove fields that are replicated when you have account for that specific reqion
+    # remove fields that are replicated when you have account for that specific region
     locale_fields = {
         'transfers': [
             'TransactionLocationType', # FRANCE locale field

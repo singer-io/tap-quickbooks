@@ -29,6 +29,11 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         }
 
     def test_run(self):
+        """
+        • Verify we can deselect all fields except when inclusion=automatic, which is handled by base.py methods
+        • Verify that only the automatic fields are sent to the target.
+        • Verify that all replicated records have unique primary key values.
+        """
         conn_id = self.ensure_connection()
 
         # Run in check mode
