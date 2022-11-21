@@ -1,3 +1,4 @@
+import copy
 import os
 import unittest
 import time
@@ -279,3 +280,38 @@ class TestQuickbooksBase(unittest.TestCase):
         date_object = dateutil.parser.parse(date_str)
         date_object_utc = date_object.astimezone(tz=pytz.UTC)
         return dt.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
+
+    def is_incremental(self, stream):
+        """Checking if the given stream is incremental or not."""
+        return self.expected_metadata().get(stream).get(self.REPLICATION_METHOD) == self.INCREMENTAL
+
+    def create_interrupt_sync_state(self, state, interrupt_stream, pending_streams, sync_records):
+        """This function will create a new interrupt sync bookmark state where
+        "currently_syncing" will have the non-null value and this state will be
+        used to resume the data extraction."""
+
+        interrupted_sync_states = copy.deepcopy(state)
+        bookmark_state = interrupted_sync_states["bookmarks"]
+        # Set the interrupt stream as currently syncing
+        interrupted_sync_states["currently_syncing"] = interrupt_stream
+
+        # For pending streams, removing the bookmark_value
+        for stream in pending_streams:
+            bookmark_state.pop(stream, None)
+
+        if self.is_incremental(interrupt_stream):
+            # update state for interrupt stream and set the bookmark to a date earlier
+            interrupt_stream_bookmark = bookmark_state.get(interrupt_stream, {})
+            interrupt_stream_bookmark.pop("offset", None)
+
+            replication_key = list(state["bookmarks"][interrupt_stream].keys())[0]
+            interrupt_stream_rec = []
+            for record in sync_records.get(interrupt_stream).get("messages"):
+                if record.get("action") == "upsert":
+                    rec = record.get("data")
+                    interrupt_stream_rec.append(rec)
+            interrupt_stream_index = len(interrupt_stream_rec) // 2 if len(interrupt_stream_rec) > 1 else 0
+            interrupt_stream_bookmark[replication_key] = interrupt_stream_rec[interrupt_stream_index]["MetaData"][replication_key]
+            bookmark_state[interrupt_stream] = interrupt_stream_bookmark
+            interrupted_sync_states["bookmarks"] = bookmark_state
+        return interrupted_sync_states

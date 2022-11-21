@@ -39,7 +39,7 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
         conn_id = self.ensure_connection(original=False)
 
-        expected_streams = {"accounts", "bill_payments", "payments"}
+        expected_streams = {"accounts", "bill_payments", "payments", "vendors"}
 
         # Run in check mode
         check_job_name = runner.run_check_mode(self, conn_id)
@@ -67,14 +67,21 @@ class TestQuickbooksInterruptedSyncTest(TestQuickbooksBase):
 
         full_sync_state = menagerie.get_state(conn_id)
 
-        # State to run 2nd sync
-        #   bill_payments: currently syncing
-        #   accounts: synced records successfully
-        #   payments: remaining to sync
-        state = {"currently_syncing": "bill_payments",
-                 "bookmarks": { "accounts": {"LastUpdatedTime": "2021-08-10T01:10:04-07:00"},
-                              "bill_payments": {"LastUpdatedTime": "2020-02-22T01:10:04-07:00"}}}
 
+        ##########################################################################
+        # Update State Between Syncs
+        ##########################################################################
+
+        interrupt_stream = "payments"
+        pending_streams = {"vendors"}
+        self.create_interrupt_sync_state(full_sync_state, interrupt_stream, pending_streams, synced_records_full_sync)
+
+        # State to run 2nd sync
+        #   payments: currently syncing
+        #   accounts and bill_payments: synced records successfully
+        #   vendors: remaining to sync
+
+        state = self.create_interrupt_sync_state(full_sync_state, interrupt_stream, pending_streams, synced_records_full_sync)
         # Set state for 2nd sync
         menagerie.set_state(conn_id, state)
 
