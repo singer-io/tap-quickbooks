@@ -1,8 +1,11 @@
+import copy
 import os
 import unittest
 import time
 from datetime import datetime as dt
 from datetime import timedelta
+import dateutil.parser
+import pytz
 
 import tap_tester.menagerie   as menagerie
 import tap_tester.connections as connections
@@ -20,9 +23,7 @@ class TestQuickbooksBase(unittest.TestCase):
     PRIMARY_KEYS = "table-key-properties"
     FOREIGN_KEYS = "table-foreign-key-properties"
     REPLICATION_METHOD = "forced-replication-method"
-    API_LIMIT = "max-row-limit"
     INCREMENTAL = "INCREMENTAL"
-    FULL = "FULL_TABLE"
     START_DATE_FORMAT = "%Y-%m-%dT00:00:00Z" # %H:%M:%SZ
     # list of streams which supports custom field
     custom_command_streams = ['invoices','estimates','credit_memos','refund_receipts','sales_receipts','purchase_orders']
@@ -32,6 +33,13 @@ class TestQuickbooksBase(unittest.TestCase):
         "%Y-%m-%dT%H:%M:%S.000000Z",
         "%Y-%m-%dT%H:%M:%S%z"
     }
+
+    def name(self):
+        """
+            Quickbooks uses the token chaining to get the existing token which requires
+            all tests to have same name So do not overwrite the test name below
+        """
+        return "tap_tester_quickbooks_combined_test"
 
     def setUp(self):
         missing_envs = [x for x in [
@@ -51,12 +59,17 @@ class TestQuickbooksBase(unittest.TestCase):
     def tap_name():
         return "tap-quickbooks"
 
-    def get_properties(self):
-        return {
-            'start_date' : '2016-06-02T00:00:00Z',
-            'sandbox': 'true'
-        }
-
+    def get_properties(self, original=True):
+        if original:
+            return {
+                'start_date' : '2016-06-02T00:00:00Z',
+                'sandbox': 'true'
+            }
+        else:
+            return {
+                'start_date' : self.start_date,
+                'sandbox': 'true'
+            }
 
     def get_credentials(self):
         return {
@@ -77,6 +90,7 @@ class TestQuickbooksBase(unittest.TestCase):
             "classes",
             "credit_memos",
             "customers",
+            "customer_types",
             "departments",
             "deposits",
             "employees",
@@ -257,3 +271,47 @@ class TestQuickbooksBase(unittest.TestCase):
 
     def is_report_stream(self, stream):
         return stream in ["profit_loss_report"]
+
+    def convert_state_to_utc(self, date_str):
+        """
+        Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to a string
+        formatted utc datetime, in order to compare against the json formatted datetime values
+        """
+        date_object = dateutil.parser.parse(date_str)
+        date_object_utc = date_object.astimezone(tz=pytz.UTC)
+        return dt.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
+
+    def is_incremental(self, stream):
+        """Checking if the given stream is incremental or not."""
+        return self.expected_metadata().get(stream).get(self.REPLICATION_METHOD) == self.INCREMENTAL
+
+    def create_interrupt_sync_state(self, state, interrupt_stream, pending_streams, sync_records):
+        """This function will create a new interrupt sync bookmark state where
+        "currently_syncing" will have the non-null value and this state will be
+        used to resume the data extraction."""
+
+        interrupted_sync_states = copy.deepcopy(state)
+        bookmark_state = interrupted_sync_states["bookmarks"]
+        # Set the interrupt stream as currently syncing
+        interrupted_sync_states["currently_syncing"] = interrupt_stream
+
+        # For pending streams, removing the bookmark_value
+        for stream in pending_streams:
+            bookmark_state.pop(stream, None)
+
+        if self.is_incremental(interrupt_stream):
+            # update state for interrupt stream and set the bookmark to a date earlier
+            interrupt_stream_bookmark = bookmark_state.get(interrupt_stream, {})
+            interrupt_stream_bookmark.pop("offset", None)
+
+            replication_key = list(state["bookmarks"][interrupt_stream].keys())[0]
+            interrupt_stream_rec = []
+            for record in sync_records.get(interrupt_stream).get("messages"):
+                if record.get("action") == "upsert":
+                    rec = record.get("data")
+                    interrupt_stream_rec.append(rec)
+            interrupt_stream_index = len(interrupt_stream_rec) // 2 if len(interrupt_stream_rec) > 1 else 0
+            interrupt_stream_bookmark[replication_key] = interrupt_stream_rec[interrupt_stream_index]["MetaData"][replication_key]
+            bookmark_state[interrupt_stream] = interrupt_stream_bookmark
+            interrupted_sync_states["bookmarks"] = bookmark_state
+        return interrupted_sync_states

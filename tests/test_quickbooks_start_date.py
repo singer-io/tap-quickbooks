@@ -5,8 +5,6 @@ import tap_tester.runner      as runner
 from base import TestQuickbooksBase
 
 class TestQuickbooksStartDate(TestQuickbooksBase):
-    def name(self):
-        return "tap_tester_quickbooks_combined_test"
 
     def expected_streams(self):
         """All streams are under test"""
@@ -26,6 +24,13 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
 
 
     def test_run(self):
+        """
+        Test that the start_date configuration is respected
+        - verify that a sync with a later start date has at least one record synced
+        and less records than the 1st sync with a previous start date
+        - verify that each stream has less records than the earlier start date sync
+        - verify all data from later start data has bookmark values >= start_date
+        """
         # SYNC 1
         conn_id = self.ensure_connection()
 
@@ -48,7 +53,7 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
         sync_job_name = runner.run_sync_mode(self, conn_id)
         first_sync_records = runner.get_records_from_target_output()
         first_sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+            self, conn_id, expected_streams, self.expected_primary_keys())
 
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
@@ -69,14 +74,14 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
         sync_job_name = runner.run_sync_mode(self, conn_id)
         second_sync_records = runner.get_records_from_target_output()
         second_sync_record_count = runner.examine_target_output_file(
-            self, conn_id, self.expected_streams(), self.expected_primary_keys())
+            self, conn_id, expected_streams, self.expected_primary_keys())
 
         # Verify tap and target exit codes
         exit_status = menagerie.get_exit_status(conn_id, sync_job_name)
         menagerie.verify_sync_exit_status(self, exit_status, sync_job_name)
 
         # Test by stream
-        for stream in self.expected_streams():
+        for stream in expected_streams:
             with self.subTest(stream=stream):
                 # record counts
                 first_sync_count = first_sync_record_count.get(stream, 0)
@@ -92,6 +97,21 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
                 start_date_1_epoch = self.dt_to_ts(start_date_1)
                 start_date_2 = self.get_properties(original=False)['start_date']
                 start_date_2_epoch = self.dt_to_ts(start_date_2)
+
+                expected_primary_keys = self.expected_primary_keys()[stream]
+
+                primary_keys_list_1 = [tuple(message.get('data').get(expected_pk) for expected_pk in expected_primary_keys)
+                                       for message in first_sync_records.get(stream, {}).get('messages', {})
+                                       if message.get('action') == 'upsert']
+                primary_keys_list_2 = [tuple(message.get('data').get(expected_pk) for expected_pk in expected_primary_keys)
+                                       for message in second_sync_records.get(stream, {}).get('messages', {})
+                                       if message.get('action') == 'upsert']
+                primary_keys_sync_1 = set(primary_keys_list_1)
+                primary_keys_sync_2 = set(primary_keys_list_2)
+
+                # Verify by primary key the records replicated in the 2nd sync are part of the 1st sync
+                self.assertTrue(primary_keys_sync_2.issubset(primary_keys_sync_1),
+                                msg="Records in the 2nd sync are not a subset of the 1st sync")
 
                 # Verify by stream that our first sync meets or exceeds the default record count
                 self.assertLessEqual(expected_first_sync_count, first_sync_count)
