@@ -25,6 +25,11 @@ class TestQuickbooksPagination(TestQuickbooksBase):
 
 
     def test_run(self):
+        """Executing run_test with different page_size values for different streams
+        - Verify for each stream you can get multiple pages of data. This requires we ensure more than 1 page of data exists at all times for any given stream.
+        - Verify the sync meets or exceeds the default record count
+        - Verify we did not duplicate any records across pages
+        """
         conn_id = self.ensure_connection()
 
         # Run in check mode

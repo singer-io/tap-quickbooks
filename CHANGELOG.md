@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.0.0
+
+   * Updated field types and added new fields as per the doc [#58](https://github.com/singer-io/tap-quickbooks/pull/58)
+   * Added latest minor version (65) in the API requests [#57](https://github.com/singer-io/tap-quickbooks/pull/57)
+   * Added new stream - CustomerType [#62](https://github.com/singer-io/tap-quickbooks/pull/62)
+   * Added custom exception handling [#56](https://github.com/singer-io/tap-quickbooks/pull/56)
+   * Added missing tap tester & unit tests [#61](https://github.com/singer-io/tap-quickbooks/pull/61) [#59](https://github.com/singer-io/tap-quickbooks/pull/59)
+
 ## 1.1.2
 
    * Updated manifest file to fix issues created in 1.1.1 deployment [#53](https://github.com/singer-io/tap-quickbooks/pull/53)

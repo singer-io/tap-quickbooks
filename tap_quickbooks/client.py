@@ -2,6 +2,7 @@ import json
 import backoff
 import requests
 import singer
+
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import Timeout
 

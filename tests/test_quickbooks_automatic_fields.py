@@ -4,6 +4,7 @@ import tap_tester.runner      as runner
 import re
 
 from base import TestQuickbooksBase
+from tap_tester.logger import LOGGER
 
 page_size_key = 'max_results'
 
@@ -28,6 +29,11 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
         }
 
     def test_run(self):
+        """
+        - Verify we can deselect all fields except when inclusion=automatic, which is handled by base.py methods
+        - Verify that only the automatic fields are sent to the target.
+        - Verify that all replicated records have unique primary key values.
+        """
         conn_id = self.ensure_connection()
 
         # Run in check mode
@@ -52,7 +58,7 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
 
             # Verify the expected stream tables are selected
             selected = catalog_entry.get('annotated-schema').get('selected')
-            print("Validating selection on {}: {}".format(cat['stream_name'], selected))
+            LOGGER.info(f"Validating selection on {cat['stream_name']}: {selected}")
             if cat['stream_name'] not in expected_streams:
                 self.assertFalse(selected, msg="Stream selected, but not testable.")
                 continue # Skip remaining assertions if we aren't selecting this stream
@@ -106,11 +112,6 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
                     # and will never exceed our pagination size (max_results) in this test
                     # so we can verify auto fields works, but only for 1 page of data
                     continue
-
-                # Verify the number or records exceeds the max_results (api limit)
-                pagination_threshold = int(self.get_properties().get(page_size_key))
-                self.assertGreater(record_count, pagination_threshold,
-                                   msg="Record count not large enough to guarantee pagination.")
 
                 # Verify that all replicated records have unique primary key values.
                 self.assertEqual(len(primary_keys_list),
