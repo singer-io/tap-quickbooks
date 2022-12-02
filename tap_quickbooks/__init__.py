@@ -15,7 +15,9 @@ def main():
     args = singer.parse_args(required_config_keys)
 
     config = args.config
-    client = QuickbooksClient(args.config_path, config)
+    if args.dev:
+        LOGGER.warning("Executing Tap in Dev mode")
+    client = QuickbooksClient(args.config_path, config, args.dev)
     catalog = args.catalog or Catalog([])
     state = args.state
 
