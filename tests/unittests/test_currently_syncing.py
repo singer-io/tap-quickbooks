@@ -1,36 +1,8 @@
 import unittest
 from unittest import mock
+from singer.catalog import Catalog
 from tap_quickbooks.client import QuickbooksClient
 from tap_quickbooks.sync import do_sync
-
-class Schema:
-    """Mock class for the schema"""
-    def __init__(self, stream):
-        self.stream = stream
-
-    def to_dict(self):
-        return {'stream': self.stream}
-
-class Stream:
-    """Mock class for the stream"""
-    def __init__(self, stream_name):
-        self.tap_stream_id = stream_name
-        self.stream = stream_name
-        self.replication_key = 'updated_at'
-        self.schema = Schema(stream_name)
-        self.metadata = {}
-
-class Catalog:
-    """Mock class for the singer catalog"""
-    def __init__(self, streams):
-        self.streams = streams
-
-    def get_selected_streams(self, state):
-        for stream in self.streams:
-            yield Stream(stream)
-
-    def get_stream(self, stream_name):
-        return Stream(stream_name)
 
 class TestCurrentlySuncing(unittest.TestCase):
 
@@ -52,8 +24,33 @@ class TestCurrentlySuncing(unittest.TestCase):
 
         client = QuickbooksClient("/opt/code/config.json", config)
 
-        do_sync(client=client, config=config, state=state, catalog=Catalog(
-            ['bills', 'budgets', 'invoices']))
+        fake_catalog = {
+            "streams":[
+                {"tap_stream_id": "bills",
+                 "schema": {"properties": {}},
+                 "metadata": [
+                     {"breadcrumb": [],
+                      "metadata": {"selected": "true"}}
+                 ],},
+                {"tap_stream_id": "budgets",
+                 "schema": {"properties": {}},
+                 "metadata": [
+                     {"breadcrumb": [],
+                      "metadata": {"selected": "true"}}
+                 ],},
+                {"tap_stream_id": "invoices",
+                 "schema": {"properties": {}},
+                 "metadata": [
+                     {"breadcrumb": [],
+                      "metadata": {"selected": "true"}}
+                 ],},
+            ]
+        }
+
+        do_sync(client=client,
+                config=config,
+                state=state,
+                catalog=Catalog.from_dict(fake_catalog))
 
         # Verify the call count
         self.assertEqual(mocked_currently_syncing.call_count, 4)
