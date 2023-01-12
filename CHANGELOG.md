@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.1.0
+
+   * Add support for dev mode [#64](https://github.com/singer-io/tap-quickbooks/pull/64)
+
 ## 2.0.0
 
    * Updated field types and added new fields as per the doc [#58](https://github.com/singer-io/tap-quickbooks/pull/58)
