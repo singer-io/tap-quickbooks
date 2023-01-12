@@ -113,7 +113,7 @@ def raise_for_error(response):
     raise ex(message) from None
 
 class QuickbooksClient():
-    def __init__(self, config_path, config):
+    def __init__(self, config_path, config, dev_mode = False):
         token = {
             'refresh_token': config['refresh_token'],
             'token_type': 'Bearer',
@@ -134,11 +134,7 @@ class QuickbooksClient():
         self.realm_id = config['realm_id']
         self.config_path = config_path
         self.config = config
-        self.session = OAuth2Session(config['client_id'],
-                                     token=token,
-                                     auto_refresh_url=TOKEN_REFRESH_URL,
-                                     auto_refresh_kwargs=extra,
-                                     token_updater=self._write_config)
+        self.create_session(dev_mode, token, extra)
         # Latest minorversion is '65' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
         self.minor_version = 65
         try:
@@ -148,6 +144,32 @@ class QuickbooksClient():
             LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
             raise e
 
+    def create_session(self, dev_mode, token, extra):
+        """
+        If dev mode is enabled then session is created with the existing tokens.
+        Else session is created with refreshed tokens.
+        """
+        if dev_mode:
+            self.access_token = self.config.get('access_token')
+
+            if not self.access_token:
+                raise Exception("Access token config property is missing")
+
+            dev_mode_token = {
+                "refresh_token": self.config.get('refresh_token'),
+                # Using the existing access_token for dev mode
+                "access_token": self.access_token,
+                'token_type': 'Bearer'
+            }
+
+            self.session = OAuth2Session(self.config['client_id'],
+                                         token=dev_mode_token)
+        else:
+            self.session = OAuth2Session(self.config['client_id'],
+                                         token=token,
+                                         auto_refresh_url=TOKEN_REFRESH_URL,
+                                         auto_refresh_kwargs=extra,
+                                         token_updater=self._write_config)
     def _write_config(self, token):
         LOGGER.info("Credentials Refreshed")
 
@@ -156,7 +178,7 @@ class QuickbooksClient():
             config = json.load(file)
 
         config['refresh_token'] = token['refresh_token']
-
+        config['access_token'] = token['access_token']
         with open(self.config_path, 'w') as file:
             json.dump(config, file, indent=2)
 

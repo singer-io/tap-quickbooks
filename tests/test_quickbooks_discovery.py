@@ -177,5 +177,5 @@ class TestQuickbooksDiscovery(TestQuickbooksBase):
                 actual_fields.append(md_entry['breadcrumb'][1])
 
         # Verify there is no duplicate metadata entries
-        self.assertEqual(len(actual_fields), len(set(actual_fields)), 
+        self.assertEqual(len(actual_fields), len(set(actual_fields)),
                          msg = "duplicates in the metadata entries retrieved")
