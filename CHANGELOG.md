@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.0
+
+   * Add support for dev mode [#65](https://github.com/singer-io/tap-quickbooks/pull/65)
+
 ## 1.1.2
 
    * Updated manifest file to fix issues created in 1.1.1 deployment [#53](https://github.com/singer-io/tap-quickbooks/pull/53)
