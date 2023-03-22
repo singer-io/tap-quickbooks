@@ -6,7 +6,7 @@ from singer.utils import strptime_to_utc
 
 import tap_quickbooks.query_builder as query_builder
 
-DATE_WINDOW_SIZE = 29
+DATE_WINDOW_SIZE = 59
 
 class Stream:
     endpoint = '/v3/company/{realm_id}/query'
