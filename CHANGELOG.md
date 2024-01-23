@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.2.0
+
+   * Updates to run on python 3.11.7 [#69](https://github.com/singer-io/tap-quickbooks/pull/69)
+
 ## 2.1.0
 
    * Add support for dev mode [#64](https://github.com/singer-io/tap-quickbooks/pull/64)
