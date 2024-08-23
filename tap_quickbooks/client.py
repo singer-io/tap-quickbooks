@@ -191,15 +191,12 @@ class QuickbooksClient():
 
     @backoff.on_exception(backoff.expo, Timeout, max_tries=5, factor=2)
     @backoff.on_exception(backoff.constant,
-                        (Quickbooks5XXException,
-                        Quickbooks4XXException,
-                        requests.ConnectionError),
-                        max_tries=3,
-                        interval=10)
-    @backoff.on_exception(backoff.constant,
-                        QuickbooksTooManyRequestsError,
-                        max_tries=5,
-                        interval=60)
+                          (QuickbooksTooManyRequestsError,
+                           Quickbooks5XXException,
+                           Quickbooks4XXException,
+                           requests.ConnectionError),
+                          max_tries=3,
+                          interval=60)
     @singer.utils.ratelimit(495, 60)
     def _make_request(self, method, endpoint, headers=None, params=None, data=None):
         # Sandbox requests need to be made against the Sandbox endpoint base
