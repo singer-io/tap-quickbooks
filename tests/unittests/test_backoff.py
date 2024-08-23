@@ -3,7 +3,8 @@ from unittest import mock
 from parameterized import parameterized
 from requests.exceptions import Timeout, ConnectionError
 from tap_quickbooks.client import Quickbooks4XXException, QuickbooksClient, Quickbooks5XXException,\
-    QuickbooksClient, QuickbooksBadRequestError, QuickbooksAuthenticationError, QuickbooksForbiddenError, QuickbooksNotFoundError, QuickbooksInternalServerError, QuickbooksServiceUnavailableError
+    QuickbooksClient, QuickbooksBadRequestError, QuickbooksAuthenticationError, QuickbooksForbiddenError,\
+    QuickbooksNotFoundError, QuickbooksTooManyRequestsError, QuickbooksInternalServerError, QuickbooksServiceUnavailableError
 from test_exception_handling import get_response
 
 class TestBackoffOAuth2SessionInitialization(unittest.TestCase):
@@ -22,6 +23,7 @@ class TestBackoffOAuth2SessionInitialization(unittest.TestCase):
         ['quickbooks_402_exception', [402, Quickbooks4XXException], [False, 3]],
         ['quickbooks_403_exception', [403, QuickbooksForbiddenError], [True, 3]],
         ['quickbooks_404_exception', [404, QuickbooksNotFoundError], [False, 3]],
+        ['quickbooks_429_exception', [429, QuickbooksTooManyRequestsError], [False, 3]],
         ['quickbooks_500_exception', [500, QuickbooksInternalServerError], [False, 3]],
         ['quickbooks_502_exception', [502, Quickbooks5XXException], [False, 3]],
         ['quickbooks_503_exception', [503, QuickbooksServiceUnavailableError], [False, 3]],
@@ -58,6 +60,7 @@ class TestBackoffOAuth2SessionInitialization(unittest.TestCase):
         ['quickbooks_402_exception', [402, Quickbooks4XXException], 3],
         ['quickbooks_403_exception', [403, QuickbooksForbiddenError], 3],
         ['quickbooks_404_exception', [404, QuickbooksNotFoundError], 3],
+        ['quickbooks_429_exception', [429, QuickbooksTooManyRequestsError], 3],
         ['quickbooks_500_exception', [500, QuickbooksInternalServerError], 3],
         ['quickbooks_502_exception', [502, Quickbooks5XXException], 3],
         ['quickbooks_503_exception', [503, QuickbooksServiceUnavailableError], 3],
