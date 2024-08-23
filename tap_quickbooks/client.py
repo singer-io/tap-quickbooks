@@ -35,6 +35,9 @@ class QuickbooksForbiddenError(Quickbooks4XXException):
 class QuickbooksNotFoundError(Quickbooks4XXException):
     """Exception class for 404 error"""
 
+class QuickbooksTooManyRequestsError(Quickbooks4XXException):
+    """Exception class for 429 error"""
+
 class QuickbooksInternalServerError(Quickbooks5XXException):
     """Exception class for 500 error"""
 
@@ -58,6 +61,10 @@ ERROR_CODE_EXCEPTION_MAPPING = {
     404: {
         "exception": QuickbooksNotFoundError,
         "message": "Couldn't find the requested resource or URL, or it doesn't exist."
+    },
+    429: {
+        "exception": QuickbooksTooManyRequestsError,
+        "message": "Rate limit exceeded. Too many requests in a given amount of time."
     },
     500: {
         "exception": QuickbooksInternalServerError,
@@ -184,12 +191,16 @@ class QuickbooksClient():
 
     @backoff.on_exception(backoff.expo, Timeout, max_tries=5, factor=2)
     @backoff.on_exception(backoff.constant,
-                          (Quickbooks5XXException,
-                           Quickbooks4XXException,
-                           requests.ConnectionError),
-                          max_tries=3,
-                          interval=10)
-    @singer.utils.ratelimit(500, 60)
+                        (Quickbooks5XXException,
+                        Quickbooks4XXException,
+                        requests.ConnectionError),
+                        max_tries=3,
+                        interval=10)
+    @backoff.on_exception(backoff.constant,
+                        QuickbooksTooManyRequestsError,
+                        max_tries=5,
+                        interval=60)
+    @singer.utils.ratelimit(495, 60)
     def _make_request(self, method, endpoint, headers=None, params=None, data=None):
         # Sandbox requests need to be made against the Sandbox endpoint base
         if self.sandbox:
