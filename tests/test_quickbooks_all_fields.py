@@ -186,6 +186,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
         - Verify no unexpected streams were replicated
         - Verify that more than just the automatic fields are replicated for each stream
         """
+        # Skipping stream deleted_objects due to data unavailability
         expected_streams = self.expected_check_streams() - {'deleted_objects'}
 
         # instantiate connection
