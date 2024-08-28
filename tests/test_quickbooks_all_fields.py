@@ -125,16 +125,13 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'PurchaseTaxCodeRef', 'SalesTaxCodeRef', 'SalesTaxIncluded', 'PurchaseTaxIncluded'
         ],
         'purchase_orders': [
-            'ShipTo', 'RecurDataRef', 'DueDate', 'SalesTermRef', 'ClassRef', 'TxnTaxDetail'
+            'ShipTo', 'DueDate', 'SalesTermRef', 'ClassRef', 'TxnTaxDetail'
         ],
         'deposits': [
             'RecurDataRef', 'TxnSource',
         ],
         'journal_entries': [
             'RecurDataRef', 'TaxRateRef'
-        ],
-        'bills': [
-            'RecurDataRef'
         ],
         'tax_rates': [
             'EffectiveTaxRate'
@@ -161,7 +158,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'CreditCardPayment', 'TaxExemptionRef', 'TxnSource'
         ],
         'sales_receipts': [
-            'RecurDataRef', 'TxnSource'
+            'TxnSource'
         ],
         'bill_payments': [
             'ProcessBillPayment', 'PrivateNote'
@@ -176,13 +173,10 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'RecurDataRef', 'PaymentMethodRef', 'SalesTermRef'
         ],
         'invoices': [
-            'InvoiceLink', 'RecurDataRef', 'TxnSource'
+            'InvoiceLink', 'TxnSource'
         ],
         'employees': [
             'Organization'
-        ],
-        'transfers': [
-            'RecurDataRef'
         ]
     }
 

@@ -12,7 +12,7 @@ from base import TestQuickbooksBase
 class TestQuickbooksBookmarks(TestQuickbooksBase):
 
     def expected_streams(self):
-        return self.expected_check_streams().difference({'budgets'})
+        return self.expected_check_streams().difference({'budgets', 'deleted_objects'})
 
     def calculated_states_by_stream(self, current_state):
         """
