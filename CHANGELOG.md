@@ -2,7 +2,7 @@
 
 ## 3.0.0
 
-   * Update the data type as per the docs [#73](https://github.com/singer-io/tap-quickbooks/pull/73)
+   * Update `Qty` datatype in `sales_item_line` shared schema [#73](https://github.com/singer-io/tap-quickbooks/pull/73)
 
 ## 2.2.0
 
