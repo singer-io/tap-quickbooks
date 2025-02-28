@@ -6,6 +6,10 @@ import singer
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import Timeout
 
+# from debugpy import listen, wait_for_client
+# listen(8001)
+# wait_for_client()
+
 
 LOGGER = singer.get_logger()
 REQUEST_TIMEOUT = 300
@@ -142,10 +146,10 @@ class QuickbooksClient():
         self.config_path = config_path
         self.config = config
         self.create_session(dev_mode, token, extra)
-        # Latest minorversion is '65' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
-        self.minor_version = 65
+        # Latest minorversion is '75' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
+        self.minor_version = 75
         try:
-            # Make an authenticated request to any endpoint with minorversion=65 to validate the client object
+            # Make an authenticated request to any endpoint with minorversion=75 to validate the client object
             self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo", "minorversion": self.minor_version})
         except Exception as e:
             LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")

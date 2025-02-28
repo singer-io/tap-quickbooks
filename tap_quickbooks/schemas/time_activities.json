@@ -149,6 +149,12 @@
       ],
       "format": "singer.decimal"
     },
+    "ProjectRef": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
     "patternProperties": {".+": {}}
   },
   "type": [
