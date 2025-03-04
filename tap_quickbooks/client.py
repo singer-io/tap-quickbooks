@@ -6,10 +6,6 @@ import singer
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import Timeout
 
-# from debugpy import listen, wait_for_client
-# listen(8001)
-# wait_for_client()
-
 
 LOGGER = singer.get_logger()
 REQUEST_TIMEOUT = 300
