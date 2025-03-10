@@ -19,7 +19,7 @@ class TestMinorVersion(unittest.TestCase):
         client = QuickbooksClient("", config)
 
         # Verify minor version is passed in API query request
-        params={"query": "SELECT * FROM CompanyInfo","minorversion":65}
+        params={"query": "SELECT * FROM CompanyInfo","minorversion":75}
         mocked_get.assert_called_with("/v3/company/test_ri/query", params=params)
 
     def test_sync_minor_version(self, mocked_get,mocked_request):
@@ -36,5 +36,5 @@ class TestMinorVersion(unittest.TestCase):
         list(stream.sync())
 
         # Verify minor version is passed in API query request
-        params={'query': 'SELECT * FROM CompanyInfo', 'minorversion': 65}
+        params={'query': 'SELECT * FROM CompanyInfo', 'minorversion': 75}
         mocked_get.assert_any_call('/v3/company/test_ri/query', params=params)
