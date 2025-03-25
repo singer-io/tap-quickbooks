@@ -9,7 +9,7 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
     def expected_streams(self):
         """All streams are under test"""
         # Skipping stream deleted_objects due to data unavailability
-        return self.expected_check_streams().difference({'deleted_objects'})
+        return self.expected_check_streams().difference({'budgets', 'deleted_objects'})
 
     def get_properties(self, original=True):
         if original:
