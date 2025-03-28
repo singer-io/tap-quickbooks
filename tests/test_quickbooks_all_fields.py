@@ -1,6 +1,7 @@
 from tap_tester import runner, menagerie
 from base import TestQuickbooksBase
 
+
 class TestQuickbooksAllFields(TestQuickbooksBase):
     """Test case to verify we are replicating all fields data from the Tap"""
 
@@ -137,7 +138,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'EffectiveTaxRate'
         ],
         'refund_receipts': [
-            'RecurDataRef', 'CheckPayment', 'PaymentType', 'ShipAddr'
+            'RecurDataRef', 'CheckPayment', 'PaymentType', 'ShipAddr', 'ProjectRef'
         ],
         'terms': [
             'DiscountDayOfMonth'
@@ -149,16 +150,16 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'TaxRegistrationNumber'
         ],
         'estimates': [
-            'RecurDataRef', 'DueDate', 'SalesTermRef'
+            'RecurDataRef', 'DueDate', 'SalesTermRef', 'ProjectRef'
         ],
         'vendors': [
             'OtherContactInfo'
         ],
         'payments': [
-            'CreditCardPayment', 'TaxExemptionRef', 'TxnSource'
+            'CreditCardPayment', 'TaxExemptionRef', 'TxnSource', 'ProjectRef'
         ],
         'sales_receipts': [
-            'TxnSource'
+            'TxnSource', 'ProjectRef'
         ],
         'bill_payments': [
             'ProcessBillPayment', 'PrivateNote'
@@ -170,13 +171,16 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'RecurDataRef', 'TxnTaxDetail', 'TxnSource'
         ],
         'credit_memos': [
-            'RecurDataRef', 'PaymentMethodRef', 'SalesTermRef'
+            'RecurDataRef', 'PaymentMethodRef', 'SalesTermRef', 'ProjectRef'
         ],
         'invoices': [
-            'InvoiceLink', 'TxnSource'
+            'InvoiceLink', 'TxnSource', 'ProjectRef'
         ],
         'employees': [
             'Organization'
+        ],
+        'time_activities': [
+            'ProjectRef'
         ]
     }
 
