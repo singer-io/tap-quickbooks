@@ -95,9 +95,9 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
 
                 # start dates
                 start_date_1 = self.get_properties()['start_date']
-                start_date_1_epoch = self.dt_to_ts(start_date_1)
+                start_date_1_epoch = self.strptime_to_timestamp(start_date_1)
                 start_date_2 = self.get_properties(original=False)['start_date']
-                start_date_2_epoch = self.dt_to_ts(start_date_2)
+                start_date_2_epoch = self.strptime_to_timestamp(start_date_2)
 
                 expected_primary_keys = self.expected_primary_keys()[stream]
 
@@ -126,12 +126,12 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
                         rep_key_value = message.get('data').get('ReportDate')
                     else :
                         rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
-                    self.assertGreaterEqual(self.dt_to_ts(rep_key_value), start_date_1_epoch,
+                    self.assertGreaterEqual(self.strptime_to_timestamp(rep_key_value), start_date_1_epoch,
                                             msg="A record was replicated with a replication key value prior to the start date")
                 for message in second_sync_messages:
                     if self.is_report_stream(stream):
                         rep_key_value = message.get('data').get('ReportDate')
                     else :
                         rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
-                    self.assertGreaterEqual(self.dt_to_ts(rep_key_value), start_date_2_epoch,
+                    self.assertGreaterEqual(self.strptime_to_timestamp(rep_key_value), start_date_2_epoch,
                                             msg="A record was replicated with a replication key value prior to the start date")

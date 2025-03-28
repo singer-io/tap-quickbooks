@@ -3,8 +3,6 @@ import os
 import unittest
 import time
 from datetime import datetime as dt
-from datetime import timedelta
-import dateutil.parser
 import pytz
 
 import tap_tester.menagerie   as menagerie
@@ -261,11 +259,19 @@ class TestQuickbooksBase(unittest.TestCase):
 
         return record_counts
 
-    def dt_to_ts(self, dtime):
+    def strptime_to_timestamp(self, dtime):
         for date_format in self.DATETIME_FMT:
             try:
                 date_stripped = int(time.mktime(dt.strptime(dtime, date_format).timetuple()))
                 return date_stripped
+            except ValueError:
+                continue
+
+    def strftime_to_datetime(self, date_str):
+        for date_format in self.DATETIME_FMT:
+            try:
+                date_time = dt.strptime(date_str, date_format)
+                return date_time
             except ValueError:
                 continue
 
@@ -277,7 +283,7 @@ class TestQuickbooksBase(unittest.TestCase):
         Convert a saved bookmark value of the form '2020-08-25T13:17:36-07:00' to a string
         formatted utc datetime, in order to compare against the json formatted datetime values
         """
-        date_object = dateutil.parser.parse(date_str)
+        date_object = self.strftime_to_datetime(date_str)
         date_object_utc = date_object.astimezone(tz=pytz.UTC)
         return dt.strftime(date_object_utc, "%Y-%m-%dT%H:%M:%SZ")
 
