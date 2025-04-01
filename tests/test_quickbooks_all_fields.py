@@ -150,16 +150,16 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'TaxRegistrationNumber'
         ],
         'estimates': [
-            'RecurDataRef', 'DueDate', 'SalesTermRef', 'ProjectRef'
+            'RecurDataRef', 'DueDate', 'SalesTermRef'
         ],
         'vendors': [
             'OtherContactInfo'
         ],
         'payments': [
-            'CreditCardPayment', 'TaxExemptionRef', 'TxnSource', 'ProjectRef'
+            'CreditCardPayment', 'TaxExemptionRef', 'TxnSource'
         ],
         'sales_receipts': [
-            'TxnSource', 'ProjectRef'
+            'TxnSource'
         ],
         'bill_payments': [
             'ProcessBillPayment', 'PrivateNote'
@@ -171,16 +171,13 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'RecurDataRef', 'TxnTaxDetail', 'TxnSource'
         ],
         'credit_memos': [
-            'RecurDataRef', 'PaymentMethodRef', 'SalesTermRef', 'ProjectRef'
+            'RecurDataRef', 'PaymentMethodRef', 'SalesTermRef'
         ],
         'invoices': [
-            'InvoiceLink', 'TxnSource', 'ProjectRef'
+            'InvoiceLink', 'TxnSource'
         ],
         'employees': [
             'Organization'
-        ],
-        'time_activities': [
-            'ProjectRef'
         ]
     }
 
