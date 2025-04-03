@@ -48,7 +48,7 @@ class TestQuickbooksAutomaticFields(TestQuickbooksBase):
 
         # Select only the expected streams tables
         # Skipping stream deleted_objects due to data unavailability
-        expected_streams = self.expected_check_streams() - {'budgets', 'deleted_objects'}
+        expected_streams = self.expected_check_streams() - {'deleted_objects'}
         catalog_entries = [ce for ce in found_catalogs if ce['tap_stream_id'] in expected_streams]
         self.select_all_streams_and_fields(conn_id, catalog_entries, False)
 
