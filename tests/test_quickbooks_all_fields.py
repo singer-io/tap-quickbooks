@@ -138,7 +138,7 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'EffectiveTaxRate'
         ],
         'refund_receipts': [
-            'RecurDataRef', 'CheckPayment', 'PaymentType', 'ShipAddr', 'ProjectRef'
+            'RecurDataRef', 'CheckPayment', 'PaymentType', 'ShipAddr'
         ],
         'terms': [
             'DiscountDayOfMonth'
