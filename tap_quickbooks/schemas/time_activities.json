@@ -150,10 +150,7 @@
       "format": "singer.decimal"
     },
     "ProjectRef": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "$ref": "shared/ref_schema.json"
     },
     "patternProperties": {".+": {}}
   },

@@ -270,8 +270,7 @@ class TestQuickbooksBase(unittest.TestCase):
     def strftime_to_datetime(self, date_str):
         for date_format in self.DATETIME_FMT:
             try:
-                date_time = dt.strptime(date_str, date_format)
-                return date_time
+                return dt.strptime(date_str, date_format)
             except ValueError:
                 continue
 

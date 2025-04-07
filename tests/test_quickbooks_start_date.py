@@ -135,3 +135,21 @@ class TestQuickbooksStartDate(TestQuickbooksBase):
                         rep_key_value = message.get('data').get('MetaData').get('LastUpdatedTime')
                     self.assertGreaterEqual(self.strptime_to_timestamp(rep_key_value), start_date_2_epoch,
                                             msg="A record was replicated with a replication key value prior to the start date")
+
+class TestQuickbooksBudgetStartDate(TestQuickbooksStartDate):
+    def expected_streams(self):
+        """All streams are under test"""
+        # Skipping stream deleted_objects due to data unavailability
+        return {'budgets'}
+
+    def get_properties(self, original=True):
+        if original:
+            return {
+                'start_date' : '2016-06-02T00:00:00Z',
+                'sandbox': 'true'
+            }
+        else:
+            return {
+                'start_date' : '2025-04-04T00:00:00Z',
+                'sandbox': 'true'
+            }
