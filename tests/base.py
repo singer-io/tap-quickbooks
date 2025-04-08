@@ -262,8 +262,7 @@ class TestQuickbooksBase(unittest.TestCase):
     def strptime_to_timestamp(self, dtime):
         for date_format in self.DATETIME_FMT:
             try:
-                date_stripped = int(time.mktime(dt.strptime(dtime, date_format).timetuple()))
-                return date_stripped
+                return int(time.mktime(dt.strptime(dtime, date_format).timetuple()))
             except ValueError:
                 continue
 
