@@ -1,5 +1,10 @@
 # Change Log
 
+## 2.3.0
+
+   * Upgrade latest API minor version (75) [#74](https://github.com/singer-io/tap-quickbooks/pull/74)
+   * Add new fields in the schema
+
 ## 2.2.0
 
    * Revise backoff logic to handle 429 error [#72](https://github.com/singer-io/tap-quickbooks/pull/72)
@@ -20,7 +25,7 @@
 
    * Updated manifest file to fix issues created in 1.1.1 deployment [#53](https://github.com/singer-io/tap-quickbooks/pull/53)
 ## 1.1.1
-   
+
    * Updated Schemas with missing fields [#50](https://github.com/singer-io/tap-quickbooks/pull/50)
    * Request Timeout [#48](https://github.com/singer-io/tap-quickbooks/pull/48)
 
