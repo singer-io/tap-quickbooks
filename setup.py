@@ -11,7 +11,7 @@ setup(name='tap-quickbooks',
       py_modules=['tap_quickbooks'],
       install_requires=[
           'singer-python==6.1.1',
-          'requests==2.32.3',
+          'requests==2.32.4',
           'requests_oauthlib==2.0.0',
       ],
       extras_require={
