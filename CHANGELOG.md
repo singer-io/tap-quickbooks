@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.3.1
+   * Bump dependency versions for twistlock compliance [#75](https://github.com/singer-io/tap-quickbooks/pull/75)
+
 ## 2.3.0
 
    * Upgrade latest API minor version (75) [#74](https://github.com/singer-io/tap-quickbooks/pull/74)
