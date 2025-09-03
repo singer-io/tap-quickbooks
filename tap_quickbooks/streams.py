@@ -327,7 +327,7 @@ class ReportStream(Stream):
                 self.parse_report_rows(pileOfRows['Summary'])
 
             if 'ColData' in pileOfRows.keys():
-                entry_data = dict()
+                entry_data = {}
                 entry_data['name'] = pileOfRows['ColData'][0]['value']
                 vals = []
                 for column_value in pileOfRows['ColData'][1:]:
@@ -340,7 +340,7 @@ class ReportStream(Stream):
             Return record for every day formed using output of parse_report_columns and parse_report_rows
         '''
         for index, date in enumerate(self.parsed_metadata['dates']):
-            report = dict()
+            report = {}
             report['ReportDate'] = date
             report['AccountingMethod'] = 'Accrual'
             report['Details'] = {}
