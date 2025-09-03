@@ -49,7 +49,7 @@ class Test_ClientDevMode(unittest.TestCase):
                          dev_mode=True)
 
         # _write_config function should never be called as it will update the config
-        self.assertEquals(mock_write_config.call_count, 0)
+        self.assertEqual(mock_write_config.call_count, 0)
 
     @patch("requests_oauthlib.OAuth2Session.request", return_value=MagicMock(status_code=200))
     def test_client_dev_mode_missing_access_token(self, mock_request):

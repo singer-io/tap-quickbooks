@@ -18,7 +18,7 @@ class TestBackoffError(unittest.TestCase):
         client = QuickbooksClient("", {"start_date": "dummy_start_date", "refresh_token": "dummy_token", "client_id": "dummy_client_id", "client_secret": "dummy_client_secret", "user_agent": "dummy_ua", "realm_id": "dummy_ri"})
         with self.assertRaises(Timeout):
             client._make_request('GET', '/v3/company/dummy_ri/query')
-        self.assertEquals(mock_send.call_count, 5)
+        self.assertEqual(mock_send.call_count, 5)
 
 class MockResponse():
     def __init__(self, resp, status_code, content=[""], headers=None, raise_error=False, text={}):
