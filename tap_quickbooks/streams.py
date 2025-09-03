@@ -35,7 +35,8 @@ class Stream:
             resp = self.client.get(self.endpoint, params={"query": query,"minorversion": self.client.minor_version}).get('QueryResponse',{})
 
             results = resp.get(self.table_name, [])
-            yield from results
+            for rec in results:
+                yield rec
 
             if results:
                 self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
@@ -261,7 +262,8 @@ class ReportStream(Stream):
 
             reports = self.day_wise_reports() # get reports for every days from parsed metadata
             if reports: # pylint: disable=using-constant-test
-                yield from reports
+                for report in reports:
+                    yield report
                 self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', strptime_to_utc(report.get('ReportDate')).isoformat())
                 singer.write_state(self.state)
 
