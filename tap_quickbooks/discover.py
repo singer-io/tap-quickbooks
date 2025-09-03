@@ -22,7 +22,7 @@ def _load_schemas():
     for filename in files:
         path = _get_abs_path("schemas") + "/" + filename
         file_raw = filename.replace(".json", "")
-        with open(path, 'utf-8') as file:
+        with open(path, encoding='utf-8') as file:
             try:
                 schemas[file_raw] = json.load(file)
             except:
@@ -42,7 +42,7 @@ def _load_shared_schema_refs():
 
     shared_schema_refs = {}
     for shared_file in shared_file_names:
-        with open(os.path.join(shared_schemas_path, shared_file), 'utf-8') as data_file:
+        with open(os.path.join(shared_schemas_path, shared_file), encoding='utf-8') as data_file:
             shared_schema_refs['shared/' + shared_file] = json.load(data_file)
 
     return shared_schema_refs

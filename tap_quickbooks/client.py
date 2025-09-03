@@ -181,12 +181,12 @@ class QuickbooksClient():
         LOGGER.info("Credentials Refreshed")
 
         # Update config at config_path
-        with open(self.config_path, 'utf-8') as file:
+        with open(self.config_path, encoding='utf-8') as file:
             config = json.load(file)
 
         config['refresh_token'] = token['refresh_token']
         config['access_token'] = token['access_token']
-        with open(self.config_path, 'w', 'utf-8') as file:
+        with open(self.config_path, 'w', encoding='utf-8') as file:
             json.dump(config, file, indent=2)
 
     @backoff.on_exception(backoff.expo, Timeout, max_tries=5, factor=2)
