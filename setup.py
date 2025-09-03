@@ -16,7 +16,7 @@ setup(name='tap-quickbooks',
       ],
       extras_require={
           'test': [
-              'pylint==2.5.3',
+              'pylint',
               'nose'
           ],
           'dev': [
