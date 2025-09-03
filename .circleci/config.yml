@@ -22,7 +22,7 @@ jobs:
          command: |
             source /usr/local/share/virtualenvs/tap-quickbooks/bin/activate
             # TODO: Adjust the pylint disables
-            pylint tap_quickbooks --disable 'broad-exception-raised,chained-comparison,empty-docstring,fixme,invalid-name,line-too-long,missing-class-docstring,missing-function-docstring,missing-module-docstring,no-else-raise,no-else-return,too-few-public-methods,too-many-positional-arguments,too-many-branches,too-many-lines,too-many-locals,ungrouped-imports,wrong-spelling-in-comment,wrong-spelling-in-docstring,bad-whitespace,undefined-loop-variable,too-many-instance-attributes,consider-using-f-string'
+            pylint tap_quickbooks --disable 'broad-exception-raised,chained-comparison,empty-docstring,fixme,invalid-name,line-too-long,missing-class-docstring,missing-function-docstring,missing-module-docstring,no-else-raise,no-else-return,too-few-public-methods,too-many-positional-arguments,too-many-branches,too-many-lines,too-many-locals,ungrouped-imports,wrong-spelling-in-comment,wrong-spelling-in-docstring,undefined-loop-variable,too-many-instance-attributes,consider-using-f-string'
       - run:
           name: 'Unit Tests'
           command: |
