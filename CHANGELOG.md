@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.3.2
+   * Pylint updates [#78](https://github.com/singer-io/tap-quickbooks/pull/78)
+
 ## 2.3.1
    * Bump dependency versions for twistlock compliance [#75](https://github.com/singer-io/tap-quickbooks/pull/75)
 

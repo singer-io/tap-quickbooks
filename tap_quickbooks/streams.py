@@ -3,8 +3,7 @@ from datetime import timedelta
 import singer
 from singer import utils
 from singer.utils import strptime_to_utc
-
-import tap_quickbooks.query_builder as query_builder
+from tap_quickbooks import query_builder
 
 DATE_WINDOW_SIZE = 29
 
@@ -272,8 +271,7 @@ class ReportStream(Stream):
             start_dttm = end_dttm + timedelta(days=1) # one record is emitted for every day so start from next day
             end_dttm = start_dttm + timedelta(days=DATE_WINDOW_SIZE)
 
-            if end_dttm > now_dttm:
-                end_dttm = now_dttm
+            end_dttm = min(end_dttm, now_dttm)
 
         singer.write_state(self.state)
 
@@ -331,7 +329,7 @@ class ReportStream(Stream):
                 self.parse_report_rows(pileOfRows['Summary'])
 
             if 'ColData' in pileOfRows.keys():
-                entry_data = dict()
+                entry_data = {}
                 entry_data['name'] = pileOfRows['ColData'][0]['value']
                 vals = []
                 for column_value in pileOfRows['ColData'][1:]:
@@ -344,7 +342,7 @@ class ReportStream(Stream):
             Return record for every day formed using output of parse_report_columns and parse_report_rows
         '''
         for index, date in enumerate(self.parsed_metadata['dates']):
-            report = dict()
+            report = {}
             report['ReportDate'] = date
             report['AccountingMethod'] = 'Accrual'
             report['Details'] = {}
