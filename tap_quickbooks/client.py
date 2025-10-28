@@ -144,12 +144,16 @@ class QuickbooksClient():
         self.create_session(dev_mode, token, extra)
         # Latest minorversion is '75' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
         self.minor_version = 75
-        try:
-            # Make an authenticated request to any endpoint with minorversion=75 to validate the client object
-            self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo", "minorversion": self.minor_version})
-        except Exception as e:
-            LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
-            raise e
+
+        # NB> Removing this because it is consuming quota.
+        #     If we start seeing issues with unauthenticated connections we will need to look into this again
+        #
+        # try:
+        #     # Make an authenticated request to any endpoint with minorversion=75 to validate the client object
+        #     self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo", "minorversion": self.minor_version})
+        # except Exception as e:
+        #     LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
+        #     raise e
 
     def create_session(self, dev_mode, token, extra):
         """
