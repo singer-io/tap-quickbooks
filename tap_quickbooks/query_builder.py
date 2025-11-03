@@ -1,3 +1,14 @@
+from .streams import STREAM_OBJECTS
+
+def build_batch_query(streams):
+
+    queries = [{"bId": stream['table_name'],
+                "Query": build_query(stream['table_name'], stream['bookmark'], stream['start_position'], stream['max_results'], stream.get('additional_where'))}
+               for stream in streams]
+
+    return {"BatchItemRequest": queries}
+
+
 def build_query(table_name, bookmark, start_position, max_results, additional_where=None):
     query_base = "SELECT * FROM {}".format(table_name)
     where_base = " WHERE Metadata.LastUpdatedTime >= '{}'".format(bookmark)
