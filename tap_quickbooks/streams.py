@@ -22,7 +22,6 @@ class Stream:
         self.config = config
         self.state = state
 
-
     def sync(self):
         start_position = 1
         max_results = int(self.config.get('max_results', '1000'))
@@ -30,7 +29,7 @@ class Stream:
         bookmark = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.config.get('start_date'))
 
         while True:
-            query = query_builder.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
+            query = self.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
 
             resp = self.client.get(self.endpoint, params={"query": query,"minorversion": self.client.minor_version}).get('QueryResponse',{})
 
