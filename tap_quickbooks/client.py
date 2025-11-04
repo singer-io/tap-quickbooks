@@ -245,3 +245,6 @@ class QuickbooksClient():
 
     def get(self, url, headers=None, params=None):
         return self._make_request("GET", url, headers=headers, params=params)
+
+    def post(self, url, headers={'Content-Type': 'application/json'}, data=None):
+        return self._make_request("POST", url, headers=headers, data=data)
