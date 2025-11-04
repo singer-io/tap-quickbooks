@@ -1,5 +1,3 @@
-from .streams import STREAM_OBJECTS, Stream
-
 def build_batch_query(streams, bookmarks, start_positions, max_results):
     queries = [{"bId": stream.table_name,
                 "Query": build_query(stream.table_name,

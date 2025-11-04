@@ -8,7 +8,7 @@ from .streams import STREAM_OBJECTS, BATCH_STREAMS
 LOGGER = singer.get_logger()
 
 
-def sync_batch_streams(client, config, state, catalog, batch_streams):
+def sync_batch_streams(client, config, state, batch_streams):
     stream_objects = [STREAM_OBJECTS.get(stream.tap_stream_id)(client, config, state) for stream in batch_streams]
     bookmarks = {stream.stream_name: singer.get_bookmark(state, stream.stream_name, 'LastUpdatedTime', config.get('start_date'))
                  for stream in stream_objects}
@@ -16,9 +16,8 @@ def sync_batch_streams(client, config, state, catalog, batch_streams):
     start_positions = {stream.stream_name: 1
                        for stream in stream_objects}
 
-    for i in range(len(batch_streams)):
+    for i, stream in enumerate(batch_streams):
         stream_object = stream_objects[i]
-        stream = batch_streams[i]
         stream_id = stream.tap_stream_id
         stream_schema = stream.schema
 
@@ -36,7 +35,8 @@ def sync_batch_streams(client, config, state, catalog, batch_streams):
     while True:
         query = query_builder.build_batch_query(stream_objects, bookmarks, start_positions, max_results)
 
-        resp = client.post(f'/v3/company/{{realm_id}}/batch?minorversion=75', data=json.dumps(query)).get('BatchItemResponse',[])
+        resp = client.post(f'/v3/company/{{realm_id}}/batch?minorversion={client.minor_version}',
+                           data=json.dumps(query)).get('BatchItemResponse',[])
         if not [result for result in resp if result.get('QueryResponse',{}).get('maxResults')]:
             break
 
@@ -70,7 +70,7 @@ def do_sync(client, config, state, catalog):
 
     # This will sync all batch eligible streams in one go
     if selected_batch_streams:
-        sync_batch_streams(client, config, state, catalog, selected_batch_streams)
+        sync_batch_streams(client, config, state, selected_batch_streams)
 
     for stream in other_selected_streams:
         stream_id = stream.tap_stream_id
