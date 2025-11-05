@@ -28,9 +28,6 @@ def sync_batch_streams(client, config, state, batch_streams):
             stream_object.replication_keys
         )
     LOGGER.info("Syncing batches: %s", [stream.tap_stream_id for stream in batch_streams])
-    # not sure about this...
-    # state = singer.set_currently_syncing(state, batch_streams[0].tap_stream_id)
-    # singer.write_state(state)
 
     while True:
         query = query_builder.build_batch_query(stream_objects, bookmarks, start_positions, max_results)
@@ -43,7 +40,6 @@ def sync_batch_streams(client, config, state, batch_streams):
         for result in resp:
             keys = result.get('QueryResponse',{}).keys() - {'startPosition','maxResults', 'totalCount'}
             if not keys:
-                # LOGGER.warning(f'No QueryResponse for {result}')
                 continue
 
             table_name = list(keys)[0]
