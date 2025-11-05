@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.4.0
+   * Use batch endpoint for querying basic streams [#80](https://github.com/singer-io/tap-quickbooks/pull/80)
+
 ## 2.3.3
    * Increase default page size to 1000 [#79](https://github.com/singer-io/tap-quickbooks/pull/79)
 
