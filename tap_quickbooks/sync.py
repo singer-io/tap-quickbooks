@@ -29,8 +29,8 @@ def sync_batch_streams(client, config, state, batch_streams):
         )
     LOGGER.info("Syncing batches: %s", [stream.tap_stream_id for stream in batch_streams])
     # not sure about this...
-    state = singer.set_currently_syncing(state, batch_streams[0].tap_stream_id)
-    singer.write_state(state)
+    # state = singer.set_currently_syncing(state, batch_streams[0].tap_stream_id)
+    # singer.write_state(state)
 
     while True:
         query = query_builder.build_batch_query(stream_objects, bookmarks, start_positions, max_results)
@@ -41,29 +41,41 @@ def sync_batch_streams(client, config, state, batch_streams):
             break
 
         for result in resp:
-            keys = result.get('QueryResponse',{}).keys() - {'startPosition','maxResults'}
-            if keys:
-                table_name = list(keys)[0]
-                stream_obj = [stream for stream in stream_objects if stream.table_name == table_name][0]
-                stream = [stream for stream in batch_streams if stream.tap_stream_id == stream_obj.stream_name][0]
-                stream_name = stream_obj.stream_name
-                records = result.get('QueryResponse',{}).get(table_name)
-                for record in records:
-                    with Transformer() as transformer:
-                        singer.write_record(
-                            stream.tap_stream_id,
-                            transformer.transform(record,
-                                                  stream.schema.to_dict(),
-                                                  metadata.to_map(stream.metadata)))
-                if records:
-                    state = singer.write_bookmark(state, stream_name, 'LastUpdatedTime', record.get('MetaData').get('LastUpdatedTime'))
-                    singer.write_state(state)
+            keys = result.get('QueryResponse',{}).keys() - {'startPosition','maxResults', 'totalCount'}
+            if not keys:
+                # LOGGER.warning(f'No QueryResponse for {result}')
+                continue
 
+            table_name = list(keys)[0]
+            stream_objs = [stream for stream in stream_objects if stream.table_name == table_name]
+            if not stream_objs:
+                LOGGER.warning(f'No stream_obj for table {table_name}')
+                continue
+            stream_obj = stream_objs[0]
+
+            streams = [stream for stream in batch_streams if stream.tap_stream_id == stream_obj.stream_name]
+            if not streams:
+                LOGGER.warning(f'No stream for stream_obj {stream_obj.stream_name}')
+                continue
+            stream = streams[0]
+
+            stream_name = stream_obj.stream_name
+            records = result.get('QueryResponse',{}).get(table_name)
+            for record in records:
+                with Transformer() as transformer:
+                    singer.write_record(
+                        stream.tap_stream_id,
+                        transformer.transform(record,
+                                              stream.schema.to_dict(),
+                                              metadata.to_map(stream.metadata)))
+            if records:
+                state = singer.write_bookmark(state, stream_name, 'LastUpdatedTime', record.get('MetaData').get('LastUpdatedTime'))
+                singer.write_state(state)
                 start_positions[stream_name] += len(records)
 
 def do_sync(client, config, state, catalog):
 
-    selected_streams = catalog.get_selected_streams(state)
+    selected_streams = list(catalog.get_selected_streams(state))
 
     selected_batch_streams = [stream for stream in selected_streams if stream.tap_stream_id in BATCH_STREAMS]
     other_selected_streams = [stream for stream in selected_streams if stream.tap_stream_id not in BATCH_STREAMS]
