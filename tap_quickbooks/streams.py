@@ -3,7 +3,6 @@ from datetime import timedelta
 import singer
 from singer import utils
 from singer.utils import strptime_to_utc
-from tap_quickbooks import query_builder
 
 DATE_WINDOW_SIZE = 29
 
