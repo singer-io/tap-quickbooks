@@ -49,13 +49,13 @@ def sync_batch_streams(client, config, state, batch_streams):
             table_name = list(keys)[0]
             stream_objs = [stream for stream in stream_objects if stream.table_name == table_name]
             if not stream_objs:
-                LOGGER.warning(f'No stream_obj for table {table_name}')
+                LOGGER.warning('No stream_obj for table %s', table_name)
                 continue
             stream_obj = stream_objs[0]
 
             streams = [stream for stream in batch_streams if stream.tap_stream_id == stream_obj.stream_name]
             if not streams:
-                LOGGER.warning(f'No stream for stream_obj {stream_obj.stream_name}')
+                LOGGER.warning('No stream for stream_obj %s', stream_obj.stream_name)
                 continue
             stream = streams[0]
 
