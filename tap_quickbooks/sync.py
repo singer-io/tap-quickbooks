@@ -3,13 +3,13 @@ import singer
 from singer import Transformer, metadata
 from tap_quickbooks import query_builder
 
-from .streams import STREAM_OBJECTS, BATCH_STREAMS
+from .streams import STANDARD_STREAMS, BATCH_STREAMS
 
 LOGGER = singer.get_logger()
 
 
 def sync_batch_streams(client, config, state, batch_streams):
-    stream_objects = [STREAM_OBJECTS.get(stream.tap_stream_id)(client, config, state) for stream in batch_streams]
+    stream_objects = [BATCH_STREAMS.get(stream.tap_stream_id)(client, config, state) for stream in batch_streams]
     bookmarks = {stream.stream_name: singer.get_bookmark(state, stream.stream_name, 'LastUpdatedTime', config.get('start_date'))
                  for stream in stream_objects}
     max_results = int(config.get('max_results', '1000'))
@@ -74,19 +74,21 @@ def do_sync(client, config, state, catalog):
     selected_streams = list(catalog.get_selected_streams(state))
 
     selected_batch_streams = [stream for stream in selected_streams if stream.tap_stream_id in BATCH_STREAMS]
-    other_selected_streams = [stream for stream in selected_streams if stream.tap_stream_id not in BATCH_STREAMS]
+    selected_standard_streams = [stream for stream in selected_streams if stream.tap_stream_id in STANDARD_STREAMS]
+    unknown_streams = [stream.tap_stream_id for stream in selected_streams if stream.tap_stream_id not in BATCH_STREAMS and stream.tap_stream_id not in STANDARD_STREAMS]
 
     # This will sync all batch eligible streams in one go
+    if unknown_streams:
+        raise Exception("Attempted to sync unknown stream(s) {}".format(unknown_streams))
+
     if selected_batch_streams:
         sync_batch_streams(client, config, state, selected_batch_streams)
 
-    for stream in other_selected_streams:
+    for stream in selected_standard_streams:
         stream_id = stream.tap_stream_id
         stream_schema = stream.schema
-        stream_object = STREAM_OBJECTS.get(stream_id)
+        stream_object = STANDARD_STREAMS.get(stream_id)
 
-        if stream_object is None:
-            raise Exception("Attempted to sync unknown stream {}".format(stream_id))
 
         stream_object = stream_object(client, config, state)
         singer.write_schema(

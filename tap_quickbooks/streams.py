@@ -398,7 +398,12 @@ class DeletedObjects(Stream):
                             yield rec
 
 
-STREAM_OBJECTS = {
+STANDARD_STREAMS = {
+    "profit_loss_report": ProfitAndLossReport,
+    "deleted_objects": DeletedObjects
+}
+
+BATCH_STREAMS = {
     "accounts": Accounts,
     "bill_payments": BillPayments,
     "bills": Bills,
@@ -427,39 +432,5 @@ STREAM_OBJECTS = {
     "time_activities": TimeActivities,
     "transfers": Transfers,
     "vendor_credits": VendorCredits,
-    "vendors": Vendors,
-    "profit_loss_report": ProfitAndLossReport,
-    "deleted_objects": DeletedObjects
-}
-
-BATCH_STREAMS = {
-    "accounts",
-    "bill_payments",
-    "bills",
-    "budgets",
-    "classes",
-    "credit_memos",
-    "customers",
-    "customer_types",
-    "departments",
-    "deposits",
-    "employees",
-    "estimates",
-    "invoices",
-    "items",
-    "journal_entries",
-    "payment_methods",
-    "payments",
-    "purchase_orders",
-    "purchases",
-    "refund_receipts",
-    "sales_receipts",
-    "tax_agencies",
-    "tax_codes",
-    "tax_rates",
-    "terms",
-    "time_activities",
-    "transfers",
-    "vendor_credits",
-    "vendors"
+    "vendors": Vendors
 }

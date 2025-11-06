@@ -17,6 +17,7 @@ def main():
     config = args.config
     if args.dev:
         LOGGER.warning("Executing Tap in Dev mode")
+    client = QuickbooksClient(args.config_path, config, args.dev)
     state = args.state
 
     if args.properties and not args.catalog:
@@ -33,7 +34,6 @@ def main():
         else:
             catalog = do_discover()
 
-        client = QuickbooksClient(args.config_path, config, args.dev)
         LOGGER.info("Starting sync mode")
         do_sync(client, config, state, catalog)
         LOGGER.info("Finished sync mode")

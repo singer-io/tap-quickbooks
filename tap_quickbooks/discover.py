@@ -4,7 +4,7 @@ import json
 from singer import metadata
 from singer.catalog import Catalog
 import singer
-from .streams import STREAM_OBJECTS
+from .streams import STANDARD_STREAMS, BATCH_STREAMS
 
 LOGGER = singer.get_logger()
 
@@ -51,7 +51,7 @@ def do_discover():
     raw_schemas = _load_schemas()
     catalog_entries = []
 
-    for stream_name, stream in STREAM_OBJECTS.items():
+    for stream_name, stream in (STANDARD_STREAMS | BATCH_STREAMS).items():
         # create and add catalog entry
         schema = raw_schemas[stream_name]
 

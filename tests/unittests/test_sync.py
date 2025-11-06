@@ -63,7 +63,7 @@ class TestSyncCov(unittest.TestCase):
             do_sync(client=client, config={}, state={}, catalog=mock_catalog)
 
         self.assertEqual(str(e.exception),
-                         "Attempted to sync unknown stream test")
+                         "Attempted to sync unknown stream(s) ['test']")
 
     @parameterized.expand([  # test_name, [state, config, write_state_call_count]
         ['start_date_unused', [{'bookmarks': {"profit_loss_report": {
