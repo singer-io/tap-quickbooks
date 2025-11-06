@@ -35,9 +35,6 @@ class MockCatalog:
 def get_data(stream_name, count: int = 0):
     """Return data based on stream_name and count of data """
 
-    if stream_name == 'accounts':
-        return {'QueryResponse': {'Account': [{'data': 'value', 'MetaData': {'LastUpdatedTime': '2012-08-21T00:00:00Z'}}]}}
-
     if stream_name == "profit_loss_report":
         return [{"ReportDate": "2022-06-21T00:00:00.000000Z", "AccountingMethod": "Accrual"}]
 
@@ -51,40 +48,6 @@ def get_data(stream_name, count: int = 0):
         return mock_data
 
 class TestSyncCov(unittest.TestCase):
-
-    @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
-    @mock.patch('singer.write_record')
-    @mock.patch('singer.write_state')
-    def test_sync_accounts(self, mock_write_state, mock_write_rcord, mock_get):
-        """Test sync call for the Account stream"""
-
-        config = {
-            'client_id': 'test_client_id',
-            'refresh_token': 'test_refresh_token',
-            'client_secret': 'test_client_secret',
-            'user_agent': 'test_user_agent',
-            'realm_id': 'test_realm_id'
-        }
-        client = QuickbooksClient('path', config)
-        mock_get.return_value = get_data('accounts')
-
-        mock_catalog = MockCatalog(['accounts'])
-        do_sync(client=client, config={}, state={}, catalog=mock_catalog)
-
-        expected_calls = [
-            mock.call(
-                {"currently_syncing": None, "bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}}),
-            mock.call(
-                {"currently_syncing": None, "bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}}),
-            mock.call(
-                {"currently_syncing": None, "bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}}),
-            mock.call(
-                {"currently_syncing": None, "bookmarks": {"accounts": {"LastUpdatedTime": "2012-08-21T00:00:00Z"}}})
-        ]
-
-        self.assertEqual(mock_write_state.mock_calls, expected_calls)
-        self.assertEqual(mock_write_state.call_count, 4)
-
     @mock.patch('tap_quickbooks.client.QuickbooksClient.get')
     @mock.patch('singer.write_record')
     @mock.patch('singer.write_state')
@@ -100,7 +63,7 @@ class TestSyncCov(unittest.TestCase):
             do_sync(client=client, config={}, state={}, catalog=mock_catalog)
 
         self.assertEqual(str(e.exception),
-                         "Attempted to sync unknown stream test")
+                         "Attempted to sync unknown stream(s) ['test']")
 
     @parameterized.expand([  # test_name, [state, config, write_state_call_count]
         ['start_date_unused', [{'bookmarks': {"profit_loss_report": {

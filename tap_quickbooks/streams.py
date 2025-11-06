@@ -3,7 +3,6 @@ from datetime import timedelta
 import singer
 from singer import utils
 from singer.utils import strptime_to_utc
-from tap_quickbooks import query_builder
 
 DATE_WINDOW_SIZE = 29
 
@@ -21,33 +20,6 @@ class Stream:
         self.client = client
         self.config = config
         self.state = state
-
-
-    def sync(self):
-        start_position = 1
-        max_results = int(self.config.get('max_results', '1000'))
-
-        bookmark = singer.get_bookmark(self.state, self.stream_name, 'LastUpdatedTime', self.config.get('start_date'))
-
-        while True:
-            query = query_builder.build_query(self.table_name, bookmark, start_position, max_results, additional_where=self.additional_where)
-
-            resp = self.client.get(self.endpoint, params={"query": query,"minorversion": self.client.minor_version}).get('QueryResponse',{})
-
-            results = resp.get(self.table_name, [])
-            for rec in results:
-                yield rec
-
-            if results:
-                self.state = singer.write_bookmark(self.state, self.stream_name, 'LastUpdatedTime', rec.get('MetaData').get('LastUpdatedTime'))
-                singer.write_state(self.state)
-
-            if len(results) < max_results:
-                break
-            start_position += max_results
-
-        singer.write_state(self.state)
-
 
 class Accounts(Stream):
     stream_name = 'accounts'
@@ -426,7 +398,12 @@ class DeletedObjects(Stream):
                             yield rec
 
 
-STREAM_OBJECTS = {
+STANDARD_STREAMS = {
+    "profit_loss_report": ProfitAndLossReport,
+    "deleted_objects": DeletedObjects
+}
+
+BATCH_STREAMS = {
     "accounts": Accounts,
     "bill_payments": BillPayments,
     "bills": Bills,
@@ -455,7 +432,5 @@ STREAM_OBJECTS = {
     "time_activities": TimeActivities,
     "transfers": Transfers,
     "vendor_credits": VendorCredits,
-    "vendors": Vendors,
-    "profit_loss_report": ProfitAndLossReport,
-    "deleted_objects": DeletedObjects
+    "vendors": Vendors
 }
