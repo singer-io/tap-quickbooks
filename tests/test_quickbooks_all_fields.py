@@ -15,13 +15,11 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'JournalCodeRef' # FRANCE locale field
         ],
         'refund_receipts': [
-            'patternProperties', # already added in the schema but not found in the API doc
             'GlobalTaxCalculation', # AUSTRALIA, UK, CANADA, INDIA locale field
             'TransactionLocationType', # FRANCE locale field
         ],
         'purchases': [
             'IncludeInAnnualTPAR', # AUSTRALIA locale field
-            'patternProperties', # already added in the schema but not found in the API doc
             'GlobalTaxCalculation', # AUSTRALIA, UK, CANADA, INDIA locale field
             'TransactionLocationType', # FRANCE locale field
         ],
@@ -33,7 +31,6 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'GSTRegistrationType', # INDIA locale field
             'TaxReportingBasis', # FRANCE locale field
             'VendorPaymentBankDetail', # AUSTRALIA locale field
-            'patternProperties', # already added in the schema but not found in the API doc
             'HasTPAR', # AUSTRALIA locale field
             'APAccountRef', # FRANCE locale field
             'BusinessNumber', # INDIA locale field
@@ -43,7 +40,6 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
         ],
         'items': [
             'ServiceType', # INDIA locale field
-            'patternProperties', # already added in the schema but not found in the API doc
             'ReverseChargeRate', # INDIA locale field
             'AbatementRate', # INDIA locale field
             'ItemCategoryType', # FRANCE locale field
@@ -72,12 +68,10 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'GlobalTaxCalculation' # INDIA, CANADA, UK, AUSTRALIA locale field
         ],
         'invoices': [
-            'patternProperties', # already added in the schema but not found in the API doc
             'GlobalTaxCalculation', # AUSTRALIA locale field
             'TransactionLocationType', # FRANCE locale field
         ],
         'sales_receipts': [
-            'patternProperties', # already added in the schema but not found in the API doc
             'GlobalTaxCalculation', # AUSTRALIA locale field
             'TransactionLocationType', # FRANCE locale field
         ],
@@ -85,7 +79,6 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'LastFileDate' # INDIA, CANADA, UK, AUSTRALIA, FRANCE locale field
         ],
         'credit_memos': [
-            'patternProperties', # already added in the schema but not found in the API doc
             'InvoiceRef', # INDIA locale field
             'GlobalTaxCalculation', # AUSTRALIA locale field
             'TransactionLocationType', # FRANCE locale field
@@ -104,7 +97,6 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'TransactionLocationType', # FRANCE locale field
         ],
         'estimates': [
-            'patternProperties', # already added in the schema but not found in the API doc
             'GlobalTaxCalculation', # AUSTRALIA, UK, INDIA, CANADA locale field
             'TransactionLocationType', # FRANCE locale field
         ],
@@ -114,7 +106,6 @@ class TestQuickbooksAllFields(TestQuickbooksBase):
             'TransactionLocationType', # FRANCE locale field
         ],
         'time_activities': [
-            'patternProperties', # already added in the schema but not found in the API doc
             'TransactionLocationType', # FRANCE locale field
         ]
     }
