@@ -407,8 +407,7 @@
     },
     "ProjectRef": {
       "$ref": "shared/ref_schema.json"
-    },
-    "patternProperties": {".+": {}}
+    }
   },
   "type": [
     "null",

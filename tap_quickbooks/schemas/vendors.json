@@ -323,8 +323,7 @@
         "null",
         "boolean"
       ]
-    },
-    "patternProperties": {".+": {}}
+    }
   },
   "type": [
     "null",
