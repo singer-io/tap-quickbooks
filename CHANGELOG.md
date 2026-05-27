@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.4.1
+   * Remove unused `patternProperties` from schemas [#81](https://github.com/singer-io/tap-quickbooks/pull/81)
+
 ## 2.4.0
    * Use batch endpoint for querying basic streams [#80](https://github.com/singer-io/tap-quickbooks/pull/80)
 
