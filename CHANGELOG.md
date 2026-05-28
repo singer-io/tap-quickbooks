@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.4.2
+   * Add sandbox authentication helper text to error message [#82](https://github.com/singer-io/tap-quickbooks/pull/82)
+
 ## 2.4.1
    * Remove unused `patternProperties` from schemas [#81](https://github.com/singer-io/tap-quickbooks/pull/81)
 
