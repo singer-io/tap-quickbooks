@@ -108,7 +108,13 @@ def raise_for_error(response):
             msg = errors.get('Message', errors.get('message'))
             detail = errors.get('Detail', errors.get('detail'))
             internal_error_code = errors.get('code')
-            error_message  = 'Message: {}, Quickbooks Error code: {}, Detail: {}'.format(msg, internal_error_code, detail)
+            error_message = 'Message: {}, Quickbooks Error code: {}'.format(msg, internal_error_code)
+            if detail:
+                error_message += ', Detail: {}'.format(detail)
+            if internal_error_code == '3100':
+                error_message += (
+                    ' Check that the sandbox configuration option matches your credentials.'
+                )
         else:
             error_message = errors
     else:
