@@ -25,6 +25,7 @@ def main():
 
     if args.discover:
         LOGGER.info("Starting discovery mode")
+        client.do_authorization_check()
         catalog = do_discover()
         write_catalog(catalog)
         LOGGER.info("Finished discovery mode")
