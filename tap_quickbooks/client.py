@@ -151,15 +151,14 @@ class QuickbooksClient():
         # Latest minorversion is '75' according to doc, https://developer.intuit.com/app/developer/qbo/docs/learn/explore-the-quickbooks-online-api/minor-versions
         self.minor_version = 75
 
-        # NB> Removing this because it is consuming quota.
-        #     If we start seeing issues with unauthenticated connections we will need to look into this again
-        #
-        # try:
-        #     # Make an authenticated request to any endpoint with minorversion=75 to validate the client object
-        #     self.get('/v3/company/{}/query'.format(self.realm_id), params={"query": "SELECT * FROM CompanyInfo", "minorversion": self.minor_version})
-        # except Exception as e:
-        #     LOGGER.info("Error initializing QuickbooksClient during token refresh, please reauthenticate.")
-        #     raise e
+    def do_authorization_check(self):
+        try:
+            # Make a lightweight REST request to validate authorization without consuming query quota
+            # This is more efficient than query-based checks and provides direct company info access validation
+            self.get('/v3/company/{}/companyinfo/{}'.format(self.realm_id, self.realm_id))
+        except Exception as e:
+            LOGGER.info("Error during authorization check, please reauthenticate.")
+            raise e
 
     def create_session(self, dev_mode, token, extra):
         """
@@ -206,7 +205,8 @@ class QuickbooksClient():
                            Quickbooks4XXException,
                            requests.ConnectionError),
                           max_tries=3,
-                          interval=60)
+                          interval=60,
+                          giveup=lambda e: isinstance(e, (QuickbooksAuthenticationError, QuickbooksForbiddenError)))
     @singer.utils.ratelimit(495, 60)
     def _make_request(self, method, endpoint, headers=None, params=None, data=None):
         # Sandbox requests need to be made against the Sandbox endpoint base

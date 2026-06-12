@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -43,7 +43,7 @@ jobs:
             source dev_env.sh
             run-test --tap=tap-quickbooks tests
 workflows:
-  version: 2
+  version: 2.1
   commit:
     jobs:
       - build:

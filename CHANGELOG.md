@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.5.0
+   * Add authentication check during discovery [#83](https://github.com/singer-io/tap-quickbooks/pull/83)
+
 ## 2.4.2
    * Add sandbox authentication helper text to error message [#82](https://github.com/singer-io/tap-quickbooks/pull/82)
 
