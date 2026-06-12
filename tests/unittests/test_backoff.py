@@ -57,9 +57,9 @@ class TestBackoffOAuth2SessionInitialization(unittest.TestCase):
 
     @parameterized.expand([
         ['quickbooks_400_exception', [400, QuickbooksBadRequestError], 3],
-        ['quickbooks_401_exception', [401, QuickbooksAuthenticationError], 3],
+        ['quickbooks_401_exception', [401, QuickbooksAuthenticationError], 1],
         ['quickbooks_402_exception', [402, Quickbooks4XXException], 3],
-        ['quickbooks_403_exception', [403, QuickbooksForbiddenError], 3],
+        ['quickbooks_403_exception', [403, QuickbooksForbiddenError], 1],
         ['quickbooks_404_exception', [404, QuickbooksNotFoundError], 3],
         ['quickbooks_429_exception', [429, QuickbooksTooManyRequestsError], 3],
         ['quickbooks_500_exception', [500, QuickbooksInternalServerError], 3],
