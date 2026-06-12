@@ -205,7 +205,8 @@ class QuickbooksClient():
                            Quickbooks4XXException,
                            requests.ConnectionError),
                           max_tries=3,
-                          interval=60)
+                          interval=60,
+                          giveup=lambda e: isinstance(e, (QuickbooksAuthenticationError, QuickbooksForbiddenError)))
     @singer.utils.ratelimit(495, 60)
     def _make_request(self, method, endpoint, headers=None, params=None, data=None):
         # Sandbox requests need to be made against the Sandbox endpoint base
