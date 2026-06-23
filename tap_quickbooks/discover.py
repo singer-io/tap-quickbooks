@@ -4,9 +4,11 @@ import json
 from singer import metadata
 from singer.catalog import Catalog
 import singer
+from tap_quickbooks.client import QuickbooksForbiddenError
 from .streams import STANDARD_STREAMS, BATCH_STREAMS
 
 LOGGER = singer.get_logger()
+STREAMS = STANDARD_STREAMS | BATCH_STREAMS
 
 
 def _get_abs_path(path):
@@ -47,14 +49,65 @@ def _load_shared_schema_refs():
 
     return shared_schema_refs
 
-def do_discover():
+
+def _prune_inaccessible_children(schemas, field_metadata):
+    """
+    Remove child streams from schemas whose parent stream was excluded.
+    """
+    for name, stream_cls in list(STREAMS.items()):
+        parent_stream = getattr(stream_cls, 'parent', None)
+        if name in schemas and parent_stream and parent_stream not in schemas:
+            LOGGER.warning(
+                "Stream '%s' excluded from catalog because its parent stream '%s' is not accessible.",
+                name,
+                parent_stream,
+            )
+            schemas.pop(name, None)
+            field_metadata.pop(name, None)
+
+
+def _apply_access_checks(client, schemas, field_metadata):
+    """
+    Probe each stream for read access and remove inaccessible streams.
+    """
+    inaccessible_streams = []
+    for stream_name, stream_obj in STREAMS.items():
+        if stream_name not in schemas:
+            continue
+
+        stream = stream_obj(client=client, config=client.config, state={})
+        if not stream.check_access():
+            inaccessible_streams.append(stream_name)
+
+    for stream_name in inaccessible_streams:
+        schemas.pop(stream_name, None)
+        field_metadata.pop(stream_name, None)
+
+    _prune_inaccessible_children(schemas, field_metadata)
+
+    if not schemas:
+        raise QuickbooksForbiddenError(
+            "HTTP-error-code: 403, Error: The credentials do not have 'read' access to any supported streams."
+        )
+    if inaccessible_streams:
+        LOGGER.warning(
+            "No 'read' access to stream(s): %s. Excluded from catalog.",
+            ", ".join(sorted(inaccessible_streams)),
+        )
+
+
+def do_discover(client):
+    """
+    Build and return catalog entries for streams the credentials can read.
+    """
     raw_schemas = _load_schemas()
+    field_metadata = {}
     catalog_entries = []
 
-    for stream_name, stream in (STANDARD_STREAMS | BATCH_STREAMS).items():
-        # create and add catalog entry
+    for stream_name, stream in STREAMS.items():
+        if stream_name not in raw_schemas:
+            continue
         schema = raw_schemas[stream_name]
-
         mdata = metadata.to_map(
             metadata.get_standard_metadata(
                 schema=schema,
@@ -63,10 +116,18 @@ def do_discover():
                 replication_method=stream.replication_method,
             )
         )
-        # Set the replication_key MetaData to automatic as well
         mdata = metadata.write(mdata, ('properties', stream.replication_keys[0]), 'inclusion', 'automatic')
-        # load all refs
-        refs = _load_shared_schema_refs()
+        field_metadata[stream_name] = mdata
+
+    _apply_access_checks(client, raw_schemas, field_metadata)
+    refs = _load_shared_schema_refs()
+
+    for stream_name, stream in STREAMS.items():
+        if stream_name not in raw_schemas:
+            continue
+        # create and add catalog entry
+        schema = raw_schemas[stream_name]
+        mdata = field_metadata[stream_name]
         catalog_entry = {
             "stream": stream_name,
             "tap_stream_id": stream_name,

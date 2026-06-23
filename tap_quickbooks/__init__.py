@@ -26,14 +26,14 @@ def main():
     if args.discover:
         LOGGER.info("Starting discovery mode")
         client.do_authorization_check()
-        catalog = do_discover()
+        catalog = do_discover(client)
         write_catalog(catalog)
         LOGGER.info("Finished discovery mode")
     else:
         if args.catalog:
             catalog = args.catalog
         else:
-            catalog = do_discover()
+            catalog = do_discover(client)
 
         LOGGER.info("Starting sync mode")
         do_sync(client, config, state, catalog)

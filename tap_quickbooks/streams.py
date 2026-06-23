@@ -1,8 +1,11 @@
+import json
 from datetime import timedelta
 
 import singer
 from singer import utils
 from singer.utils import strptime_to_utc
+from tap_quickbooks import query_builder
+from tap_quickbooks.client import QuickbooksForbiddenError
 
 DATE_WINDOW_SIZE = 29
 
@@ -15,11 +18,54 @@ class Stream:
     additional_where = None
     stream_name = None
     table_name = None
+    parent = None
 
-    def __init__(self, client, config, state):
+    def __init__(self, client=None, config=None, state=None):
         self.client = client
-        self.config = config
-        self.state = state
+        self.config = config if config is not None else {}
+        self.state = state if state is not None else {}
+
+    def check_access(self):
+        """
+        Verify credentials can read this stream.
+        """
+        if self.parent:
+            return True
+
+        if not self.client:
+            return False
+
+        if not self.table_name:
+            return True
+
+        bookmark = self.config.get('start_date')
+        query = query_builder.build_query(
+            self.table_name,
+            bookmark,
+            1,
+            1,
+            self.additional_where,
+        )
+        batch_query = {
+            "BatchItemRequest": [{
+                "bId": self.table_name,
+                "Query": query,
+            }]
+        }
+
+        try:
+            self.client.post(
+                '/v3/company/{realm_id}/batch?minorversion={}'.format(self.client.minor_version),
+                data=json.dumps(batch_query),
+            )
+            return True
+        except QuickbooksForbiddenError as exc:
+            singer.get_logger().warning(
+                "Permission Error: Stream '%s' - %s",
+                self.stream_name,
+                exc,
+            )
+            return False
 
 class Accounts(Stream):
     stream_name = 'accounts'
@@ -187,6 +233,28 @@ class ReportStream(Stream):
     # replication keys is ReportDate, manually created from data
     replication_keys = ['ReportDate']
 
+    def check_access(self):
+        if self.parent:
+            return True
+
+        probe_date = str(utils.now().date())
+        params = {
+            'summarize_column_by': 'Days',
+            'start_date': probe_date,
+            'end_date': probe_date,
+        }
+
+        try:
+            self.client.get(self.endpoint, params=params)
+            return True
+        except QuickbooksForbiddenError as exc:
+            singer.get_logger().warning(
+                "Permission Error: Stream '%s' - %s",
+                self.stream_name,
+                exc,
+            )
+            return False
+
     def sync(self):
 
         is_start_date_used = False
@@ -342,6 +410,26 @@ class DeletedObjects(Stream):
                         'Customer', 'Department', 'Deposit', 'Employee', 'Estimate', 'Invoice',
                         'Item', 'JournalEntry', 'PaymentMethod', 'Payment', 'PurchaseOrder', 'Purchase',
                         'RefundReceipt', 'SalesReceipt', 'Term', 'Transfer', 'VendorCredit', 'Vendor']
+
+    def check_access(self):
+        if self.parent:
+            return True
+
+        params = {
+            'entities': self.deleted_entities[0],
+            'changedSince': self.config.get('start_date')
+        }
+
+        try:
+            self.client.get(self.endpoint, params=params)
+            return True
+        except QuickbooksForbiddenError as exc:
+            singer.get_logger().warning(
+                "Permission Error: Stream '%s' - %s",
+                self.stream_name,
+                exc,
+            )
+            return False
 
     def sync(self):
 
