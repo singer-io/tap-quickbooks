@@ -55,7 +55,7 @@ class Stream:
 
         try:
             self.client.post(
-                '/v3/company/{realm_id}/batch?minorversion={}'.format(self.client.minor_version),
+                f'/v3/company/{{realm_id}}/batch?minorversion={self.client.minor_version}',
                 data=json.dumps(batch_query),
             )
             return True
