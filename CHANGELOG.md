@@ -1,8 +1,9 @@
 # Change Log
 
-## 2.6.0
+## 2.6.0 [#84](https://github.com/singer-io/tap-quickbooks/pull/84)
    * Streams the credentials cannot access (403) are now excluded from the catalog during discovery instead of raising an error.
    * Added unit tests for discovery access checks and bookmark handling.
+   * Bump `singer-python` to 6.8.0, `requests` to 2.34.2.
 
 ## 2.5.0
    * Add authentication check during discovery [#83](https://github.com/singer-io/tap-quickbooks/pull/83)
