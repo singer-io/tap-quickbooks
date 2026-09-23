@@ -18,7 +18,6 @@ class Stream:
     additional_where = None
     stream_name = None
     table_name = None
-    parent = None
 
     def __init__(self, client=None, config=None, state=None):
         self.client = client
@@ -29,9 +28,6 @@ class Stream:
         """
         Verify credentials can read this stream.
         """
-        if self.parent:
-            return True
-
         if not self.client:
             return False
 
@@ -234,9 +230,6 @@ class ReportStream(Stream):
     replication_keys = ['ReportDate']
 
     def check_access(self):
-        if self.parent:
-            return True
-
         probe_date = str(utils.now().date())
         params = {
             'summarize_column_by': 'Days',
@@ -412,9 +405,6 @@ class DeletedObjects(Stream):
                         'RefundReceipt', 'SalesReceipt', 'Term', 'Transfer', 'VendorCredit', 'Vendor']
 
     def check_access(self):
-        if self.parent:
-            return True
-
         params = {
             'entities': self.deleted_entities[0],
             'changedSince': self.config.get('start_date')

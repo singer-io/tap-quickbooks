@@ -50,22 +50,6 @@ def _load_shared_schema_refs():
     return shared_schema_refs
 
 
-def _prune_inaccessible_children(schemas, field_metadata):
-    """
-    Remove child streams from schemas whose parent stream was excluded.
-    """
-    for name, stream_cls in list(STREAMS.items()):
-        parent_stream = getattr(stream_cls, 'parent', None)
-        if name in schemas and parent_stream and parent_stream not in schemas:
-            LOGGER.warning(
-                "Stream '%s' excluded from catalog because its parent stream '%s' is not accessible.",
-                name,
-                parent_stream,
-            )
-            schemas.pop(name, None)
-            field_metadata.pop(name, None)
-
-
 def _apply_access_checks(client, schemas, field_metadata):
     """
     Probe each stream for read access and remove inaccessible streams.
@@ -83,8 +67,6 @@ def _apply_access_checks(client, schemas, field_metadata):
         schemas.pop(stream_name, None)
         field_metadata.pop(stream_name, None)
 
-    _prune_inaccessible_children(schemas, field_metadata)
-
     if not schemas:
         raise QuickbooksForbiddenError(
             "HTTP-error-code: 403, Error: The credentials do not have 'read' access to any supported streams."
@@ -96,9 +78,13 @@ def _apply_access_checks(client, schemas, field_metadata):
         )
 
 
-def do_discover(client):
+def do_discover(client, check_access=True):
     """
     Build and return catalog entries for streams the credentials can read.
+
+    When `check_access` is False, the per-stream access probes are skipped so
+    that building an implicit catalog for a plain sync (no --catalog/--discover)
+    does not pay the cost of an extra network call per stream.
     """
     raw_schemas = _load_schemas()
     field_metadata = {}
@@ -119,7 +105,8 @@ def do_discover(client):
         mdata = metadata.write(mdata, ('properties', stream.replication_keys[0]), 'inclusion', 'automatic')
         field_metadata[stream_name] = mdata
 
-    _apply_access_checks(client, raw_schemas, field_metadata)
+    if check_access:
+        _apply_access_checks(client, raw_schemas, field_metadata)
     refs = _load_shared_schema_refs()
 
     for stream_name, stream in STREAMS.items():

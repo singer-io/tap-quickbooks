@@ -33,7 +33,8 @@ def main():
         if args.catalog:
             catalog = args.catalog
         else:
-            catalog = do_discover(client)
+            # No stream is excluded here: access is validated per-stream when synced.
+            catalog = do_discover(client, check_access=False)
 
         LOGGER.info("Starting sync mode")
         do_sync(client, config, state, catalog)
