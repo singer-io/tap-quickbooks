@@ -26,14 +26,16 @@ def main():
     if args.discover:
         LOGGER.info("Starting discovery mode")
         client.do_authorization_check()
-        catalog = do_discover()
+        catalog = do_discover(client)
         write_catalog(catalog)
         LOGGER.info("Finished discovery mode")
     else:
         if args.catalog:
             catalog = args.catalog
         else:
-            catalog = do_discover()
+            # Fallback only; documented usage always syncs with a catalog from --discover.
+            # Skip access probing here to avoid a network call per stream on every sync run.
+            catalog = do_discover(client, check_access=False)
 
         LOGGER.info("Starting sync mode")
         do_sync(client, config, state, catalog)

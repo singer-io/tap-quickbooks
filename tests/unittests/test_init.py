@@ -42,7 +42,12 @@ class TestQuickbooksInit(unittest.TestCase):
     def test_discover_coverage(self):
         """Test catalog obtained from discover is the instance of singer Catalog"""
 
-        catalog = do_discover()
+        client = mock.Mock()
+        client.config = {'start_date': '2022-01-01T00:00:00Z'}
+
+        with mock.patch('tap_quickbooks.discover._apply_access_checks'):
+            catalog = do_discover(client)
+
         self.assertIsInstance(catalog, Catalog)
 
     @mock.patch('singer.parse_args')

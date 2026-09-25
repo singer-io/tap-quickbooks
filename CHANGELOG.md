@@ -1,5 +1,12 @@
 # Change Log
 
+## 2.6.0 [#84](https://github.com/singer-io/tap-quickbooks/pull/84)
+   * Streams the credentials cannot access (403) are now excluded from the catalog during discovery. If credentials cannot access any supported streams, discovery still fails with a 403.
+   * Batch-query stream access is probed with a single combined request instead of one call per stream, cutting discovery from 31 calls down to as few as 3 when fully authorized.
+   * A plain sync run without an explicit `--catalog` no longer pays the per-stream access-check cost.
+   * Added unit tests for discovery access checks and bookmark handling.
+   * Bump `singer-python` to 6.8.0, `requests` to 2.34.2.
+
 ## 2.5.0
    * Add authentication check during discovery [#83](https://github.com/singer-io/tap-quickbooks/pull/83)
 
