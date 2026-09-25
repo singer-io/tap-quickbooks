@@ -33,7 +33,8 @@ def main():
         if args.catalog:
             catalog = args.catalog
         else:
-            # No stream is excluded here: access is validated per-stream when synced.
+            # Fallback only; documented usage always syncs with a catalog from --discover.
+            # Skip access probing here to avoid a network call per stream on every sync run.
             catalog = do_discover(client, check_access=False)
 
         LOGGER.info("Starting sync mode")
