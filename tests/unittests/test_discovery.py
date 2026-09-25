@@ -3,6 +3,7 @@ from unittest import mock
 
 from tap_quickbooks.client import QuickbooksForbiddenError
 from tap_quickbooks.discover import _apply_access_checks, do_discover
+from tap_quickbooks.streams import Accounts, Invoices
 
 
 class _AllowedStream:
@@ -58,6 +59,28 @@ class TestDiscoveryAccessChecks(unittest.TestCase):
         with mock.patch('tap_quickbooks.discover.STREAMS', stream_map):
             with self.assertRaises(QuickbooksForbiddenError):
                 _apply_access_checks(fake_client, schemas, field_metadata)
+
+    def test_apply_access_checks_probes_batch_streams_in_a_single_call(self):
+        schemas = {
+            'accounts': {'type': 'object'},
+            'invoices': {'type': 'object'},
+        }
+        field_metadata = {
+            'accounts': {'meta': 1},
+            'invoices': {'meta': 1},
+        }
+
+        stream_map = {'accounts': Accounts, 'invoices': Invoices}
+
+        fake_client = mock.Mock()
+        fake_client.minor_version = 75
+        fake_client.config = {'start_date': '2022-01-01T00:00:00Z'}
+
+        with mock.patch('tap_quickbooks.discover.STREAMS', stream_map):
+            _apply_access_checks(fake_client, schemas, field_metadata)
+
+        self.assertEqual(fake_client.post.call_count, 1)
+        self.assertEqual(set(schemas.keys()), {'accounts', 'invoices'})
 
     def test_do_discover_returns_catalog(self):
         fake_client = mock.Mock()

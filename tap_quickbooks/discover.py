@@ -5,7 +5,7 @@ from singer import metadata
 from singer.catalog import Catalog
 import singer
 from tap_quickbooks.client import QuickbooksForbiddenError
-from .streams import STANDARD_STREAMS, BATCH_STREAMS
+from .streams import STANDARD_STREAMS, BATCH_STREAMS, Stream, check_batch_streams_access
 
 LOGGER = singer.get_logger()
 STREAMS = STANDARD_STREAMS | BATCH_STREAMS
@@ -53,13 +53,32 @@ def _load_shared_schema_refs():
 def _apply_access_checks(client, schemas, field_metadata):
     """
     Probe each stream for read access and remove inaccessible streams.
+
+    Streams that use the default batch-query probe (the common case) are
+    checked with a single combined batch call instead of one call per stream;
+    only report/CDC-style streams that override check_access() are probed
+    individually.
     """
     inaccessible_streams = []
+
+    batch_probe_streams = []
+    individual_probe_streams = []
     for stream_name, stream_obj in STREAMS.items():
         if stream_name not in schemas:
             continue
 
         stream = stream_obj(client=client, config=client.config, state={})
+        if stream_obj.check_access is Stream.check_access:
+            batch_probe_streams.append((stream_name, stream))
+        else:
+            individual_probe_streams.append((stream_name, stream))
+
+    batch_access = check_batch_streams_access(client, [stream for _, stream in batch_probe_streams])
+    for stream_name, stream in batch_probe_streams:
+        if not batch_access.get(stream.stream_name, False):
+            inaccessible_streams.append(stream_name)
+
+    for stream_name, stream in individual_probe_streams:
         if not stream.check_access():
             inaccessible_streams.append(stream_name)
 

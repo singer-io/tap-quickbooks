@@ -63,6 +63,35 @@ class Stream:
             )
             return False
 
+
+def check_batch_streams_access(client, streams):
+    """
+    Probe access for multiple query-batch streams (e.g. Accounts, Invoices) in a
+    single combined batch call instead of one call per stream. Only falls back
+    to per-stream probing when the combined call itself is forbidden, so we can
+    still tell exactly which stream(s) are inaccessible.
+    """
+    if not streams:
+        return {}
+
+    bookmarks = {stream.stream_name: stream.config.get('start_date') for stream in streams}
+    start_positions = {stream.stream_name: 1 for stream in streams}
+    batch_query = query_builder.build_batch_query(streams, bookmarks, start_positions, 1)
+
+    try:
+        client.post(
+            f'/v3/company/{{realm_id}}/batch?minorversion={client.minor_version}',
+            data=json.dumps(batch_query),
+        )
+        return {stream.stream_name: True for stream in streams}
+    except QuickbooksForbiddenError as exc:
+        singer.get_logger().warning(
+            "Permission Error while batch-probing %d stream(s): %s. Falling back to per-stream checks.",
+            len(streams),
+            exc,
+        )
+        return {stream.stream_name: stream.check_access() for stream in streams}
+
 class Accounts(Stream):
     stream_name = 'accounts'
     table_name = 'Account'
