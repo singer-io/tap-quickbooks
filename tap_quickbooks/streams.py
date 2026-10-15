@@ -436,7 +436,8 @@ class DeletedObjects(Stream):
     def check_access(self):
         params = {
             'entities': self.deleted_entities[0],
-            'changedSince': self.config.get('start_date')
+            # CDC changedSince must be within the last 30 days, so use a fresh timestamp for the probe
+            'changedSince': utils.strftime(utils.now() - timedelta(minutes=1))
         }
 
         try:
